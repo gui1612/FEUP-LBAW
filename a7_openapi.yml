@@ -78,15 +78,15 @@ paths:
                     enum:
                       - user:admin
                       - user:blocked
-                    example:
-                      AddAdmin:
-                        description: "The requested user is already an admin"
-                        value: user:admin
+              examples:
+                AddAdmin:
+                  description: "The requested user is already an admin"
+                  value: { "reason": "user:admin" }
 
-                      AddBlocked:
-                        description: "The requested user is blocked"
-                        value: user:admin
-                        
+                AddBlocked:
+                  description: "The requested user is blocked"
+                  value: { "reason": "user:blocked" }
+
         # FIXME falta error
       
 
