@@ -17,8 +17,10 @@ tags:
   - name: "M02: System Administration"
 
 paths:
+
   /:
     get:
+      operationId: "R201"
       summary: "R101: View Homepage"
       description: "View feed of most popular or recent posts. Access: PUB"
       tags:
@@ -37,10 +39,14 @@ paths:
         200:
           description: "Ok. Show Homepage UI01"
 
+  # M02 - System Administration
   /admin:
     get:
+      operationId: "R201"
       summary: "R201: View Administration Panel"
       description: "View administration panel. Access: ADM"
+      tags:
+        - "M02 - System Administration"
 
       responses:
         200:
@@ -48,16 +54,23 @@ paths:
 
   /admin/team:
     get:
+      operationId: "R202"
       summary: "R202: View Administrators"
       description: "View all system administrators. Access: ADM"
+      tags:
+        - "M02 - System Administration"
+
       responses:
         200:
           description: "Ok. Show Administrators Listing UI"
 
   /api/admin/team/{username}:
     put:
+      operationId: "R203"
       summary: "R203: Add Administrator API Route"
       description: "Add user to the team of system administrators. Access: ADM"
+      tags:
+        - "M02 - System Administration"
 
       parameters:
         - in: path
@@ -83,8 +96,11 @@ paths:
                       - user:not-found
 
     delete:
+      operationId: "R204"
       summary: "R204: Remove Administrator API Route"
       description: "Remove user from the team of system administrators. Access: ADM"
+      tags:
+        - "M02 - System Administration"
 
       parameters:
         - in: path
