@@ -1,0 +1,63 @@
+openapi: 3.0.0
+
+info:
+  version: 1.0.0
+  title: Wrottit API
+  description: Web Resources Specification (A7) for Wrottit
+
+servers:
+  - url: http://lbaw2264.lbaw.fe.up.pt
+    description: Production server
+
+externalDocs:
+  url: https://git.fe.up.pt/lbaw/lbaw2223/lbaw2264/-/wikis
+  description: Wrottit documentation
+
+tags:
+  - name: "M01: Reports"
+
+paths:
+  /reports:
+    get:
+      operationId: R101
+      summary: "R101: View all reports"
+      description: "Provide list of all reports."
+      security:
+        - permissions:
+          - PUB
+      
+      tags:
+        - "M01: Reports"
+
+      parameters:
+        - in: query
+          name: order
+          description: Review ordering
+          required: false
+          schema:
+            type: string
+            enum:
+              - newest
+              - oldest
+              - most reported
+              - least reported
+
+        - in: query
+          name: state
+          description: Review state
+          required: false
+          schema:
+            type: array
+            items:
+              enum:
+                - proposed
+                - ongoing
+                - approved
+                - denied
+
+      responses:
+        200:
+          description: "Ok. Show Reports UI"
+
+
+            
