@@ -16,8 +16,7 @@ externalDocs:
 tags:
   - name: "M02: System Administration"
   - name: "M03: Notifications"
-  - name: "M04: Posts"
-  - name: "M05: Comments"
+  - name: "M04: Forums, Posts and Comments"
 
 paths:
 
@@ -118,9 +117,9 @@ paths:
         - "M03: Notifications"
 
       responses:
-        "200":
+        200:
           description: "Ok. Show Notifications"
-        "401":
+        401:
           description: "Access unauthorized. Not logged in"
 
   /notifications:
@@ -132,9 +131,9 @@ paths:
         - "M03: Messages and Notifications"
 
       responses:
-        "200":
+        200:
           description: "Ok. Show Notifications"
-        "401":
+        401:
           description: "Access unauthorized. Not logged in"
 
   #M04 : Forums, Posts and Comments
@@ -168,9 +167,9 @@ paths:
         - "M04: Forums, Posts and Comments"
 
       responses:
-        '200':
+        200:
           description: 'Ok. Show Create Post Form'
-        '302':
+        302:
           description: 'Redirect after trying to get Create Post Form'
           headers:
             Location:
@@ -212,7 +211,7 @@ paths:
                 - tag_ids
 
       responses:
-        "302":
+        302:
           description: "Redirect after processing the create post form."
           headers:
             Location:
@@ -238,14 +237,14 @@ paths:
       parameters:
         - in: path
           name: id
+          required: true
           schema:
             type: integer
-          required: true
 
       responses:
-        "200":
+        200:
           description: "OK. Show Post Page"
-        "404":
+        404:
           description: "Post not found"
 
     delete:
@@ -288,18 +287,18 @@ paths:
       parameters:
         - in: path
           name: id
+          required: true
           schema:
             type: integer
-          required: true
 
       responses:
-        "200":
+        200:
           description: "OK. Show post edition form"
-        "401":
+        401:
           description: "Unauthorized. Must be authenticated."
-        "403":
+        403:
           description: "Unauthorized. Must be the owner of the post"
-        "404":
+        404:
           description: "Post not found"
 
     put:
@@ -312,9 +311,9 @@ paths:
       parameters:
         - in: path
           name: id
+          required: true
           schema:
             type: integer
-          required: true
 
       requestBody:
         required: true
@@ -329,7 +328,7 @@ paths:
                   type: string
 
       responses:
-        "302":
+        302:
           description: "Redirect after processing the post updated information"
           headers:
             Location:
@@ -370,13 +369,13 @@ paths:
                 - post_id
 
       responses:
-        "200":
+        200:
           description: "Successful comment creation. Return created comment"
-        "400":
+        400:
           description: "Bad Request. Failed to create comment"
-        "401":
+        401:
           description: "Unauthorized. Authentication is required."
-        "404":
+        404:
           description: "Post Id not found."
 
   /comment/{id}:
@@ -390,9 +389,9 @@ paths:
       parameters:
         - in: path
           name: id
+          required: true
           schema:
             type: integer
-          required: true
 
       requestBody:
         required: true
@@ -405,15 +404,15 @@ paths:
                   type: string
 
       responses:
-        "200":
+        200:
           description: "Comment updated successfully. Return updated comment"
-        "400":
+        400:
           description: "Bad Request. Failed to update comment."
-        "401":
+        401:
           description: "Unauthorized. Authentication is required."
-        "403":
+        403:
           description: "Forbidden. Must be the owner of the comment."
-        "404":
+        404:
           description: "Comment Id not found."
 
     delete:
@@ -426,18 +425,18 @@ paths:
       parameters:
         - in: path
           name: id
+          required: true
           schema:
             type: integer
-          required: true
 
       responses:
-        "200":
+        200:
           description: "Comment deleted successfully. Return deleted comment"
-        "401":
+        401:
           description: "Unauthorized. Authentication is required."
-        "403":
+        403:
           description: "Forbidden. Must be the owner of the comment."
-        "404":
+        404:
           description: "Comment Id not found."
 
   /api/post/{id}/comments:
@@ -451,28 +450,111 @@ paths:
         - in: path
           name: id
           description: "Post Id"
+          required: true
           schema:
             type: integer
-          required: true
         - in: query
           name: offset
           description: "starting value to fetch results"
+          required: false
           schema:
             type: integer
             minimum: 0
             default: 0
-          required: false
         - in: query
           name: limit
           description: "limits the number of results"
+          required: false # returns all posts if not specified
           schema:
             type: integer
             minimum: 1
-          required: false # returns all posts if not specified
 
       responses:
-        "200":
+        200:
           description: "OK. Return a list of comments that fit the criteria"
-        "404":
+        404:
           description: "Post Id not found."
 
+  /api/post/{id}/comments:
+    get:
+      operationId: R412
+      summary: "R412 : Like a post"
+      description: "Processes a request to like a post. Access: USR"
+      tags:
+        - "M04: Forums, Posts and Comments"
+      parameters:
+        - in: path
+          name: id
+          description: "Post Id"
+          required: true
+          schema:
+            type: integer
+
+      responses:
+        200:
+          description: "OK. Successfully liked the post"
+        404:
+          description: "Post Id not found."
+
+  /api/post/{id}/comments:
+    get:
+      operationId: R413
+      summary: "R413 : Disike a post"
+      description: "Processes a request to dislike a post. Access: USR"
+      tags:
+        - "M04: Forums, Posts and Comments"
+      parameters:
+        - in: path
+          name: id
+          description: "Post Id"
+          required: true
+          schema:
+            type: integer
+
+      responses:
+        200:
+          description: "OK. Successfully disliked the post"
+        404:
+          description: "Post Id not found."
+
+  /api/post/{id}/comments:
+    get:
+      operationId: R414
+      summary: "R414 : Like a comment"
+      description: "Processes a request to like a comment. Access: USR"
+      tags:
+        - "M04: Forums, Posts and Comments"
+      parameters:
+        - in: path
+          name: id
+          description: "Comment Id"
+          required: true
+          schema:
+            type: integer
+
+      responses:
+        200:
+          description: "OK. Successfully liked the comment"
+        404:
+          description: "Comment Id not found."
+
+  /api/post/{id}/comments:
+    get:
+      operationId: R415
+      summary: "R415 : Disike a comment"
+      description: "Processes a request to dislike a comment. Access: USR"
+      tags:
+        - "M04: Forums, Posts and Comments"
+      parameters:
+        - in: path
+          name: id
+          description: "Comment Id"
+          required: true
+          schema:
+            type: integer
+
+      responses:
+        200:
+          description: "OK. Successfully disliked the comment"
+        404:
+          description: "Comment Id not found."
