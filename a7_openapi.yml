@@ -15,6 +15,7 @@ externalDocs:
 
 tags:
   - name: "M02: System Administration"
+  - name: "M03: Notifications"
 
 paths:
 
@@ -124,3 +125,33 @@ paths:
                   reason:
                     enum:
                       - user:not-found
+
+  # M03: Notifications
+
+  /api/notifications:
+    get:
+      operationId: R301
+      summary: "R301: View Notifications"
+      description: "Displays user notifications. Access: USR"
+      tags:
+        - "M03: Notifications"
+
+      responses:
+        "200":
+          description: "Ok. Show Notifications"
+        "401":
+          description: "Access unauthorized. Not logged in"
+
+  /notifications:
+    put:
+      operationId: R302
+      summary: "R302: Mark Notifications as Read"
+      description: "Mark notification as read. Access: USR"
+      tags:
+        - "M03: Messages and Notifications"
+
+      responses:
+        "200":
+          description: "Ok. Show Notifications"
+        "401":
+          description: "Access unauthorized. Not logged in"
