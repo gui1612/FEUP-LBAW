@@ -14,69 +14,69 @@ externalDocs:
   description: Wrottit documentation
 
 tags:
-  - name: "M01: Reports"
+  - name: "M02: System Administration"
 
 paths:
-  /reports:
+  /:
     get:
-      operationId: R101
-      summary: "R101: View all reports"
-      description: "Provide list of all reports. Access: ADM"
+      summary: "R101: View Homepage"
+      description: "View feed of most popular or recent posts. Access: PUB"
       tags:
-        - "M01: Reports"
-
+        - "" # FIXME content module
+      
       parameters:
         - in: query
-          name: order
-          description: Review ordering
-          required: false
+          name: sort
+          description: "Posts ordering"
           schema:
-            type: string
             enum:
-              - newest
-              - oldest
-              - mostreports
-              - leastreports
-
-        - in: query
-          name: state
-          description: Review state
-          required: false
-          schema:
-            type: array
-            items:
-              enum:
-                - proposed
-                - ongoing
-                - approved
-                - denied
+              - popular
+              - recent
 
       responses:
-        200:
-          description: "Ok. Show Reports Listing UI"
+        "200":
+          description: "Ok. Show Homepage UI01"
 
-  /reports/{id}:
+  /admin/team:
     get:
-      operationId: R102
-      summary: "R102: View report"
-      description: "Provide detailed view of report. Access: ADM"
-      tags:
-        - "M101: Reports"
+      summary: "R201: View Administrators"
+      description: "View all system administrators. Access: ADM"
+      responses:
+        "200":
+          description: "Ok. Show Administrators Listing UI"
 
-      parameters:
-        - in: path
-          name: id
-          description: "Report ID"
-          required: true
-          schema:
-            type: integer
+    post:
+      summary: "R202: Add Administrator Action"
+      description: "Add a user to the team of system administrators. Access: ADM"
+
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                redirect: 
+                  type: string
+                  default: "/admin/team"
+                  
+                username:
+                  type: string
+
+              required:
+                - username
 
       responses:
-        200:
-          description: "Ok. Show Report UI"
+        302:
+          description: "Redirect after adding the member to the administration team."
+          headers:
+            Location:
+              schema:
+                type: string
+              examples:
+                302Success:
+                  description: "Successful addition of member to the administration team"
+                  externalValue: redirect form field
+        # FIXME falta error
+      
 
-        404:
-          description: "No report with the given ID"
-        
-
-            
