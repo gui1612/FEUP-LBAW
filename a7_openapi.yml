@@ -80,7 +80,6 @@ paths:
                 properties:
                   reason:
                     enum:
-                      - user:blocked
                       - user:not-found
 
     delete:
@@ -109,75 +108,3 @@ paths:
                   reason:
                     enum:
                       - user:not-found
-
-  /api/users/{username}/block:
-    post:
-      summary: "R205: Block user account"
-      description: "Block an user's account. Access: ADM"
-
-      parameters:
-        - in: path
-          name: username
-          description: "The username of the user to block."
-          required: true
-          schema:
-            type: string
-
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                reason:
-                  type: string
-              required:
-                - reason
-
-      responses:
-        200:
-          description: "Ok. Successfuly blocked user's account."
-
-        422:
-          description: "Validation error. User's account was not blocked."
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  reason:
-                    enum:
-                      - user:admin
-                      - user:not-found
-
-    delete:
-      summary: "R206: Unblock user account"
-      description: "Unblock an user's account. Access: ADM"
-
-      parameters:
-        - in: path
-          name: username
-          description: "The username of the user to unblock."
-          required: true
-          schema:
-            type: string
-
-      responses:
-        200:
-          description: "Ok. Successfuly unblocked user's account."
-
-        422:
-          description: "Validation error. User's account was not unblocked."
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  reason:
-                    enum:
-                      - user:not-found
-
-    
-      
-
