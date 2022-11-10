@@ -106,6 +106,7 @@ CREATE TABLE Notifications (
   id SERIAL PRIMARY KEY,
   createdAt DATETIME NOT NULL DEFAULT NOW CONSTRAINT validCreation CHECK createdAt <= NOW,
   type NotificationType NOT NULL,
+  receiverId INTEGER NOT NULL,
   followId REFERENCES Follows,
   commentId REFERENCES Comments,
   ratingId REFERENCES Ratings,
