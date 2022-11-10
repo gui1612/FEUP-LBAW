@@ -16,6 +16,8 @@ externalDocs:
 tags:
   - name: "M02: System Administration"
   - name: "M03: Notifications"
+  - name: "M04: Posts"
+  - name: "M05: Comments"
 
 paths:
 
@@ -155,3 +157,138 @@ paths:
           description: "Ok. Show Notifications"
         "401":
           description: "Access unauthorized. Not logged in"
+
+# M05 : Comments
+  /comment:
+    post:
+      operationId: R501
+      summary: "R501 : Create comment"
+      description: "Deals with the new comment's creation form. Access: USR"
+      tags:
+        - "M05: Comments"
+
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                body:
+                  type: string
+                rating:
+                  type: integer
+                post_id:
+                  type: integer
+              required:
+                - body
+                - rating
+                - post_id
+
+      responses:
+        "200":
+          description: "Successful comment creation. Return created comment"
+        "400":
+          description: "Bad Request. Failed to create comment"
+        "401":
+          description: "Unauthorized. Authentication is required."
+        "404":
+          description: "Post Id not found."
+
+  /comment/{id}:
+    put:
+      operationId: R502
+      summary: "R502 : Edit comment"
+      description: "Deals with a comment edition. Access: OWN"
+      tags:
+        - "M05: Comments"
+
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+          required: true
+
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                body:
+                  type: string
+
+      responses:
+        "200":
+          description: "Comment updated successfully. Return updated comment"
+        "400":
+          description: "Bad Request. Failed to update comment."
+        "401":
+          description: "Unauthorized. Authentication is required."
+        "403":
+          description: "Forbidden. Must be the owner of the comment."
+        "404":
+          description: "Comment Id not found."
+
+    delete:
+      operationId: R503
+      summary: "R503 : Delete comment"
+      description: "Processes a request to delete a comment. Access: OWN, ADM"
+      tags:
+        - "M05: Comments"
+
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+          required: true
+
+      responses:
+        "200":
+          description: "Comment deleted successfully. Return deleted comment"
+        "401":
+          description: "Unauthorized. Authentication is required."
+        "403":
+          description: "Forbidden. Must be the owner of the comment."
+        "404":
+          description: "Comment Id not found."
+
+  /api/post/{id}/comments:
+    get:
+      operationId: R504
+      summary: "R504 : Comments of a given article"
+      description: "Returns comments of a given article according to user parameters. Access: PUB"
+      tags:
+        - "M05: Comments"
+      parameters:
+        - in: path
+          name: id
+          description: "Post Id"
+          schema:
+            type: integer
+          required: true
+        - in: query
+          name: offset
+          description: "starting value to fetch results"
+          schema:
+            type: integer
+            minimum: 0
+            default: 0
+          required: false
+        - in: query
+          name: limit
+          description: "limits the number of results"
+          schema:
+            type: integer
+            minimum: 1
+          required: false # returns all articles if not specified
+
+      responses:
+        "200":
+          description: "OK. Return a list of comments that fit the criteria"
+        "404":
+          description: "Article Id not found."
+
