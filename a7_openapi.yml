@@ -21,11 +21,7 @@ paths:
     get:
       operationId: R101
       summary: "R101: View all reports"
-      description: "Provide list of all reports."
-      security:
-        - permissions:
-          - PUB
-      
+      description: "Provide list of all reports. Access: ADM"
       tags:
         - "M01: Reports"
 
@@ -39,8 +35,8 @@ paths:
             enum:
               - newest
               - oldest
-              - most reported
-              - least reported
+              - mostreports
+              - leastreports
 
         - in: query
           name: state
@@ -57,7 +53,30 @@ paths:
 
       responses:
         200:
-          description: "Ok. Show Reports UI"
+          description: "Ok. Show Reports Listing UI"
 
+  /reports/{id}:
+    get:
+      operationId: R102
+      summary: "R102: View report"
+      description: "Provide detailed view of report. Access: ADM"
+      tags:
+        - "M101: Reports"
+
+      parameters:
+        - in: path
+          name: id
+          description: "Report ID"
+          required: true
+          schema:
+            type: integer
+
+      responses:
+        200:
+          description: "Ok. Show Report UI"
+
+        404:
+          description: "No report with the given ID"
+        
 
             
