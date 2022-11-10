@@ -137,14 +137,14 @@ paths:
         "401":
           description: "Access unauthorized. Not logged in"
 
-  #M04 : Posts
+  #M04 : Forums, Posts and Comments
   /:
     get:
       operationId: "401"
       summary: "R401: View Homepage"
       description: "View feed of most popular or recent posts. Access: PUB"
       tags:
-        - "M04: Posts"
+        - "M04: Forums, Posts and Comments"
       
       parameters:
         - in: query
@@ -165,7 +165,7 @@ paths:
       summary: "R402 : Create post form"
       description: "Provide new post creation form. Access: USR"
       tags:
-        - "M04: Posts"
+        - "M04: Forums, Posts and Comments"
 
       responses:
         '200':
@@ -186,7 +186,7 @@ paths:
       summary: "R403 : Create post action"
       description: "Processes the new post creation form. Access: USR"
       tags:
-        - "M04: Posts"
+        - "M04: Forums, Posts and Comments"
 
       requestBody:
         required: true
@@ -233,7 +233,7 @@ paths:
       summary: "R404 : View Post Page"
       description: "View a Post Page. Access: PUB"
       tags:
-        - "M04: Posts"
+        - "M04: Forums, Posts and Comments"
 
       parameters:
         - in: path
@@ -253,7 +253,7 @@ paths:
       summary: "R405 : Delete post action"
       description: "Processes a request to delete a post. Access: OWN, ADM"
       tags:
-        - "M04: Posts"
+        - "M04: Forums, Posts and Comments"
 
       parameters:
         - in: path
@@ -283,7 +283,7 @@ paths:
       summary: "R406 : Post edition form"
       description: "Provide a form for post edition. Access: OWN"
       tags:
-        - "M04: Posts"
+        - "M04: Forums, Posts and Comments"
 
       parameters:
         - in: path
@@ -307,7 +307,7 @@ paths:
       summary: "R407 : Edit post action"
       description: "Processes the user edit profile form submission. Access: OWN"
       tags:
-        - "M04: Posts"
+        - "M04: Forums, Posts and Comments"
 
       parameters:
         - in: path
@@ -343,14 +343,13 @@ paths:
                   description: "Failed post edition. Redirect to the edit post page."
                   value: "/post/{id}/edit"
 
-  # M05 : Comments
   /comment:
     post:
-      operationId: R501
-      summary: "R501 : Create comment"
+      operationId: R408
+      summary: "R408 : Create comment"
       description: "Deals with the new comment's creation form. Access: USR"
       tags:
-        - "M05: Comments"
+        - "M04: Forums, Posts and Comments"
 
       requestBody:
         required: true
@@ -382,11 +381,11 @@ paths:
 
   /comment/{id}:
     put:
-      operationId: R502
-      summary: "R502 : Edit comment"
+      operationId: R409
+      summary: "R409 : Edit comment"
       description: "Deals with a comment edition. Access: OWN"
       tags:
-        - "M05: Comments"
+        - "M04: Forums, Posts and Comments"
 
       parameters:
         - in: path
@@ -418,11 +417,11 @@ paths:
           description: "Comment Id not found."
 
     delete:
-      operationId: R503
-      summary: "R503 : Delete comment"
+      operationId: R410
+      summary: "R410 : Delete comment"
       description: "Processes a request to delete a comment. Access: OWN, ADM"
       tags:
-        - "M05: Comments"
+        - "M04: Forums, Posts and Comments"
 
       parameters:
         - in: path
@@ -443,11 +442,11 @@ paths:
 
   /api/post/{id}/comments:
     get:
-      operationId: R504
-      summary: "R504 : Comments of a given post"
+      operationId: R411
+      summary: "R411 : Comments of a given post"
       description: "Returns comments of a given post according to user parameters. Access: PUB"
       tags:
-        - "M05: Comments"
+        - "M04: Forums, Posts and Comments"
       parameters:
         - in: path
           name: id
