@@ -45,71 +45,61 @@ paths:
         200:
           description: "Ok. Show Administrators Listing UI"
 
-  /api/admin/team:
-    post:
-      summary: "R202: Add Administrators API Route"
-      description: "Add users to the team of system administrators. Access: ADM"
+  /api/admin/team/{username}:
+    put:
+      summary: "R202: Add Administrator API Route"
+      description: "Add user to the team of system administrators. Access: ADM"
 
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              type: array
-              items:
-                type: string
+      parameters:
+        - in: path
+          name: username
+          description: "The username of the user to add to the team of system administrators."
+          required: true
+          schema:
+            type: string
 
       responses:
         200:
-          description: "Ok. Successfuly added all members to the administration team."
+          description: "Ok. Successfuly added member to the administration team."
 
         422:
-          description: "Validation error. Some members were not added to the administration team."
+          description: "Validation error. The member was not added to the administration team."
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  type: object
-                  properties:
-                    username:
-                      type: string
-                    reason:
-                      enum:
-                        - user:admin
-                        - user:blocked
+                type: object
+                properties:
+                  reason:
+                    enum:
+                      - user:admin
+                      - user:blocked
 
     delete:
-      summary: "R203: Remove Administrators API Route"
-      description: "Remove users from the team of system administrators. Access: ADM"
+      summary: "R203: Remove Administrator API Route"
+      description: "Remove user from the team of system administrators. Access: ADM"
 
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              type: array
-              items:
-                type: string
+      parameters:
+        - in: path
+          name: username
+          description: "The username of the user to remove from the team of system administrators."
+          required: true
+          schema:
+            type: string
 
       responses:
         200:
-          description: "Ok. Successfuly removed all members from the administration team."
+          description: "Ok. Successfuly removed the member from the administration team."
 
         422:
-          description: "Validation error. Some members were not removed from the administration team."
+          description: "Validation error. The member was not removed from the administration team."
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  type: object
-                  properties:
-                    username:
-                      type: string
-                    reason:
-                      enum:
-                        - user:not-admin
+                type: object
+                properties:
+                  reason:
+                    enum:
+                      - user:not-admin
         # FIXME falta error
       
 
