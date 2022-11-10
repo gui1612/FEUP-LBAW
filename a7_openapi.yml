@@ -21,27 +21,6 @@ tags:
 
 paths:
 
-  /:
-    get:
-      operationId: "R201"
-      summary: "R101: View Homepage"
-      description: "View feed of most popular or recent posts. Access: PUB"
-      tags:
-        - "" # FIXME content module
-      
-      parameters:
-        - in: query
-          name: sort
-          description: "Posts ordering"
-          schema:
-            enum:
-              - popular
-              - recent
-
-      responses:
-        200:
-          description: "Ok. Show Homepage UI01"
-
   # M02 - System Administration
   /admin:
     get:
@@ -158,7 +137,213 @@ paths:
         "401":
           description: "Access unauthorized. Not logged in"
 
-# M05 : Comments
+  #M04 : Posts
+  /:
+    get:
+      operationId: "401"
+      summary: "R401: View Homepage"
+      description: "View feed of most popular or recent posts. Access: PUB"
+      tags:
+        - "M04: Posts"
+      
+      parameters:
+        - in: query
+          name: sort
+          description: "Posts ordering"
+          schema:
+            enum:
+              - popular
+              - recent
+
+      responses:
+        200:
+          description: "Ok. Show Homepage UI01"
+
+  /post:
+    get:
+      operationId: R402
+      summary: "R402 : Create post form"
+      description: "Provide new post creation form. Access: USR"
+      tags:
+        - "M04: Posts"
+
+      responses:
+        '200':
+          description: 'Ok. Show Create Post Form'
+        '302':
+          description: 'Redirect after trying to get Create Post Form'
+          headers:
+            Location:
+              schema:
+                type: string  
+              examples:
+                302Failure:
+                  description: 'You are not logged in. Failed post creation. Redirect to login Page.'
+                  value: '/login' 
+
+    post:
+      operationId: R403
+      summary: "R403 : Create post action"
+      description: "Processes the new post creation form. Access: USR"
+      tags:
+        - "M04: Posts"
+
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                title:
+                  type: string
+                body:
+                  type: string
+                rating:
+                  type: integer
+                tag_ids:
+                  type: array
+                  minLength: 1
+                  maxLength: 3
+              required:
+                - title
+                - body
+                - rating
+                - tag_ids
+
+      responses:
+        "302":
+          description: "Redirect after processing the create post form."
+          headers:
+            Location:
+              schema:
+                type: string
+              examples:
+                302Success:
+                  description: "Successful post creation. Redirect to Post Page."
+                  value: "/post/{id}"
+                302Failure:
+                  description: "Failed post creation. Redirect to Create Post form."
+                  value: "/post"
+
+
+  /post/{id}:
+    get:
+      operationId: R404
+      summary: "R404 : View Post Page"
+      description: "View a Post Page. Access: PUB"
+      tags:
+        - "M04: Posts"
+
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+          required: true
+
+      responses:
+        "200":
+          description: "OK. Show Post Page"
+        "404":
+          description: "Post not found"
+
+    delete:
+      operationId: R405
+      summary: "R405 : Delete post action"
+      description: "Processes a request to delete a post. Access: OWN, ADM"
+      tags:
+        - "M04: Posts"
+
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+          required: true
+
+      responses:
+        302:
+          description: "Redirect after deleting post."
+          headers:
+            Location:
+              schema:
+                type: string
+              examples:
+                302Success:
+                  description: "Successful post deletion. Redirect to homepage."
+                  value: "/"
+                302Failure:
+                  description: "Failed to delete post. Redirect to post page"
+                  value: "/post/{id}"
+
+  /post/{id}/edit:
+    get:
+      operationId: R406
+      summary: "R406 : Post edition form"
+      description: "Provide a form for post edition. Access: OWN"
+      tags:
+        - "M04: Posts"
+
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+          required: true
+
+      responses:
+        "200":
+          description: "OK. Show post edition form"
+        "401":
+          description: "Unauthorized. Must be authenticated."
+        "403":
+          description: "Unauthorized. Must be the owner of the post"
+        "404":
+          description: "Post not found"
+
+    put:
+      operationId: R407
+      summary: "R407 : Edit post action"
+      description: "Processes the user edit profile form submission. Access: OWN"
+      tags:
+        - "M04: Posts"
+
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+          required: true
+
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                title:
+                  type: string
+                body:
+                  type: string
+
+      responses:
+        "302":
+          description: "Redirect after processing the post updated information"
+          headers:
+            Location:
+              schema:
+                type: string
+              examples:
+                302Success:
+                  description: "Successful post edition. Redirect to the post page."
+                  value: "/post/{id}"
+                302Failure:
+                  description: "Failed post edition. Redirect to the edit post page."
+                  value: "/post/{id}/edit"
+
+  # M05 : Comments
   /comment:
     post:
       operationId: R501
@@ -259,8 +444,8 @@ paths:
   /api/post/{id}/comments:
     get:
       operationId: R504
-      summary: "R504 : Comments of a given article"
-      description: "Returns comments of a given article according to user parameters. Access: PUB"
+      summary: "R504 : Comments of a given post"
+      description: "Returns comments of a given post according to user parameters. Access: PUB"
       tags:
         - "M05: Comments"
       parameters:
@@ -284,11 +469,11 @@ paths:
           schema:
             type: integer
             minimum: 1
-          required: false # returns all articles if not specified
+          required: false # returns all posts if not specified
 
       responses:
         "200":
           description: "OK. Return a list of comments that fit the criteria"
         "404":
-          description: "Article Id not found."
+          description: "Post Id not found."
 
