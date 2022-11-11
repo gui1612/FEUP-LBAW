@@ -1,41 +1,143 @@
-create schema if not exists lbaw;
+CREATE schema IF NOT EXISTS lbaw2264;
+SET search_path TO lbaw2264;
 
-DROP TABLE IF EXISTS users CASCADE;
-DROP TABLE IF EXISTS cards CASCADE;
-DROP TABLE IF EXISTS items CASCADE;
+DROP TYPE IF EXISTS ReportState CASCADE;
+DROP TYPE IF EXISTS ReportType CASCADE;
+DROP TYPE IF EXISTS NotificationType CASCADE;
+DROP TYPE IF EXISTS RatingType CASCADE;
 
-CREATE TABLE users (
+DROP TABLE IF EXISTS Users CASCADE;
+DROP TABLE IF EXISTS Forums CASCADE;
+DROP TABLE IF EXISTS ForumOwners CASCADE;
+DROP TABLE IF EXISTS Posts CASCADE;
+DROP TABLE IF EXISTS Comments CASCADE;
+DROP TABLE IF EXISTS Ratings CASCADE;
+DROP TABLE IF EXISTS Follows CASCADE;
+DROP TABLE IF EXISTS Reports CASCADE;
+DROP TABLE IF EXISTS Notifications CASCADE;
+DROP TABLE IF EXISTS PostImages CASCADE;
+
+----------------------------------------------------------------------
+--- Types
+----------------------------------------------------------------------
+
+CREATE TYPE ReportState AS ENUM ('proposed', 'ongoing', 'approved', 'denied');
+CREATE TYPE ReportType AS ENUM ('post', 'comment', 'forum');
+CREATE TYPE NotificationType AS ENUM ('follow_user', 'post_comment', 'content_reported', 'like');
+CREATE TYPE RatingType AS ENUM ('like', 'dislike')
+
+
+-----------------------------------------
+-- Tables
+-----------------------------------------
+
+CREATE TABLE Users (
   id SERIAL PRIMARY KEY,
-  name VARCHAR NOT NULL,
-  email VARCHAR UNIQUE NOT NULL,
-  password VARCHAR NOT NULL,
-  remember_token VARCHAR
+  createdAt DATETIME NOT NULL DEFAULT NOW CONSTRAINT validCreation CHECK createdAt <= NOW,
+  email TEXT CONSTRAINT userEmailUk UNIQUE,
+  pwHash TEXT,
+  username TEXT NOT NULL CONSTRAINT userUsernameUk UNIQUE,
+  firstName TEXT,
+  lastName TEXT,
+  bio TEXT,
+  reputation NOT NULL DEFAULT 0,
+  blockReason TEXT,
+  profilePicture TEXT,
+  bannerPicture TEXT,
+  isAdmin BOOLEAN NOT NULL DEFAULT FALSE
 );
 
-CREATE TABLE cards (
+CREATE TABLE Forums (
   id SERIAL PRIMARY KEY,
-  name VARCHAR NOT NULL,
-  user_id INTEGER REFERENCES users NOT NULL
+  createdAt DATETIME NOT NULL DEFAULT NOW CONSTRAINT validCreation CHECK createdAt <= NOW,
+  name TEXT NOT NULL CONSTRAINT forumNameUk UNIQUE,
+  description TEXT,
+  forumPicture TEXT,
+  bannerPicture TEXT,
+  hidden BOOLEAN NOT NULL DEFAULT FALSE
 );
 
-CREATE TABLE items (
-  id SERIAL PRIMARY KEY,
-  card_id INTEGER NOT NULL REFERENCES cards ON DELETE CASCADE,
-  description VARCHAR NOT NULL,
-  done BOOLEAN NOT NULL DEFAULT FALSE
+CREATE TABLE ForumOwners (
+  forumId REFERENCES Forums NOT NULL,
+  ownerId REFERENCES Users NOT NULL,
+  PRIMARY KEY (forumId, ownerId)
 );
 
-INSERT INTO users VALUES (
-  DEFAULT,
-  'John Doe',
-  'admin@example.com',
-  '$2y$10$HfzIhGCCaxqyaIdGgjARSuOKAcm1Uy82YfLuNaajn6JrjLWy9Sj/W'
-); -- Password is 1234. Generated using Hash::make('1234')
+CREATE TABLE Posts (
+  id SERIAL PRIMARY KEY,
+  createdAt DATETIME NOT NULL DEFAULT NOW CONSTRAINT validCreation CHECK createdAt <= NOW,
+  lastEdited DATETIME NOT NULL DEFAULT NOW CONSTRAINT validEditionTime CHECK createdAt <= lastEdited,
+  title TEXT NOT NULL,
+  body TEXT NOT NULL,
+  rating INT NOT NULL DEFAULT 0,
+  ownerId REFERENCES Users NOT NULL,
+  forumId REFERENCES Forums NOT NULL,
+  hidden BOOLEAN NOT NULL DEFAULT FALSE
+);
 
-INSERT INTO cards VALUES (DEFAULT, 'Things to do', 1);
-INSERT INTO items VALUES (DEFAULT, 1, 'Buy milk');
-INSERT INTO items VALUES (DEFAULT, 1, 'Walk the dog', true);
+CREATE TABLE Comments (
+  id SERIAL PRIMARY KEY,
+  createdAt DATETIME NOT NULL DEFAULT NOW CONSTRAINT validCreation CHECK createdAt <= NOW,
+  lastEdited DATETIME NOT NULL DEFAULT NOW CONSTRAINT validEditionTime CHECK createdAt <= lastEdited,
+  body TEXT NOT NULL,
+  rating INT NOT NULL DEFAULT 0,
+  ownerId REFERENCES Users NOT NULL,
+  postId REFERENCES Posts NOT NULL,
+  hidden BOOLEAN NOT NULL DEFAULT FALSE
+);
 
-INSERT INTO cards VALUES (DEFAULT, 'Things not to do', 1);
-INSERT INTO items VALUES (DEFAULT, 2, 'Break a leg');
-INSERT INTO items VALUES (DEFAULT, 2, 'Crash the car');
+CREATE TABLE Ratings (
+  ownerId REFERENCES Users NOT NULL,
+  ratedPost REFERENCES Posts,
+  ratedComment REFERENCES Comments,
+  type RatingType NOT NULL,
+  PRIMARY KEY (ownerId, ratedPost, ratedComment),
+
+  CONSTRAINT validRatings CHECK ((ratedPost IS NULL) <> (ratedComment IS NULL))
+);
+
+CREATE TABLE Follows (
+  ownerId REFERENCES Users NOT NULL,
+  followedUser REFERENCES Users,
+  followedForum REFERENCES Forums,
+  PRIMARY KEY (ownerId, followedUser, followedForum)
+
+  CONSTRAINT validFollow CHECK ((followedUser IS NULL) <> (followedForum IS NULL)),
+  CONSTRAINT doesNotFollowThemselves CHECK (followedUser <> ownerId)
+);
+
+CREATE TABLE Reports (
+  id SERIAL PRIMARY KEY, 
+  createdAt DATETIME NOT NULL DEFAULT NOW CONSTRAINT validCreation CHECK createdAt <= NOW,
+  reason TEXT NOT NULL,
+  state ReportState NOT NULL DEFAULT ReportState.proposed,
+  archived BOOLEAN NOT NULL DEFAULT FALSE,
+  type ReportType NOT NULL,
+  reporterId REFERENCES Users NOT NULL,
+  forumId REFERENCES Forums,
+  postId REFERENCES Posts,
+  commentId REFERENCES Comments
+
+  CONSTRAINT validReport CHECK ((forumId IS NULL) <> (postId IS NULL) <> (commentId IS NULL))
+);
+
+CREATE TABLE Notifications (
+  id SERIAL PRIMARY KEY,
+  createdAt DATETIME NOT NULL DEFAULT NOW CONSTRAINT validCreation CHECK createdAt <= NOW,
+  read NOT NULL DEFAULT FALSE,
+  type NotificationType NOT NULL,
+  receiverId INTEGER NOT NULL,
+  followId REFERENCES Follows,
+  commentId REFERENCES Comments,
+  ratingId REFERENCES Ratings,
+  reportId REFERENCES Reports,
+
+  CONSTRAINT validNotification CHECK ((followId IS NULL) <> (commentId IS NULL) <> (ratingId IS NULL))
+);
+
+CREATE TABLE PostImages (
+    id SERIAL PRIMARY KEY,
+    path TEXT NOT NULL,
+    caption NOT NULL,
+    postId REFERENCES Posts NOT NULL
+);
