@@ -16,8 +16,7 @@ externalDocs:
 tags:
   - name: "M01: Authentication and User Profile"
   - name: "M02: System Administration"
-  - name: "M03: Notifications"
-  - name: "M04: Forums, Posts and Comments"
+  - name: "M03: Forums, Posts and Comments"
 
 paths:
   # M01 - Authentication and User Profile
@@ -372,44 +371,14 @@ paths:
                     enum:
                       - user:not-found
 
-  # M03: Notifications
-
-  /api/notifications:
-    get:
-      operationId: R301
-      summary: "R301: View Notifications"
-      description: "Displays user notifications. Access: USR"
-      tags:
-        - "M03: Notifications"
-
-      responses:
-        200:
-          description: "Ok. Show Notifications"
-        401:
-          description: "Access unauthorized. Not logged in"
-
-  /notifications:
-    put:
-      operationId: R302
-      summary: "R302: Mark Notifications as Read"
-      description: "Mark notification as read. Access: USR"
-      tags:
-        - "M03: Messages and Notifications"
-
-      responses:
-        200:
-          description: "Ok. Show Notifications"
-        401:
-          description: "Access unauthorized. Not logged in"
-
-  #M04 : Forums, Posts and Comments
+  #M03 : Forums, Posts and Comments
   /:
     get:
-      operationId: "401"
-      summary: "R401: View Homepage"
+      operationId: "301"
+      summary: "R301: View Homepage"
       description: "View feed of most popular or recent posts. Access: PUB"
       tags:
-        - "M04: Forums, Posts and Comments"
+        - "M03: Forums, Posts and Comments"
       
       parameters:
         - in: query
@@ -426,11 +395,11 @@ paths:
 
   /post:
     get:
-      operationId: R402
-      summary: "R402 : Create post form"
+      operationId: R302
+      summary: "R302 : Create post form"
       description: "Provide new post creation form. Access: USR"
       tags:
-        - "M04: Forums, Posts and Comments"
+        - "M03: Forums, Posts and Comments"
 
       responses:
         200:
@@ -447,11 +416,11 @@ paths:
                   value: '/login' 
 
     post:
-      operationId: R403
-      summary: "R403 : Create post action"
+      operationId: R303
+      summary: "R4303 : Create post action"
       description: "Processes the new post creation form. Access: USR"
       tags:
-        - "M04: Forums, Posts and Comments"
+        - "M03: Forums, Posts and Comments"
 
       requestBody:
         required: true
@@ -494,11 +463,11 @@ paths:
 
   /post/{id}:
     get:
-      operationId: R404
-      summary: "R404 : View Post Page"
+      operationId: R304
+      summary: "R304 : View Post Page"
       description: "View a Post Page. Access: PUB"
       tags:
-        - "M04: Forums, Posts and Comments"
+        - "M03: Forums, Posts and Comments"
 
       parameters:
         - in: path
@@ -514,11 +483,11 @@ paths:
           description: "Post not found"
 
     delete:
-      operationId: R405
-      summary: "R405 : Delete post action"
+      operationId: R305
+      summary: "R305 : Delete post action"
       description: "Processes a request to delete a post. Access: OWN, ADM"
       tags:
-        - "M04: Forums, Posts and Comments"
+        - "M03: Forums, Posts and Comments"
 
       parameters:
         - in: path
@@ -544,11 +513,11 @@ paths:
 
   /post/{id}/edit:
     get:
-      operationId: R406
-      summary: "R406 : Post edition form"
+      operationId: R306
+      summary: "R306 : Post edition form"
       description: "Provide a form for post edition. Access: OWN"
       tags:
-        - "M04: Forums, Posts and Comments"
+        - "M03: Forums, Posts and Comments"
 
       parameters:
         - in: path
@@ -568,11 +537,11 @@ paths:
           description: "Post not found"
 
     put:
-      operationId: R407
-      summary: "R407 : Edit post action"
+      operationId: R307
+      summary: "R307 : Edit post action"
       description: "Processes the user edit profile form submission. Access: OWN"
       tags:
-        - "M04: Forums, Posts and Comments"
+        - "M03: Forums, Posts and Comments"
 
       parameters:
         - in: path
@@ -607,220 +576,3 @@ paths:
                 302Failure:
                   description: "Failed post edition. Redirect to the edit post page."
                   value: "/post/{id}/edit"
-
-  /comment:
-    post:
-      operationId: R408
-      summary: "R408 : Create comment"
-      description: "Deals with the new comment's creation form. Access: USR"
-      tags:
-        - "M04: Forums, Posts and Comments"
-
-      requestBody:
-        required: true
-        content:
-          application/x-www-form-urlencoded:
-            schema:
-              type: object
-              properties:
-                body:
-                  type: string
-                rating:
-                  type: integer
-                post_id:
-                  type: integer
-              required:
-                - body
-                - rating
-                - post_id
-
-      responses:
-        200:
-          description: "Successful comment creation. Return created comment"
-        400:
-          description: "Bad Request. Failed to create comment"
-        401:
-          description: "Unauthorized. Authentication is required."
-        404:
-          description: "Post Id not found."
-
-  /comment/{id}:
-    put:
-      operationId: R409
-      summary: "R409 : Edit comment"
-      description: "Deals with a comment edition. Access: OWN"
-      tags:
-        - "M04: Forums, Posts and Comments"
-
-      parameters:
-        - in: path
-          name: id
-          required: true
-          schema:
-            type: integer
-
-      requestBody:
-        required: true
-        content:
-          application/x-www-form-urlencoded:
-            schema:
-              type: object
-              properties:
-                body:
-                  type: string
-
-      responses:
-        200:
-          description: "Comment updated successfully. Return updated comment"
-        400:
-          description: "Bad Request. Failed to update comment."
-        401:
-          description: "Unauthorized. Authentication is required."
-        403:
-          description: "Forbidden. Must be the owner of the comment."
-        404:
-          description: "Comment Id not found."
-
-    delete:
-      operationId: R410
-      summary: "R410 : Delete comment"
-      description: "Processes a request to delete a comment. Access: OWN, ADM"
-      tags:
-        - "M04: Forums, Posts and Comments"
-
-      parameters:
-        - in: path
-          name: id
-          required: true
-          schema:
-            type: integer
-
-      responses:
-        200:
-          description: "Comment deleted successfully. Return deleted comment"
-        401:
-          description: "Unauthorized. Authentication is required."
-        403:
-          description: "Forbidden. Must be the owner of the comment."
-        404:
-          description: "Comment Id not found."
-
-  /api/post/{id}/comments:
-    get:
-      operationId: R411
-      summary: "R411 : Comments of a given post"
-      description: "Returns comments of a given post according to user parameters. Access: PUB"
-      tags:
-        - "M04: Forums, Posts and Comments"
-      parameters:
-        - in: path
-          name: id
-          description: "Post Id"
-          required: true
-          schema:
-            type: integer
-        - in: query
-          name: offset
-          description: "starting value to fetch results"
-          required: false
-          schema:
-            type: integer
-            minimum: 0
-            default: 0
-        - in: query
-          name: limit
-          description: "limits the number of results"
-          required: false # returns all posts if not specified
-          schema:
-            type: integer
-            minimum: 1
-
-      responses:
-        200:
-          description: "OK. Return a list of comments that fit the criteria"
-        404:
-          description: "Post Id not found."
-
-  /api/post/{id}/comments:
-    get:
-      operationId: R412
-      summary: "R412 : Like a post"
-      description: "Processes a request to like a post. Access: USR"
-      tags:
-        - "M04: Forums, Posts and Comments"
-      parameters:
-        - in: path
-          name: id
-          description: "Post Id"
-          required: true
-          schema:
-            type: integer
-
-      responses:
-        200:
-          description: "OK. Successfully liked the post"
-        404:
-          description: "Post Id not found."
-
-  /api/post/{id}/comments:
-    get:
-      operationId: R413
-      summary: "R413 : Disike a post"
-      description: "Processes a request to dislike a post. Access: USR"
-      tags:
-        - "M04: Forums, Posts and Comments"
-      parameters:
-        - in: path
-          name: id
-          description: "Post Id"
-          required: true
-          schema:
-            type: integer
-
-      responses:
-        200:
-          description: "OK. Successfully disliked the post"
-        404:
-          description: "Post Id not found."
-
-  /api/post/{id}/comments:
-    get:
-      operationId: R414
-      summary: "R414 : Like a comment"
-      description: "Processes a request to like a comment. Access: USR"
-      tags:
-        - "M04: Forums, Posts and Comments"
-      parameters:
-        - in: path
-          name: id
-          description: "Comment Id"
-          required: true
-          schema:
-            type: integer
-
-      responses:
-        200:
-          description: "OK. Successfully liked the comment"
-        404:
-          description: "Comment Id not found."
-
-  /api/post/{id}/comments:
-    get:
-      operationId: R415
-      summary: "R415 : Disike a comment"
-      description: "Processes a request to dislike a comment. Access: USR"
-      tags:
-        - "M04: Forums, Posts and Comments"
-      parameters:
-        - in: path
-          name: id
-          description: "Comment Id"
-          required: true
-          schema:
-            type: integer
-
-      responses:
-        200:
-          description: "OK. Successfully disliked the comment"
-        404:
-          description: "Comment Id not found."
