@@ -1,3 +1,22 @@
+CREATE schema IF NOT EXISTS lbaw2264;
+SET search_path TO lbaw2264;
+
+DROP TYPE IF EXISTS ReportState CASCADE;
+DROP TYPE IF EXISTS ReportType CASCADE;
+DROP TYPE IF EXISTS NotificationType CASCADE;
+DROP TYPE IF EXISTS RatingType CASCADE;
+
+DROP TABLE IF EXISTS Users CASCADE;
+DROP TABLE IF EXISTS Forums CASCADE;
+DROP TABLE IF EXISTS ForumOwners CASCADE;
+DROP TABLE IF EXISTS Posts CASCADE;
+DROP TABLE IF EXISTS Comments CASCADE;
+DROP TABLE IF EXISTS Ratings CASCADE;
+DROP TABLE IF EXISTS Follows CASCADE;
+DROP TABLE IF EXISTS Reports CASCADE;
+DROP TABLE IF EXISTS Notifications CASCADE;
+DROP TABLE IF EXISTS PostImages CASCADE;
+
 ----------------------------------------------------------------------
 --- Types
 ----------------------------------------------------------------------
