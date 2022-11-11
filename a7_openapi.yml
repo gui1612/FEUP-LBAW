@@ -576,3 +576,45 @@ paths:
                 302Failure:
                   description: "Failed post edition. Redirect to the edit post page."
                   value: "/post/{id}/edit"
+
+  /api/post/{id}/posts:
+    get:
+      operationId: R408
+      summary: "R308 : Like a post"
+      description: "Processes a request to like a post. Access: USR"
+      tags:
+        - "M03: Forums, Posts and Comments"
+      parameters:
+        - in: path
+          name: id
+          description: "Post Id"
+          required: true
+          schema:
+            type: integer
+
+      responses:
+        200:
+          description: "OK. Successfully liked the post"
+        404:
+          description: "Post Id not found."
+
+  /api/post/{id}/posts:
+    get:
+      operationId: R409
+      summary: "R409 : Disike a post"
+      description: "Processes a request to dislike a post. Access: USR"
+      tags:
+        - "M03: Forums, Posts and Comments"
+      parameters:
+        - in: path
+          name: id
+          description: "Post Id"
+          required: true
+          schema:
+            type: integer
+
+      responses:
+        200:
+          description: "OK. Successfully disliked the post"
+        404:
+          description: "Post Id not found."
