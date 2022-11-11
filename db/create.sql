@@ -5,7 +5,7 @@
 CREATE TYPE ReportState AS ENUM ('proposed', 'ongoing', 'approved', 'denied');
 CREATE TYPE ReportType AS ENUM ('post', 'comment', 'forum');
 CREATE TYPE NotificationType AS ENUM ('follow_user', 'post_comment', 'content_reported', 'like');
-CREATE TYPE RatingType AS ENUM ('like', 'dislike');
+CREATE TYPE RatingType AS ENUM ('like', 'dislike')
 
 
 -----------------------------------------
@@ -105,6 +105,7 @@ CREATE TABLE Reports (
 CREATE TABLE Notifications (
   id SERIAL PRIMARY KEY,
   createdAt DATETIME NOT NULL DEFAULT NOW CONSTRAINT validCreation CHECK createdAt <= NOW,
+  read NOT NULL DEFAULT FALSE,
   type NotificationType NOT NULL,
   receiverId INTEGER NOT NULL,
   followId REFERENCES Follows,
