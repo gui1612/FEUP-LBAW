@@ -20,55 +20,55 @@ tags:
 
 paths:
   # M01 - Authentication and User Profile
-/login:
-  get:
-    operationId: "R101"
-    summary: "R101: Login Form"
-    description: "Provide a form for authentication. Acess: PUB"
-    tags:
-      - "M01: Authentication and User Profile" 
-    
-    response:  
-      "200": 
-        description: "Ok. Show Administrators Listing UI02" 
-    
-  post:
-    operationId: "R102"
-    summary: "R102: Login Action"
-    description: "Login form submission action. Acess: PUB"
-    tags:
-      - "M01: Authentication and User Profile"
-    requestBody:
-      required: true
-      content:
-        application/x-www-form-urlencoded:
-          schema:
-            type: object
-            properties:
-              email:
-                type: string
-                format: email
-              password:
-                type: string
-                format: password
-            required:
-              - email
-              - password
-  
-    responses:
-      "302":
-        description: "Redirect after processing the login credentials."
-        headers:
-          Location:
+  /login:
+    get:
+      operationId: "R101"
+      summary: "R101: Login Form"
+      description: "Provide a form for authentication. Acess: PUB"
+      tags:
+        - "M01: Authentication and User Profile" 
+      
+      response:  
+        "200": 
+          description: "Ok. Show Administrators Listing UI02" 
+      
+    post:
+      operationId: "R102"
+      summary: "R102: Login Action"
+      description: "Login form submission action. Acess: PUB"
+      tags:
+        - "M01: Authentication and User Profile"
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
             schema:
-              type: string
-            examples:
-              302Success:
-                description: "Successful login. Redirect to homepage."
-                value: "/"
-              302Failure:
-                description: "Failed login. Redirect to login form."
-                value: "/login"            
+              type: object
+              properties:
+                email:
+                  type: string
+                  format: email
+                password:
+                  type: string
+                  format: password
+              required:
+                - email
+                - password
+    
+      responses:
+        "302":
+          description: "Redirect after processing the login credentials."
+          headers:
+            Location:
+              schema:
+                type: string
+              examples:
+                302Success:
+                  description: "Successful login. Redirect to homepage."
+                  value: "/"
+                302Failure:
+                  description: "Failed login. Redirect to login form."
+                  value: "/login"            
   
   /logout:
     get:
