@@ -50,10 +50,5 @@ class User extends Authenticatable
         return count($isFollowing) > 0; 
     }
 
-
-    public function isAdmin() {
-        return $this->isAdmin == true;
-    }
-
     
 }
