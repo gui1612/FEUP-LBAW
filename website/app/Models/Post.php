@@ -7,5 +7,12 @@ use Illuminate\Database\Eloquent\Model;
 
 class Post extends Model
 {
+    
     use HasFactory;
+
+    public $timestamps = false;
+
+    public function commentOwner() {
+        return $this->belongsTo(User::Class);
+    }
 }

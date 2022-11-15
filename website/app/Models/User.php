@@ -4,11 +4,10 @@ namespace App\Models;
 
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class User extends Authenticatable
 {
-    use Notifiable, HasFactory;
+    use Notifiable;
 
     protected $table = 'Users';
 
@@ -35,7 +34,7 @@ class User extends Authenticatable
         'password', 'remember_token',
     ];
 
-    public function followedBy()  
+   /* public function followedBy()  
     {
         return $this->belongsTo(User::class, 'Follows', 'followedUser','ownerId');
     }
@@ -51,19 +50,23 @@ class User extends Authenticatable
         return count($isFollowing) > 0; 
     }
 
-    public function reports() {
+    public function reports() 
+    {
         return $this->hasMany(Report::class);
     }
 
-    public function notifications() {
+    public function notifications() 
+    {
         return $this->hasMany(Notification::class);
     }
 
-    public function comments() {
+    public function comments() 
+    {
         return $this->hasMany(Comment::class);
     }
 
     public function posts() {
         return $this->hasMany(Post::class);
     }
+    */
 }

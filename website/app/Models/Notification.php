@@ -8,4 +8,13 @@ use Illuminate\Database\Eloquent\Model;
 class Notification extends Model
 {
     use HasFactory;
+
+    public $timestamps = false;
+
+    function receiver() {
+        return $this->belongsTo(User::class);
+    }
+
+    
+
 }
