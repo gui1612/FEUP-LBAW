@@ -9,7 +9,7 @@ class User extends Authenticatable
 {
     use Notifiable;
 
-    protected $table = 'Users';
+    protected $table = 'users';
 
 
     // Don't add create and update timestamps in database.
@@ -21,8 +21,7 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'username', 'first_name', 'last_name', 'banner_Picture' ,'email',
-        'password', 'bio'
+        'username'
     ];
 
     /**
@@ -31,7 +30,7 @@ class User extends Authenticatable
      * @var array
      */
     protected $hidden = [
-        'password', 'remember_token',
+        'password'
     ];
 
    /* public function followedBy()  
