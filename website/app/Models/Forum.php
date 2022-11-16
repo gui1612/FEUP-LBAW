@@ -12,18 +12,16 @@ class Forum extends Model
 
     public $timestamps = false;
 
-    public function forumOwner() {
-        return $this->belongsTo(User::class);
+    public function owners() {
+        return $this->belongsToMany(User::class, 'forumowners', 'forum_id', 'owner_id');
     }
     
-    public function reports() {
-        return $this->hasMany(Report::class);
-    }
+    // public function reports() {
+    //     return $this->hasMany(Report::class);
+    // }
 
-    /* I have doubts about this one, also the reverse 
-     need to be done */
-    public function follows() {
-        return $this->hasMany(Follow::class);
+    public function followed_by() {
+        return $this->hasMany(User::class);
     }
 
 }

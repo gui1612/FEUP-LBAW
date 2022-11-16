@@ -2,16 +2,11 @@
 
 namespace App\Models;
 
-use Illuminate\Notifications\Notifiable;
-use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
 
-class User extends Authenticatable
+class User extends Model
 {
-    use Notifiable;
-
-    protected $table = 'users';
-
-
     // Don't add create and update timestamps in database.
     public $timestamps  = false;
 
@@ -20,52 +15,38 @@ class User extends Authenticatable
      *
      * @var array
      */
-    protected $fillable = [
-        'username'
-    ];
+    protected $fillable = [];
 
     /**
      * The attributes that should be hidden for arrays.
      *
      * @var array
      */
-    protected $hidden = [
-        'password'
-    ];
+    protected $visible = [];/*[
+        'created_at',
+        'username',
+        'first_name',
+        'last_name',
+        'bio',
+        'reputation',
+        'profile_picture',
+        'banner_picture',
+    ];*/
 
-   /* public function followedBy()  
-    {
-        return $this->belongsTo(User::class, 'Follows', 'followedUser','ownerId');
+
+    public function followed_by() {
+        return $this->belongsToMany(User::class, 'follows', 'followed_user_id', 'owner_id');
     }
 
-    public function following()
-    {
-        return $this->belongsTo(User::class, 'Follows', 'ownerId', 'followedUser');
+    public function followed_users() {
+        return $this->belongsToMany(User::class, 'follows', 'owner_id', 'followed_user_id')->wherePivotNotNull('followed_user_id');
     }
 
-    public function isFollowing($userId) 
-    {
-        $isFollowing = $this->following->where('ownerId',$userId);
-        return count($isFollowing) > 0; 
+    public function followed_forums() {
+        return $this->belongsToMany(Forum::class, 'follows', 'owner_id', 'followed_forum_id')->wherePivotNotNull('followed_forum_id');
     }
 
-    public function reports() 
-    {
-        return $this->hasMany(Report::class);
+    public function owned_forums() {
+        return $this->belongsToMany(Forum::class, 'forumowners', 'owner_id', 'forum_id');
     }
-
-    public function notifications() 
-    {
-        return $this->hasMany(Notification::class);
-    }
-
-    public function comments() 
-    {
-        return $this->hasMany(Comment::class);
-    }
-
-    public function posts() {
-        return $this->hasMany(Post::class);
-    }
-    */
 }
