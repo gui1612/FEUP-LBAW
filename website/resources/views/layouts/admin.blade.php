@@ -2,7 +2,8 @@
 
 @section('body')
     <header>
-        @include('partials.admin.navbar')
+        @include('partials.header')
+        <h1>@yield('title')</h1>
     </header>
     <main>
         @yield('content')
