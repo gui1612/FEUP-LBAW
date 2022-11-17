@@ -1,10 +1,22 @@
 version: '3'
 services:
 
-  # app:
-  #   build: ./website
-  #   ports:
-  #     - "80:80"
+  app:
+    build:
+      context: website
+      dockerfile: Dockerfile.development
+
+    environment:
+      - "DB_HOST=postgres"
+
+    volumes:
+      - "./website/app:/var/www/app"
+      - "./website/storage:/var/www/storage"
+      - "./website/resources:/var/www/resources"
+      - "./website/routes:/var/www/routes"
+
+    ports:
+      - "8000:8000"
 
   postgres:
     image: postgres:11
