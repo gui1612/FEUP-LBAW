@@ -1,4 +1,5 @@
 const mix = require('laravel-mix');
+const LiveReloadPlugin = require('webpack-livereload-plugin');
 
 /*
  |--------------------------------------------------------------------------
@@ -16,3 +17,10 @@ mix.js('resources/assets/js/app.js', 'public/js')
         require('tailwindcss'),
         require('autoprefixer')
     ]);
+
+mix.webpackConfig({
+    plugins: [new LiveReloadPlugin({
+        useSourceHash: true,
+        liveCSS: false
+    })]
+});

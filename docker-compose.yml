@@ -17,6 +17,7 @@ services:
 
     ports:
       - "8000:8000"
+      - "35729:35729"
 
   postgres:
     image: postgres:11
