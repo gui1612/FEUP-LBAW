@@ -5,19 +5,18 @@ services:
     build:
       context: .
       dockerfile: Dockerfile.development      
-
     environment:
       - "DB_HOST=postgres"
-
     volumes:
-      - "./website/app:/var/www/app"
-      - "./website/storage:/var/www/storage"
-      - "./website/resources:/var/www/resources"
-      - "./website/routes:/var/www/routes"
-
+      - "./app:/var/www/app"
+      - "./storage:/var/www/storage"
+      - "./resources:/var/www/resources"
+      - "./routes:/var/www/routes"
     ports:
       - "8000:8000"
       - "35729:35729"
+    depends_on:
+      - postgres
 
   postgres:
     image: postgres:11
