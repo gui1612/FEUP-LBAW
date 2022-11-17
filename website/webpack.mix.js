@@ -21,7 +21,6 @@ mix.js('resources/assets/js/app.js', 'public/js')
 
 mix.webpackConfig({
     plugins: [new LiveReloadPlugin({
-        useSourceHash: true,
         liveCSS: false
     })]
 });

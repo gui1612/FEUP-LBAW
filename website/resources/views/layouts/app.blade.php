@@ -1,4 +1,26 @@
-<!DOCTYPE html>
+@extends('layouts.base')
+
+@section('.title')
+  @hasSection ('title')
+    @yield('title') |
+  @endif
+  {{ config('app.name', 'Laravel') }}
+@endsection
+
+@section('body')
+  <header>
+    @include('partials.header')
+  </header>
+  <main>
+    @yield('content')
+  </main>
+  @yield('extra')
+  <footer>
+    @include('partials.footer')
+  </footer>
+@endsection
+
+{{-- <!DOCTYPE html>
 <html lang="{{ app()->getLocale() }}">
   <head>
     <meta charset="utf-8">
@@ -7,12 +29,14 @@
 
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
-
-    <style>
-      @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@100;300&display=swap');
-    </style> 
-
-    <title>{{ config('app.name', 'Laravel') }}</title>
+    <title>
+      @hasSection ('title')
+        @yield('title') | {{ config('app.name', 'Laravel') }}
+      @else
+        {{ config('app.name', 'Laravel') }}
+      @endif
+    </title>
+        
 
     <!-- Styles -->
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
@@ -24,17 +48,21 @@
 </script>
   </head>
   <body>
+    <header>
+      @yield('header')
+      {{-- <h1><a href="{{ url('/cards') }}">Thingy!</a></h1>
+      @if (Auth::check())
+      <a class="button" href="{{ url('/logout') }}"> Logout </a> <span>{{ Auth::user()->name }}</span>
+      @endif --}}
+    {{--</header>
     <main>
-      <header>
-        @yield('header')
-        {{-- <h1><a href="{{ url('/cards') }}">Thingy!</a></h1>
-        @if (Auth::check())
-        <a class="button" href="{{ url('/logout') }}"> Logout </a> <span>{{ Auth::user()->name }}</span>
-        @endif --}}
-      </header>
       <section id="content">
         @yield('content')
       </section>
+      @yield('extra')
     </main>
+    <footer>
+      @yield('footer')
+    </footer>
   </body>
-</html>
+</html> --}}
