@@ -1,5 +1,6 @@
 Dockerfile
+Dockerfile.development
 upload_image.sh
 README.md
-# /vendor
-# /node_modules
+/vendor
+/node_modules
