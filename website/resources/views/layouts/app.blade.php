@@ -8,6 +8,10 @@
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
+    <style>
+      @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@100;300&display=swap');
+    </style> 
+
     <title>{{ config('app.name', 'Laravel') }}</title>
 
     <!-- Styles -->
@@ -22,10 +26,11 @@
   <body>
     <main>
       <header>
-        <h1><a href="{{ url('/cards') }}">Thingy!</a></h1>
+        @yield('header')
+        {{-- <h1><a href="{{ url('/cards') }}">Thingy!</a></h1>
         @if (Auth::check())
         <a class="button" href="{{ url('/logout') }}"> Logout </a> <span>{{ Auth::user()->name }}</span>
-        @endif
+        @endif --}}
       </header>
       <section id="content">
         @yield('content')
