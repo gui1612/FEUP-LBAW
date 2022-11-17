@@ -21,7 +21,9 @@ Route::get('/', 'Auth\LoginController@home');
 Route::get('cards', 'CardController@list');
 Route::get('cards/{id}', 'CardController@show');
 
-Route::get('users', 'UserController@list');
+Route::get('users', 'UserController@list')->name('admin.team');
+
+Route::get('admin', 'AdminController@panel')->name('admin.panel');
 
 // API
 Route::put('api/cards', 'CardController@create');
