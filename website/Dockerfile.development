@@ -53,4 +53,4 @@ VOLUME [ \
 ]
 
 # Start command
-CMD sh ./docker_dev.sh
+CMD npm run watch & php artisan serve --host=0.0.0.0
