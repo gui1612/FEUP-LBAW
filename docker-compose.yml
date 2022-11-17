@@ -4,7 +4,7 @@ services:
   app:
     build:
       context: website
-      dockerfile: Dockerfile.development
+      dockerfile: Dockerfile.development      
 
     environment:
       - "DB_HOST=postgres"
