@@ -1,0 +1,100 @@
+.post {
+    margin: 1rem 4rem;
+    background-color: white;
+    height: 100%;
+
+    &_content {
+        padding: 1.5rem 2.5rem;
+
+        &_utils {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+
+            img {
+                height: 1.8rem;
+                width: 1.8rem;
+            }
+        }
+
+        &_creator_details {
+            display: flex;
+            align-items: center;
+
+            img {
+                width: 3.5rem;
+                height: 3.5rem;
+            }
+        }
+
+        h2 {
+            font-weight: bold;
+            font-size: 1.8rem;
+            padding-bottom: 1rem;
+        }
+
+        p {
+            padding-bottom: 1rem;
+            font-weight: 600;
+        }
+
+        &_rating {
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            padding: 1rem;
+
+            button {
+                width: 1.8rem;
+                height: 1.8rem;
+
+                img {
+                    width: 100%;
+                }
+            }
+        }
+    }
+}
+
+.editable_title {
+    display: flex;
+    align-items: flex-start;
+    gap: 1rem;
+    font-weight: bold;
+    font-size: 1.6rem;
+    margin-bottom: 1rem;
+    
+    .edit_title {
+        border-bottom: 2px solid rgb(63, 63, 63);
+        outline: none;
+    }
+}
+
+.editable_body {
+    border: 1px solid rgb(63, 63,63);
+    padding: 0.5rem;
+    font-weight: 600;
+    font-size: 1.2rem;
+
+    .edit_body {
+        outline: none;
+    }
+}
+
+.edit_button {
+    display: flex;
+    align-items: center;
+    width: max-content;
+
+    padding: 0.5rem 0.8rem;
+    margin: 2rem 0;
+    gap: 0.8rem;
+    border-radius: 3px;
+
+    background-color: rgb(192, 195, 211);
+
+    img {
+        width: 1.4rem;
+        height: 1.4rem;
+    }
+}

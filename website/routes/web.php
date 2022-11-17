@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\PostController;
 use Illuminate\Support\Facades\Route;
 use App\Models\User;
 
@@ -36,3 +37,6 @@ Route::get('logout', 'Auth\LoginController@logout')->name('logout');
 Route::get('register', 'Auth\RegisterController@showRegistrationForm')->name('register');
 Route::post('register', 'Auth\RegisterController@register');
 
+Route::get('post/{id}', 'PostController@show')->name('post');
+Route::get('edit_post/{id}', 'PostController@edit')->name('post.edit');
+Route::delete('api/post/{id}', 'PostController@delete');

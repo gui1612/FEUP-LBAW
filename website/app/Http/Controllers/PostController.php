@@ -9,7 +9,14 @@ use Illuminate\Support\Facades\Auth;
 class PostController extends Controller {
     public function show($id) {
         $post = Post::find($id);
-        return view('pages.post', ['post' => $post]);
+
+        return view('pages.post', ['post' => $post, 'id' => $id]);
+    }
+
+    public function edit($id) {
+      $post = Post::find($id);
+
+      return view('pages.edit_post', ['post' => $post, 'id' => $id]);
     }
 
     public function list() {
@@ -34,19 +41,10 @@ class PostController extends Controller {
     public function delete(Request $request, $id) {
       $post = Post::find($id);
 
-      #$this->authorize('delete', $post);
+      $this->authorize('delete', $post);
 
       $post->delete();
 
       return $post;
     }
-
-    public function edit(Request $request, $id) {
-        $post = Post::find($id);
-  
-        #$this->authorize('delete', $post);
-  
-  
-        return $post;
-      }
 }
