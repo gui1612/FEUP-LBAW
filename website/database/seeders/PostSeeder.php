@@ -2,7 +2,8 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+use App\Models\Post;
+use App\Models\User;
 use Illuminate\Database\Seeder;
 
 class PostSeeder extends Seeder
@@ -12,8 +13,31 @@ class PostSeeder extends Seeder
      *
      * @return void
      */
-    public function run()
-    {
-        //
+    public function run() {
+        $users = User::all();
+
+        Post::factory()
+            ->recycle($users)
+            ->count(400)
+            ->create();
+        
+        Post::factory()
+            ->recycle($users)
+            ->count(400)
+            ->long()
+            ->create();
+
+        Post::factory()
+            ->recycle($users)
+            ->count(400)
+            ->hidden()
+            ->create();
+
+        Post::factory()
+            ->recycle($users)
+            ->count(400)
+            ->long()
+            ->hidden()
+            ->create();
     }
 }

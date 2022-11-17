@@ -71,7 +71,7 @@ CREATE TABLE Posts (
   body TEXT CONSTRAINT post_body_nn NOT NULL,
   rating INTEGER DEFAULT 0 CONSTRAINT post_rating_nn NOT NULL,
   owner_id INTEGER CONSTRAINT post_ref_owner REFERENCES Users CONSTRAINT post_owner_id_nn NOT NULL,
-  forum_id INTEGER CONSTRAINT post_ref_forum REFERENCES Forums CONSTRAINT post_forum_id_nn NOT NULL,
+  -- forum_id INTEGER CONSTRAINT post_ref_forum REFERENCES Forums CONSTRAINT post_forum_id_nn NOT NULL,
   hidden BOOLEAN DEFAULT FALSE CONSTRAINT post_hidden_nn NOT NULL
 );
 
@@ -86,15 +86,23 @@ CREATE TABLE Comments (
   hidden BOOLEAN DEFAULT FALSE CONSTRAINT comment_hidden_nn NOT NULL
 );
 
+-- CREATE TABLE Ratings (
+--   owner_id INTEGER CONSTRAINT rating_ref_owner REFERENCES Users CONSTRAINT rating_owner_id_nn NOT NULL,
+--   rated_post_id INTEGER CONSTRAINT rating_ref_rated_post REFERENCES Posts,
+--   rated_comment_id INTEGER CONSTRAINT rating_ref_rated_comment REFERENCES Comments,
+--   type RatingType CONSTRAINT rating_type_nn NOT NULL,
+--   CONSTRAINT rating_pk PRIMARY KEY (owner_id, rated_post_id, rated_comment_id),
+
+--   CONSTRAINT rating_xor_refs CHECK ((rated_post_id IS NULL) <> (rated_comment_id IS NULL))
+-- );
+
 CREATE TABLE Ratings (
   owner_id INTEGER CONSTRAINT rating_ref_owner REFERENCES Users CONSTRAINT rating_owner_id_nn NOT NULL,
-  rated_post_id INTEGER CONSTRAINT rating_ref_rated_post REFERENCES Posts,
-  rated_comment_id INTEGER CONSTRAINT rating_ref_rated_comment REFERENCES Comments,
+  rated_post_id INTEGER CONSTRAINT rating_ref_rated_post REFERENCES Posts CONSTRAINT rated_post_id_nn NOT NULL,
   type RatingType CONSTRAINT rating_type_nn NOT NULL,
-  CONSTRAINT rating_pk PRIMARY KEY (owner_id, rated_post_id, rated_comment_id),
-
-  CONSTRAINT rating_xor_refs CHECK ((rated_post_id IS NULL) <> (rated_comment_id IS NULL))
+  CONSTRAINT rating_pk PRIMARY KEY (owner_id, rated_post_id)
 );
+
 
 CREATE TABLE Follows (
   owner_id INTEGER CONSTRAINT follow_ref_owner REFERENCES Users CONSTRAINT follow_owner_id_nn NOT NULL,
@@ -140,14 +148,14 @@ CREATE TABLE Notifications (
 
   rating_owner_id INTEGER,
   rated_post_id INTEGER,
-  rated_comment_id INTEGER,
-  CONSTRAINT notification_ref_rating FOREIGN KEY (rating_owner_id, rated_post_id, rated_comment_id) REFERENCES Ratings(owner_id, rated_post_id, rated_comment_id),
-  
+  -- rated_comment_id INTEGER,
+  CONSTRAINT notification_ref_rating FOREIGN KEY (rating_owner_id, rated_post_id/*, rated_comment_id*/) REFERENCES Ratings(owner_id, rated_post_id/*, rated_comment_id*/),
+
 
   CONSTRAINT notification_xor_ref_follow CHECK ((type = 'follow_user') = (follow_owner_id IS NOT NULL AND ((followed_user_id IS NULL) <> (followed_forum_id IS NULL)))),
   CONSTRAINT notification_xor_ref_comment CHECK ((type = 'post_comment') = (comment_id IS NOT NULL)),
   CONSTRAINT notification_xor_ref_report CHECK ((type = 'content_reported') = (report_id IS NOT NULL)),
-  CONSTRAINT notification_xor_ref_rating CHECK ((type = 'like') = (rating_owner_id IS NOT NULL AND ((rated_post_id IS NULL) <> (rated_comment_id IS NULL))))
+  CONSTRAINT notification_xor_ref_rating CHECK ((type = 'like') = (rating_owner_id IS NOT NULL AND ((rated_post_id IS NULL)/* <> (rated_comment_id IS NULL)*/)))
 );
 
 CREATE TABLE PostImages (

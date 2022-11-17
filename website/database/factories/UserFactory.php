@@ -22,7 +22,6 @@ class UserFactory extends Factory
     public function definition()
     {
         return [
-            'id' => $this->faker->unique()->numberBetween(1, 1000),
             'created_at' => $this->faker->dateTimeBetween('-2 year', 'now'),
             'email' => $this->faker->unique()->safeEmail,
             'pw_hash' => $this->faker->sha256(),
@@ -113,13 +112,14 @@ class UserFactory extends Factory
             return [
                 'email' => null,
                 'pw_hash' => null,
-                'username' => '[deleted user #' . $attributes['id'] . ']',
                 'first_name' => null,
                 'last_name' => null,
                 'bio' => null,
                 'profile_picture' => null,
                 'banner_picture' => null,
             ];
+        })->afterCreating(function (User $user) {
+            $user->username = '[deleted user #' . $user->id . ']';
         });
     }
 }

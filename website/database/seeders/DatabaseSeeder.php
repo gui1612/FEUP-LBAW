@@ -16,9 +16,12 @@ class DatabaseSeeder extends Seeder
     {
         $path = 'resources/sql/seed.sql';
         DB::unprepared(file_get_contents($path));
-
+        // DB::unprepared(file_get_contents('resources/sql/populate.sql'));
         $this->call([
-            UserSeeder::class
+            UserSeeder::class,
+            PostSeeder::class,
+            PostImageSeeder::class,
+            RatingSeeder::class
         ]);
         
         $this->command->info('Database seeded!');

@@ -14,51 +14,43 @@ class UserSeeder extends Seeder
      */
     public function run()
     {
-        // 300 normal users
         UserFactory::new()
-            ->count(300)
+            ->count(100)
             ->create();
 
-        // 100 users with no biography
         UserFactory::new()
             ->count(100)
             ->no_bio()
             ->create();
 
-        // 50 users with no profile picture
         UserFactory::new()
-            ->count(50)
+            ->count(100)
             ->no_profile_picture()
             ->create();
 
-        // 100 users with no banner picture
         UserFactory::new()
             ->count(100)
             ->no_banner_picture()
             ->create();
 
-        // 170 users with no banner picture and no profile picture
         UserFactory::new()
-            ->count(170)
+            ->count(100)
             ->no_profile_picture()
             ->no_banner_picture()
             ->create();
 
-        // 10 users with admin privileges
         UserFactory::new()
-            ->count(10)
+            ->count(100)
             ->admin()
             ->create();
 
-        // 20 blocked users
         UserFactory::new()
-            ->count(10)
+            ->count(100)
             ->blocked()
             ->create();
 
-        // 50 users with deleted accounts
         UserFactory::new()
-            ->count(50)
+            ->count(100)
             ->deleted()
             ->create();
     }

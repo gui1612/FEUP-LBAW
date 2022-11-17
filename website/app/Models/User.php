@@ -7,32 +7,9 @@ use Illuminate\Database\Eloquent\Model;
 
 class User extends Model
 {
-    // Don't add create and update timestamps in database.
+    use HasFactory;
+
     public $timestamps  = false;
-
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var array
-     */
-    protected $fillable = [];
-
-    /**
-     * The attributes that should be hidden for arrays.
-     *
-     * @var array
-     */
-    protected $visible = [];/*[
-        'created_at',
-        'username',
-        'first_name',
-        'last_name',
-        'bio',
-        'reputation',
-        'profile_picture',
-        'banner_picture',
-    ];*/
-
 
     public function followed_by() {
         return $this->belongsToMany(User::class, 'follows', 'followed_user_id', 'owner_id');

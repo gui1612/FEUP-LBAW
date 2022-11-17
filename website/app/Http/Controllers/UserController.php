@@ -8,8 +8,8 @@ use App\Models\User;
 class UserController extends Controller
 {
 
-  public function index() {
+  public function list() {
     $users = User::all();
-        return view('users.index', ['card' => implode(" ", compact('users'))]);
+    return view('pages.users', ['users' => implode(" ", compact('users'))]);
   }
 }
