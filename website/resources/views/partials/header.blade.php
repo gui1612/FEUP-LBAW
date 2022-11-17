@@ -21,4 +21,3 @@
     </div>
 
 </nav>
-<div class="header_divider"></div>

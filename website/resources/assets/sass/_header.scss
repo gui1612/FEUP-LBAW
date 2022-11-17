@@ -1,0 +1,55 @@
+.headernav {
+    background-color: white;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-weight: 600;
+    font-size: 1.4rem;
+
+    height: 4.5rem;
+    
+    &_logo {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+
+        img {
+            width: 5rem;
+            height: 5rem;
+        }
+
+        span {
+            font-weight: 300;
+            font-size: 1.8rem;
+        }
+    }
+
+    &_navigation {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        
+        &_new_post {    
+            display: flex;
+            justify-content: center;
+            align-items: center;
+
+            background-color: rgb(168, 186, 206);
+            border-radius: 6px;
+            width: 2rem;
+            height: 2rem;
+
+            img {
+                height: 1.6rem;
+                width: 1.6rem;
+            }
+        }
+
+        &_user_profile {
+            img {
+                width: 5rem;
+                height: 5rem;
+            }
+        }
+    }
+}
