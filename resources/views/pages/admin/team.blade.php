@@ -10,7 +10,7 @@
                     <div>
                         <a class="flex" href="{{ route('user.show', ['id' => $admin->id]) }}">{{ $admin->username }}</a>
                     </div>
-                    <form method="POST" action="{{ route('admin.team.delete', $admin->id) }}">
+                    <form method="POST" action="{{ route('admin.team.promote', $admin->id) }}">
                         @csrf
                         @method('DELETE')
                         <button type="submit" class="text-red-500">Delete</button>

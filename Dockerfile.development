@@ -50,6 +50,8 @@ RUN npm install
 COPY --chown=www-data . .
 RUN composer dumpautoload
 
+RUN php artisan storage:link
+
 # Copy project configurations
 COPY ./etc/php/php.ini /usr/local/etc/php/conf.d/php.ini
 

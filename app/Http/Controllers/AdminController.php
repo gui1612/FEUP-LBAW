@@ -14,7 +14,14 @@ class AdminController extends Controller
         ]);
     }
 
-    public function delete_from_team($id) {
+    public function promote($id) {
+        $user = User::find($id);
+        $user->is_admin = true;
+        $user->save();
+        return redirect()->route('admin.team');
+    }
+
+    public function demote($id) {
         $user = User::find($id);
         if (!$user->is_admin) {
             session()->flash('error', 'User is not in team');

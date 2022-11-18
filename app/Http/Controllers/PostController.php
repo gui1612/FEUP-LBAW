@@ -47,4 +47,24 @@ class PostController extends Controller {
 
       return $post;
     }
+
+    public function edit_with_new_data(Request $request, $id) {
+      $post = Post::find($id);
+
+      // $this->authorize('edit', $post);
+
+      print_r($request->files);
+      print_r($request->body);
+      // $post->title = $request->input('title');
+      // $post->body = $request->input('body');
+
+      // foreach ($request->files as $file) {
+      //   print_r($file);
+
+      // }
+      // $post->save();
+
+      return $post;
+
+    }
 }

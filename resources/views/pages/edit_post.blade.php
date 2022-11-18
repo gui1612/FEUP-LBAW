@@ -8,20 +8,19 @@
 
 @section('content')
 <body>
-    <form class="post">
+    <form class="post" method="POST" action="{{ route('post.edit', $post->id) }}" enctype="multipart/form-data">
+      @csrf
+      @method('PUT')
+
       <div class="post_content">
         <div class="editable_title">
           <label>Title: </label>
-          <span class="edit_title" contenteditable="true">
-            {{ $post->title }}
-          </span>
+          <input class="edit_title" name="title" value="{{ $post->title }}">
         </div>
 
         <div class="editable_body">
           <label hidden>body</label>        
-          <p class="edit_body" contenteditable="true">
-            {{ $post->body }}
-          </p>
+          <textarea class="edit_body" name ="body" cols="150">{{ $post->body }}</textarea>
         </div>
 
         <div class="post_images">
@@ -30,12 +29,17 @@
           @endforeach
         </div>
 
+        <div class="editable_images">
+          <label>Images: </label>
+          <input class="edit_images" type="file" name="images[]" multiple>
+        </div>
+
         <button class="edit_button">
           <span>add image</span>
-          <img src= {{ asset('images/icons/plus.svg') }} alt="add an embed" width="20" height="20">
+          <img src="{{ asset('images/icons/plus.svg') }}" alt="add an embed" width="20" height="20">
         </button>
 
-        <button class="edit_button">Save Changes</button>
+        <button class="edit_button" type="submit">Save Changes</button>
         <a href="{{ route('post', ['id'=>$id]) }}" class="edit_button">Cancel</a>
         <button class="edit_button bg-red-500" >Delete Post</button>
       </div>
