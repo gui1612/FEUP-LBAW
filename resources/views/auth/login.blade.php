@@ -18,7 +18,7 @@
                 </div>
                 <div class="field input-field">
                     <input class="password" type="password" name="password" placeholder="Password" required>
-                    <i class='bx bx-hide eye-icon'></i>
+                    <i class='bx bx-hide eye-icon' onclick="showHidden()"></i>
                     @if ($errors->has('password'))
                         <span class="error">
                             {{ $errors->first('password') }}
@@ -36,10 +36,18 @@
             
                 <div class="form-link">
                     <span>Don't have an account? 
-                        <a class="signup-link" href="{{route('register')}}"> Signup</a>
+                        <a class="link signup-link" href="{{route('register')}}"> Signup</a>
                     </span>
                 </div>
             </form>
+            <div class="line">
+            </div>
+            <div class="media-options">
+                <a href="#" class="field google">
+                    <img src="https://static.cdnlogo.com/logos/g/35/google-icon.svg" alt="" class="google-img">
+                    <span>Login with Google</span>
+                </a>
+            </div>
         </div>
     </div>   
 </div>
