@@ -21,7 +21,7 @@
         "webpack-livereload-plugin": "^3.0.2"
     },
     "dependencies": {
-        "bootstrap-sass": "^3.4.3",
+        "bootstrap": "^5.2.2",
         "jquery": "^3.6.1",
         "sass-loader": "^13.2.0"
     }

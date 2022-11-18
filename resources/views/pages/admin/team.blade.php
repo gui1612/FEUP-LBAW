@@ -4,13 +4,13 @@
 
 @section('content')
     <section>
-        <ul class="flex flex-col">
+        <ul class="container">
             @foreach ($paginator->items() as $admin)
-                <li class="flex flex-row">
-                    <div>
+                <li class="row">
+                    <div class="col">
                         <a class="flex" href="{{ route('user.show', ['id' => $admin->id]) }}">{{ $admin->username }}</a>
                     </div>
-                    <form method="POST" action="{{ route('admin.team.promote', $admin->id) }}">
+                    <form class="col bg-primary" method="POST" action="{{ route('admin.team.promote', $admin->id) }}">
                         @csrf
                         @method('DELETE')
                         <button type="submit" class="text-red-500">Delete</button>

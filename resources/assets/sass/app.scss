@@ -1,13 +1,14 @@
-@use 'header.scss';
-@use 'post.scss';
+// @use 'header.scss';
+// @use 'post.scss';
 
-@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@100;300&display=swap');
+@import "bootstrap/scss/bootstrap";
+// @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@100;300&display=swap');
 
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+// @tailwind base;
+// @tailwind components;
+// @tailwind utilities;
 
-body {
-    font-family: 'Roboto', sans-serif;
-    background-color: rgb(231, 231, 231);
-}
+// body {
+    // font-family: 'Roboto', sans-serif;
+    // background-color: rgb(231, 231, 231);
+// }
