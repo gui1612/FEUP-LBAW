@@ -41,7 +41,10 @@ Route::get('logout', 'Auth\LoginController@logout')->name('logout');
 Route::get('register', 'Auth\RegisterController@showRegistrationForm')->name('register');
 Route::post('register', 'Auth\RegisterController@register');
 
-Route::get('posts/{id}', 'PostController@show')->name('post');
+Route::get('post/{id}', 'PostController@show')->name('post');
 Route::get('post/{id}/edit', 'PostController@edit')->name('post.edit');
-Route::put('post/{id}/edit', 'PostController@edit_with_new_data')->name('post.edit');
-Route::delete('api/post/{id}', 'PostController@delete');
+Route::get('post/', 'PostController@create_post')->name('post.create');
+Route::put('post/{id}/edit', 'PostController@edit_with_new_data');
+Route::delete('api/post/{id}', 'PostController@delete')->name('post.delete');
+
+Route::post('post/', 'PostController@create');

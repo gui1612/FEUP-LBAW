@@ -98,3 +98,21 @@
         height: 1.4rem;
     }
 }
+
+.delete_button {
+    display: flex;
+    align-items: center;
+    width: max-content;
+
+    padding: 0.5rem 0.8rem;
+    margin: 2rem 0;
+    gap: 0.8rem;
+    border-radius: 3px;
+
+    background-color: rgb(190, 35, 35);
+
+    img {
+        width: 1.4rem;
+        height: 1.4rem;
+    }
+}

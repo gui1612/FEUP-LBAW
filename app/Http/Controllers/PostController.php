@@ -19,6 +19,10 @@ class PostController extends Controller {
       return view('pages.edit_post', ['post' => $post, 'id' => $id]);
     }
 
+    public function create_post() {
+      return view('pages.edit_post');
+    }
+
     public function list() {
       $this->authorize('list', Card::class);
       $posts = Post::all()->orderBy('rating')->get();
@@ -28,7 +32,7 @@ class PostController extends Controller {
     public function create(Request $request) {
       $post = new Post();
 
-     # $this->authorize('create', $post);
+      $this->authorize('create', $post);
 
       $post->title = $request->input('title');
       $post->body = $request->input('body');
@@ -51,20 +55,19 @@ class PostController extends Controller {
     public function edit_with_new_data(Request $request, $id) {
       $post = Post::find($id);
 
-      // $this->authorize('edit', $post);
+      $this->authorize('edit', $post);
 
       print_r($request->files);
       print_r($request->body);
-      // $post->title = $request->input('title');
-      // $post->body = $request->input('body');
+      $post->title = $request->input('title');
+      $post->body = $request->input('body');
 
       // foreach ($request->files as $file) {
       //   print_r($file);
 
       // }
-      // $post->save();
+      $post->save();
 
       return $post;
-
     }
 }
