@@ -4,20 +4,33 @@
 
 @section('content')
     <section>
-        <ul class="container">
-            @foreach ($paginator->items() as $admin)
-                <li class="row">
-                    <div class="col">
-                        <a class="flex" href="{{ route('user.show', ['id' => $admin->id]) }}">{{ $admin->username }}</a>
-                    </div>
-                    <form class="col bg-primary" method="POST" action="{{ route('admin.team.promote', $admin->id) }}">
-                        @csrf
-                        @method('DELETE')
-                        <button type="submit" class="text-red-500">Delete</button>
-                    </form>
-                </li>
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">First</th>
+                    <th scope="col">Last</th>
+                    <th scope="col">Username</th>
+                    <th scope="col">Email</th>
+                  </tr>
+            </thead>
+            <tbody>
+                @foreach ($paginator->items() as $admin)
+                    <tr>
+                        <th scope="row">{{ $admin->id }}</th>
+                        <td>{{ $admin->first_name }}</td>
+                        <td>{{ $admin->last_name }}</td>
+                        <td>{{ $admin->username }}</td>
+                        <td>{{ $admin->email }}</td>
+                        {{-- <form class="col bg-primary" method="POST" action="{{ route('admin.team.promote', $admin->id) }}">
+                            @csrf
+                            @method('DELETE')
+                            <button type="submit" class="text-red-500">Delete</button>
+                        </form> --}}
+                    </tr>
             @endforeach
-        </ul>
+            </tbody>
+        </table>
         @if ($paginator->hasPages())
             <nav>
                 @if (!$paginator->onFirstPage())
