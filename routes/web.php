@@ -21,9 +21,10 @@ Route::get('/', 'Auth\LoginController@home');
 Route::get('cards', 'CardController@list');
 Route::get('cards/{id}', 'CardController@show');
 
-Route::get('users', 'UserController@list')->name('admin.team');
+Route::get('users/{id}', 'UserController@show')->name('user.show');
 
-Route::get('admin', 'AdminController@panel')->name('admin.panel');
+Route::get('admin/team', 'AdminController@show_team')->name('admin.team');
+Route::delete('admin/team/{id}', 'AdminController@delete_from_team')->name('admin.team.delete');
 
 // API
 Route::put('api/cards', 'CardController@create');

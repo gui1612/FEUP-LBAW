@@ -21,7 +21,7 @@ class PostController extends Controller {
 
     public function list() {
       $this->authorize('list', Card::class);
-      $posts = posts()->orderBy('rating')->get();
+      $posts = Post::all()->orderBy('rating')->get();
       return view('pages.posts', ['posts' => $posts]);
     }
 

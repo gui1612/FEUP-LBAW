@@ -23,5 +23,10 @@
 </head>
 <body>
   @yield('body')
+  @if(session()->exists('error'))
+    <dialog open class="bg-red-400">
+      <p>{{ session('error')}}</p>
+    </dialog>
+  @endif
 </body>
 </html>
