@@ -4,7 +4,9 @@ services:
   app:
     build:
       context: .
-      dockerfile: Dockerfile.development      
+      dockerfile: Dockerfile.development   
+      args: 
+        - "HOST_UID=1000"
     environment:
       - "DB_HOST=postgres"
     volumes:

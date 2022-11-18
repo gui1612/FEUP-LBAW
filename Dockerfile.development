@@ -1,4 +1,5 @@
 FROM ubuntu:22.04
+ARG HOST_UID=33
 
 # Install dependencies
 ENV DEBIAN_FRONTEND=noninteractive
@@ -29,8 +30,14 @@ RUN apt-get install -y --no-install-recommends nodejs
 
 WORKDIR /var/www
 
-RUN chown -R www-data /var/www
-RUN chmod -R 700 /var/www
+VOLUME [ \
+    "/var/www/storage", "/var/www/app", \
+    "/var/www/resources", "/var/www/routes" \
+]
+
+RUN chown www-data /var/www
+RUN chmod 700 /var/www
+RUN usermod -u $HOST_UID www-data
 USER www-data
 
 # Copy project code and install project dependencies
@@ -48,11 +55,6 @@ COPY ./etc/php/php.ini /usr/local/etc/php/conf.d/php.ini
 
 EXPOSE 8000
 EXPOSE 35729
-
-VOLUME [ \
-    "/var/www/storage", "/var/www/app", \
-    "/var/www/resources", "/var/www/routes" \
-]
 
 # Start command
 CMD npm run watch & php artisan serve --host=0.0.0.0
