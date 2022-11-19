@@ -33,7 +33,7 @@
 <header>
   <nav class="navbar navbar-expand-sm bg-white">
     <div class="container-fluid">
-      <a class="navbar-brand" href="/">
+      <a class="navbar-brand d-flex align-items-center" href="/">
         <img src= {{ asset('images/logo.svg') }} alt="Wrottit logo" width="60" height="32" class="d-inline-block align-text-top">
         Wrottit
       </a>
@@ -41,14 +41,20 @@
         <span class="navbar-toggler-icon"></span>
       </button>
       <div class="collapse navbar-collapse" id="navbarSupportedContent">
-        <ul class="navbar-nav ms-auto">
+        <ul class="navbar-nav ms-auto d-flex align-items-center gap-3">
+          <li class="nav-item">
+            <a class="btn btn-warning text-reset d-flex align-items-center py-0">
+              <i class="bi bi-plus" style="font-size: 1.5rem"></i>New Post
+            </a>
+          </li>
+
           <li class="nav-item dropdown">
             <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-              Dropdown
+              <img src=" {{ asset("images/logo.svg") }} " height="30" width="30" class="img-fluid" style="height: 2rem">
             </a>
-            <ul class="dropdown-menu">
-              <li><a class="dropdown-item" href="#">Action</a></li>
-              <li><a class="dropdown-item" href="#">Another action</a></li>
+            <ul class="dropdown-menu dropdown-menu-lg-end"">
+              <li><a class="dropdown-item" href="#">Profile</a></li>
+              {{-- <li><a class="dropdown-item" href="#">Another action</a></li> --}}
               <li><hr class="dropdown-divider"></li>
               <li><a class="dropdown-item" href="#">Sign Out</a></li>
             </ul>
