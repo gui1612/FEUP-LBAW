@@ -5,30 +5,24 @@
 @endsection
 
 @section('content')
-
 <body>
-    <form class="post" method="POST" action="{{ route('post.create') }}" enctype="multipart/form-data">
-      <div class="post_content">
-        <div class="editable_title">
-          <label>Title: </label>
-          <input class="edit_title" name="title">
+  <div class="container w-75 m-4 bg-white px-4 py-3 d-flex flex-column gap-2 justify-content-center">
+    <h3>New Post</h3>
+    <form class="col-md-11 mx-auto" method="POST" action="{{ route('post.create') }}" enctype="multipart/form-data">
+        <div class="mb-3">
+            <label for="title" class="form-label visually-hidden">Title</label>
+            <input class="form-control" id="title" placeholder="Title">
         </div>
-
-        <div class="editable_body">
-          <label hidden>body</label>        
-          <textarea class="edit_body" name ="body" cols="150"></textarea>
+        <div class="mb-3">
+            <label for="body" class="form-label visually-hidden">Body</label>
+            <textarea rows="18" class="form-control" id="body" placeholder="Share your thoughts"></textarea>
         </div>
-
-        <div class="editable_images">
-          <label>Images: </label>
-          <input class="edit_images" type="file" name="images[]" multiple>
+        <div class="mb-3">
+          <label for="images" class="form-label visually-hidden">Images</label>
+          <input type="file" class="form-control-file" multiple>
         </div>
-
-        <button class="edit_button">
-          <span>add image</span>
-          <img src="{{ asset('images/icons/plus.svg') }}" alt="add an embed" width="20" height="20">
-        </button>
-      </div>
+        <button type="submit" class="btn btn-primary">Submit</button>
     </form>
+  </div>
 </body>
 @endsection

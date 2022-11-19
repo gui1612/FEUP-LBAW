@@ -4,7 +4,7 @@
 @php($images = $post->images()->get())
 
 @section('content')
-    <article class="post container w-75 m-4 bg-white px-4 py-3">
+    <article class="container w-75 m-4 bg-white px-4 py-3">
         @if($images->isNotEmpty())
             <div id="carouselExampleControls" class="carousel slide d-flex justify-content-center bg-black mx-auto w-100" style="height:30rem;" data-bs-ride="carousel" data-bs-interval="9999999">
                 <div class="carousel-inner">

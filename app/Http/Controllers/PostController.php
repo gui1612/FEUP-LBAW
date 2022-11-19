@@ -20,7 +20,7 @@ class PostController extends Controller {
     }
 
     public function create_post() {
-      return view('pages.edit_post');
+      return view('pages.create_post');
     }
 
     public function list() {
