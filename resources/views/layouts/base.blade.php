@@ -16,7 +16,6 @@
         // Fix for Firefox autofocus CSS bug
         // See: http://stackoverflow.com/questions/18943276/html-5-autofocus-messes-up-css-loading/18945951#18945951
     </script>
-    <script type="text/javascript" src="{{ mix('js/app.js') }}" defer></script>
     @env('local')
       <script src="http://localhost:35729/livereload.js"></script>
     @endenv
@@ -28,5 +27,6 @@
       <p>{{ session('error')}}</p>
     </dialog>
   @endif
+  <script type="text/javascript" src="{{ mix('js/app.js') }}"></script>
 </body>
 </html>

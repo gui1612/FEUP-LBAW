@@ -1,23 +1,19 @@
 @extends('layouts.app')
 
-@section('header')
-  @include('partials.header')
-@endsection
-
 @section('title', $post->title)
 
 @section('content')
 <body>
     <form class="post" method="POST" action="{{ route('post.edit', $post->id) }}" enctype="multipart/form-data">
-      <div class="post_content">
+      <div class="form-group">
         <div class="editable_title">
           <label>Title: </label>
           <input class="edit_title" name="title" value="{{ $post->title }}">
-        </div>
+      </div>
 
         <div class="editable_body">
           <label hidden>body</label>        
-          <textarea class="edit_body" name ="body" cols="150">{{ $post->body }}</textarea>
+          <textarea class="edit_body" name ="body" col150">{{ $post->body }}</textarea>
         </div>
 
         <div class="post_images">
