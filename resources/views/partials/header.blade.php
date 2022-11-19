@@ -43,8 +43,20 @@
       <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav ms-auto d-flex align-items-center gap-3">
           <li class="nav-item">
-            <a class="btn btn-warning text-reset d-flex align-items-center py-0">
+            <a class="btn btn-warning text-reset d-flex align-items-center py-0" href=" {{ route('post.create') }} ">
               <i class="bi bi-plus" style="font-size: 1.5rem"></i>New Post
+            </a>
+          </li>
+
+          <li class="nav-item">
+            <a class="btn btn-warning text-reset" href=" {{ route('post.create') }} ">
+              Sign In
+            </a>
+          </li>
+
+            <li class="nav-item">
+            <a class="btn btn-warning text-reset" href=" {{ route('post.create') }} ">
+              Sign Up
             </a>
           </li>
 
@@ -52,7 +64,7 @@
             <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
               <img src=" {{ asset("images/logo.svg") }} " height="30" width="30" class="img-fluid" style="height: 2rem">
             </a>
-            <ul class="dropdown-menu dropdown-menu-lg-end"">
+            <ul class="dropdown-menu dropdown-menu-lg-end">
               <li><a class="dropdown-item" href="#">Profile</a></li>
               {{-- <li><a class="dropdown-item" href="#">Another action</a></li> --}}
               <li><hr class="dropdown-divider"></li>
