@@ -9,7 +9,7 @@
 
 @section('body')
   @include('partials.header')
-  <main>
+  <main class="bg bg-secondary d-flex justify-content-center" style="--bs-bg-opacity: .15">
     @yield('content')
   </main>
   @yield('extra')
