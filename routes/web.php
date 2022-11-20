@@ -27,6 +27,9 @@ Route::get('admin/team', 'AdminController@show_team')->name('admin.team');
 Route::post('admin/team/{id}', 'AdminController@promote')->name('admin.team.promote');
 Route::delete('admin/team/{id}', 'AdminController@demote')->name('admin.team.demote');
 
+Route::get('admin/users', 'AdminController@show_users')->name('admin.users');
+Route::delete('admin/users/{id}', 'AdminController@delete_user')->name('admin.user.delete');
+
 // API
 Route::put('api/cards', 'CardController@create');
 Route::delete('api/cards/{card_id}', 'CardController@delete');

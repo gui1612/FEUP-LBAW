@@ -22,11 +22,20 @@
 </head>
 <body class="min-vh-100 d-flex flex-column">
   @yield('body')
-  @if(session()->exists('error'))
-    <dialog open class="bg-red-400">
-      <p>{{ session('error')}}</p>
-    </dialog>
-  @endif
+  @danger
+      <div class="toast-container bottom-0 end-0 position-fixed p-3">
+        <div class="toast fade js-toast-ephemeral" style="--bs-toast-bg: #fff;" role="alert" aria-live="assertive" aria-atomic="true">
+          <div class="toast-header">
+            <div class="bg-danger rounded-1 me-2" style="width: 1rem; height: 1rem;"></div>
+            <strong class="me-auto">{{ danger('title') }}</strong>
+            <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+          </div>
+          <div class="toast-body">
+            <span>{{ danger('message') }}</span>
+          </div>
+        </div>
+      </div>
+  @enddanger
   <script type="text/javascript" src="{{ mix('js/app.js') }}"></script>
 </body>
 </html>

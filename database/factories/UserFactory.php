@@ -120,6 +120,7 @@ class UserFactory extends Factory
             ];
         })->afterCreating(function (User $user) {
             $user->username = '[deleted user #' . $user->id . ']';
+            $user->save();
         });
     }
 }

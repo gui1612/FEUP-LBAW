@@ -6,3 +6,16 @@
  */
 
 require('./bootstrap');
+
+import { Toast } from 'bootstrap';
+
+document.querySelectorAll('.toast.js-toast-ephemeral')
+    .forEach(toastEl => {
+        const toast = new Toast(toastEl);
+        toast.show();
+
+        toastEl.addEventListener('hidden.bs.toast', () => {
+            toast.dispose();
+            toastEl.remove();
+        });
+    });
