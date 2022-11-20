@@ -1,0 +1,156 @@
+@import '../variables/variables.scss';
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+.container {
+  height: 100vh;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: rgba(252, 250, 250, 0.593);
+}
+
+.form-content {
+  padding: 30px;
+}
+
+.form {
+  max-width: 430px;
+  background: white;
+  width: 100%;
+  border-radius: 6px;
+
+  a {
+    color: #0171d3;
+    text-decoration: none;
+  }
+
+  a:hover {
+    text-decoration: underline;
+  }
+}
+
+.form-content>header {
+  font-size: 28px;
+  font-weight: 600;
+  color: #232836;
+  text-align: center;
+}
+
+form {
+  margin-top: 30px;
+}
+
+.form .field {
+  position: relative;
+  height: 50px;
+  width: 100%;
+  margin-top: 20px;
+  border-radius: 6px;
+}
+
+.field input,
+.field button {
+  height: 100%;
+  width: 100%;
+  border: none;
+  font-size: 16px;
+  font-weight: 400;
+  border-radius: 6px;
+}
+
+.field input:focus {
+  border-bottom-width: 2px;
+}
+.field input {
+  outline: none;
+  padding-left: 10px;
+  border: 1px solid#CACACA;
+}
+
+.eye-icon {
+  top: 50%;
+  right: 10px;
+  position: absolute;
+  font-size: 20px;
+  transform: translateY(-50%);
+  cursor: pointer;
+  padding: 5px;
+
+}
+
+.field button {
+  background-color: $logo-color;
+  color: #FFF;
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+
+.field button:hover {
+  background-color: #22457e;
+}
+.form-link {
+  text-align: center;
+  margin-top: 15px;
+
+  span {
+      color: #232836;
+      font-size: 14px;
+      font-weight: 400;
+  }
+}
+.form-link span a {
+  color: #0171d3;
+}
+
+.line {
+  position: relative;
+  height: 1px;
+  width: 100%;
+  background-color: #d4d4d4;
+  margin: 36px 0;
+}
+
+.line::before {
+  content: "Or";
+  position: absolute;
+  background-color: #FFF;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: #232836;
+  padding: 0 15px;
+}
+
+.media-options a {
+  display: flex;
+  background-color: white;
+  border: 1px solid#CACACA;
+  align-items: center;
+  justify-content: center;
+}
+
+img.google-img {
+  position: absolute;
+  object-fit: cover;
+  top: 50%;
+  left: 20px;
+  transform: translateY(-50%);
+  width: 20px;
+  height: 20px;
+}
+
+a.google span {
+  outline: none;
+  font-weight: 500;
+  opacity: 0.6;
+  color: #232836;
+}
+
+a.google:hover {
+  text-decoration: none;
+}
