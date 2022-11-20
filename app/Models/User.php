@@ -29,6 +29,10 @@ class User extends AuthUser {
         return $this->belongsToMany(User::class, 'follows', 'owner_id', 'followed_user_id')->wherePivotNotNull('followed_user_id');
     }
 
+    public function posts() {
+        return $this->hasMany(Post::class, 'owner_id', 'id');
+    }
+
     // public function followed_forums() {
     //     return $this->belongsToMany(Forum::class, 'follows', 'owner_id', 'followed_forum_id')->wherePivotNotNull('followed_forum_id');
     // }
