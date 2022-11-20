@@ -1,6 +1,6 @@
 <nav class="navbar navbar-expand bg-light">
   <div class="container-fluid">
-    <a class="navbar-brand d-flex align-items-center" href="{{ route('home') }}">
+    <a class="navbar-brand d-flex align-items-center" href="{{ route('feed') }}">
         <img src="{{ asset('images/logo.svg') }}" alt="Wrottit logo" width="60" height="32" class="d-inline-block">
         Wrottit
     </a>

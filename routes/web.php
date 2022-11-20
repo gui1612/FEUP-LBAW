@@ -15,7 +15,7 @@ use App\Models\User;
 |
 */
 // Home
-Route::get('/', 'Auth\LoginController@home')->name('home');
+Route::get('/', 'FeedController@show')->name('feed');
 
 // Cards
 Route::get('cards', 'CardController@list')->name('user.settings');
