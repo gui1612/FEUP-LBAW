@@ -20,7 +20,7 @@
                     </a>
                 </li>
                 <li class="d-md-none nav-item">
-                    <a class="nav-link" href="{{ route('user.profile') }}">Profile</a>
+                    <a class="nav-link" href="{{ route('user.show', Auth::user()->id) }}">Profile</a>
                 </li>
                 <li class="d-md-none nav-item">
                     <a class="nav-link" href="{{ route('user.settings') }}">Settings</a>
@@ -35,10 +35,10 @@
                     <img src="{{ asset('images/default.png') }}" alt="Wrottit logo" width="32" height="32" class="rounded-circle img-fluid border border-1">
                 </button>
                 <ul class="dropdown-menu dropdown-menu-end">
-                    <li><a class="dropdown-item" href="{{ route('user.profile') }}">Your Profile</a></li>
+                    <li><a class="dropdown-item" href="{{ route('user.show', Auth::user()->id) }}">Your Profile</a></li>
                     <li><a class="dropdown-item" href="{{ route('user.settings') }}">Settings</a></li>
                     <li><hr class="dropdown-divider"></li>
-                    <li><a class="dropdown-item" href="{{ route('Logout') }}">Logout</a></li>
+                    <li><a class="dropdown-item" href="{{ route('logout') }}">Logout</a></li>
                 </ul>
                 </div>
             </div>

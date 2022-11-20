@@ -35,7 +35,7 @@ CREATE TABLE Users (
   id SERIAL CONSTRAINT user_id_pk PRIMARY KEY,
   created_at TIMESTAMP WITHOUT TIME ZONE DEFAULT NOW() CONSTRAINT user_created_at_nn NOT NULL CONSTRAINT user_created_at_before_now CHECK (created_at <= NOW()),
   email TEXT CONSTRAINT user_email_uk UNIQUE,
-  pw_hash TEXT,
+  password TEXT,
   username TEXT CONSTRAINT user_username_nn NOT NULL CONSTRAINT user_username_uk UNIQUE,
   first_name TEXT,
   last_name TEXT,
@@ -44,7 +44,8 @@ CREATE TABLE Users (
   block_reason TEXT,
   profile_picture TEXT,
   banner_picture TEXT,
-  is_admin BOOLEAN DEFAULT FALSE CONSTRAINT user_is_admin_nn NOT NULL
+  is_admin BOOLEAN DEFAULT FALSE CONSTRAINT user_is_admin_nn NOT NULL,
+  remember_token TEXT -- Laravel
 );
 
 CREATE TABLE Forums (

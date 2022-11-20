@@ -6,7 +6,7 @@
 <div class="d-flex justify-content-center align-items-center mt-5">
     <form method="POST" action="{{ route('login.submit') }}">
         @csrf
-        <fieldset class="bg-white px-5 py-4 mb-2 rounded-2">
+        <fieldset class="bg-white px-5 py-4 mb-2">
             <legend class="text-center mb-3">Login</legend>
             <div class="mb-3">
                 <label for="exampleInputEmail1" class="form-label">Email</label>
@@ -29,7 +29,7 @@
               <button type="submit" class="btn btn-primary mt-3 mb-2">Submit</button>
               <a class="d-block" href="">Forgot your password?</a>
         </fieldset>
-        <div class="bg-white p-3 rounded-2 text-center">
+        <div class="bg-white p-3 text-center">
             <p class="mb-0">Don't have an account? <a href="{{ route('register.show') }}">Create one</a></p>    
         </div>
     </form>

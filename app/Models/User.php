@@ -3,10 +3,9 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Foundation\Auth\User as AuthUser;
 
-
-class User extends Authenticatable {
+class User extends AuthUser {
     use HasFactory;
 
     public $timestamps = false;

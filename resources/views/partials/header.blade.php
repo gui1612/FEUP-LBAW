@@ -1,9 +1,7 @@
 <header>
-  @if(optional(Auth::user())->is_admin)
-    @include('partials.navbar.admin')
-  @endif
-
+  
   @auth
+    @includeWhen(Auth::user()->is_admin, 'partials.navbar.admin')
     @include('partials.navbar.user')
   @endauth
 

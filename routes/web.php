@@ -18,7 +18,7 @@ use App\Models\User;
 Route::get('/', 'Auth\LoginController@home')->name('home');
 
 // Cards
-Route::get('cards', 'CardController@list');
+Route::get('cards', 'CardController@list')->name('user.settings');
 Route::get('cards/{id}', 'CardController@show');
 
 Route::get('users/{id}', 'UserController@show')->name('user.show');

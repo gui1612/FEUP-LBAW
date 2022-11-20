@@ -19,13 +19,13 @@ class UserFactory extends Factory
      *
      * @return array
      */
-    public function definition()
-    {
+    public function definition() {
+        $username = $this->faker->unique()->userName;
         return [
             'created_at' => $this->faker->dateTimeBetween('-2 year', 'now'),
-            'email' => $this->faker->unique()->safeEmail,
-            'pw_hash' => $this->faker->sha256(),
-            'username' => $this->faker->unique()->userName,
+            'email' => $username . '@example.com',
+            'password' => bcrypt($username),
+            'username' => $username,
             'first_name' => $this->faker->firstName,
             'last_name' => $this->faker->lastName,
             'bio' => $this->faker->paragraph(),
@@ -111,7 +111,7 @@ class UserFactory extends Factory
         return $this->state(function (array $attributes) {
             return [
                 'email' => null,
-                'pw_hash' => null,
+                'password' => null,
                 'first_name' => null,
                 'last_name' => null,
                 'bio' => null,

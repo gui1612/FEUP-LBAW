@@ -6,7 +6,7 @@
 <div class="d-flex justify-content-center align-items-center mt-5">
     <form method="POST" action="{{ route('register.submit') }}">
         @csrf
-        <fieldset class="bg-white px-5 py-4 mb-2 rounded-2">
+        <fieldset class="bg-white px-5 py-4 mb-2">
             <legend class="text-center mb-3">Register</legend>
             <div class="row mb-3">
               <div class="col">
@@ -58,7 +58,7 @@
             </div>
               <button type="submit" class="btn btn-primary mt-3 mb-2">Submit</button>
         </fieldset>
-        <div class="bg-white p-3 rounded-2 text-center">
+        <div class="bg-white p-3 text-center">
             <p class="mb-0">Already have an account? <a href="{{ route('login.show') }}">Sign in</a></p>    
         </div>
     </form>
