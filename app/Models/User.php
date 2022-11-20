@@ -29,11 +29,11 @@ class User extends AuthUser {
         return $this->belongsToMany(User::class, 'follows', 'owner_id', 'followed_user_id')->wherePivotNotNull('followed_user_id');
     }
 
-    public function followed_forums() {
-        return $this->belongsToMany(Forum::class, 'follows', 'owner_id', 'followed_forum_id')->wherePivotNotNull('followed_forum_id');
-    }
+    // public function followed_forums() {
+    //     return $this->belongsToMany(Forum::class, 'follows', 'owner_id', 'followed_forum_id')->wherePivotNotNull('followed_forum_id');
+    // }
 
-    public function owned_forums() {
-        return $this->belongsToMany(Forum::class, 'forumowners', 'owner_id', 'forum_id');
-    }
+    // public function owned_forums() {
+    //     return $this->belongsToMany(Forum::class, 'forumowners', 'owner_id', 'forum_id');
+    // }
 }
