@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="{{ app()->getLocale() }}">
+<html lang="{{ app()->getLocale() }}" class="min-vh-100">
   <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -20,7 +20,7 @@
       <script src="http://localhost:35729/livereload.js"></script>
     @endenv
 </head>
-<body>
+<body class="min-vh-100 d-flex flex-column">
   @yield('body')
   @if(session()->exists('error'))
     <dialog open class="bg-red-400">

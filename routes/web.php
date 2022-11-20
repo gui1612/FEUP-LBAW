@@ -15,7 +15,7 @@ use App\Models\User;
 |
 */
 // Home
-Route::get('/', 'Auth\LoginController@home');
+Route::get('/', 'Auth\LoginController@home')->name('home');
 
 // Cards
 Route::get('cards', 'CardController@list');
@@ -35,11 +35,11 @@ Route::post('api/item/{id}', 'ItemController@update');
 Route::delete('api/item/{id}', 'ItemController@delete');
 
 // Authentication
-Route::get('login', 'Auth\LoginController@showLoginForm')->name('login');
-Route::post('login', 'Auth\LoginController@login');
+Route::get('login', 'Auth\LoginController@showLoginForm')->name('login.show');
+Route::post('login', 'Auth\LoginController@login')->name('login.submit');
 Route::get('logout', 'Auth\LoginController@logout')->name('logout');
-Route::get('register', 'Auth\RegisterController@showRegistrationForm')->name('register');
-Route::post('register', 'Auth\RegisterController@register');
+Route::get('register', 'Auth\RegisterController@showRegistrationForm')->name('register.show');
+Route::post('register', 'Auth\RegisterController@register')->name('register.submit');
 
 Route::get('post/{id}', 'PostController@show')->name('post');
 Route::get('post/{id}/edit', 'PostController@edit')->name('post.edit');

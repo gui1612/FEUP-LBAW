@@ -9,14 +9,16 @@ services:
         - "HOST_UID=1000"
     environment:
       - "DB_HOST=postgres"
+      - "APP_URL=http://localhost:8001"
+      - "PORT=8001"
+    ports:
+      - "8001:8001"
+      - "35729:35729"
     volumes:
       - "./app:/var/www/app"
       - "./storage:/var/www/storage"
       - "./resources:/var/www/resources"
       - "./routes:/var/www/routes"
-    ports:
-      - "8000:8000"
-      - "35729:35729"
     depends_on:
       - postgres
 
