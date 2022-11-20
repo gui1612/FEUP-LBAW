@@ -21,6 +21,10 @@ class User extends AuthUser {
         'remember_token',
     ];
 
+    protected $casts = [
+        'created_at' => 'datetime:Y-m-d H:i:s',
+    ];
+
     public function followed_by() {
         return $this->belongsToMany(User::class, 'follows', 'followed_user_id', 'owner_id');
     }

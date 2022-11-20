@@ -10,7 +10,7 @@ class PostController extends Controller {
     public function show($id) {
         $post = Post::find($id);
 
-        return view('pages.post', ['post' => $post, 'id' => $id]);
+        return view('pages.post', ['post' => $post, 'id' => $id, 'preview' => False]);
     }
 
     public function edit($id) {
@@ -24,7 +24,7 @@ class PostController extends Controller {
     }
 
     public function list() {
-      $this->authorize('list', Card::class);
+      $this->authorize('list', Post::class);
       $posts = Post::all()->orderBy('rating')->get();
       return view('pages.posts', ['posts' => $posts]);
     }

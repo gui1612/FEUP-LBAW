@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use App\Http\Controllers\Post;
 
 class FeedController extends Controller
 {
@@ -14,7 +15,9 @@ class FeedController extends Controller
      * @return Response
      */
     public function show() {
-      return view('pages.feed');
+      $posts = Post::list();
+
+      return view('pages.feed', ['posts' => $posts]);
     }
 
     /**
