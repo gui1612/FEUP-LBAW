@@ -11,6 +11,10 @@ class Post extends Model
 
     public $timestamps = false;
 
+    protected $casts = [
+        'created_at' => 'datetime:Y-m-d H:i:s',
+    ];
+
     public function owner() {
         return $this->belongsTo(User::class, 'owner_id', 'id');
     }

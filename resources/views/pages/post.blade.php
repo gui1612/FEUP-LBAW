@@ -39,7 +39,7 @@
 
         <div class="d-flex align-items-center justify-content-between pe-2">
                 
-            @include('partials.user_info')
+            @include('partials.user_info', ['user' => $post->owner])
 
             <a href="{{ route('post.edit', ['id'=>$id]) }}" class="text-reset btn-lg btn"> 
                 <i class="bi bi-pencil"></i>
@@ -49,7 +49,7 @@
 
         @include('partials.post_content')
 
-        <span class="my-2"> {{ $post->created_at }} </span>
+        <span class="my-2"> on {{ date_format($post->created_at, 'Y-m-d') }}</span>
         
         @include('partials.rating')
     </article>
