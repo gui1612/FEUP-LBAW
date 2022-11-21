@@ -22,7 +22,7 @@
         </div>
         <div class="d-flex flex-column align-items-center">
             @foreach($user->posts()->get() as $post)
-                @include('partials.post_preview')
+                @include('partials.post_preview', ['on_profile'=>True])
             @endforeach
         </div>
     </div>

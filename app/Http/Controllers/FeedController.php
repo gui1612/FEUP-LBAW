@@ -14,10 +14,14 @@ class FeedController extends Controller
      * @param  int  $id
      * @return Response
      */
-    public function show() {
-      $posts = Post::paginate(30);
+    public function show_chronological() {
+      $posts = Post::orderBy('created_at')->paginate(30);
+      return view('pages.feed', ['paginator' => $posts]);
+    }
 
-      return view('pages.feed', ['posts' => $posts]);
+    public function show_rated() {
+      $posts = Post::orderBy('rating')->paginate(30);
+      return view('pages.feed', ['paginator' => $posts]);
     }
 
     /**

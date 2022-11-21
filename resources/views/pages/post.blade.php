@@ -39,7 +39,7 @@
 
         <div class="d-flex align-items-center justify-content-between pe-2">
                 
-            @include('partials.user_info', ['user' => $post->owner])
+            @include('partials.user_info', ['user' => $post->owner, 'clickable'=>True])
 
             <a href="{{ route('post.edit', ['id'=>$id]) }}" class="text-reset btn-lg btn"> 
                 <i class="bi bi-pencil"></i>

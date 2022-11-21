@@ -15,7 +15,8 @@ use App\Models\User;
 |
 */
 // Home
-Route::get('/', 'FeedController@show')->name('feed');
+Route::get('/', 'FeedController@show_chronological')->name('feed');
+Route::get('/home', 'FeedController@show_rated')->name('feed.rated');
 
 // Cards
 Route::get('cards', 'CardController@list')->name('user.settings');
