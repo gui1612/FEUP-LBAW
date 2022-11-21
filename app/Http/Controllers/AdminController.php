@@ -8,9 +8,16 @@ use Illuminate\Support\Facades\Gate;
 
 class AdminController extends Controller
 {
+
+    public function show_users() {
+        $users = User::whereNotNull('email')->orderBy('id')->paginate(20);
+        return view('pages.admin.users', ['paginator' => $users]);
+    }
+
     public function show_team() {
+        $admins = User::where('is_admin', true)->orderBy('id')->paginate(20);
         return view('pages.admin.team', [
-            'paginator' => User::where('is_admin', true)->orderBy('id')->paginate(20)
+            'paginator' => $admins
         ]);
     }
 
@@ -24,12 +31,16 @@ class AdminController extends Controller
     public function demote($id) {
         $user = User::find($id);
         if (!$user->is_admin) {
-            session()->flash('error', 'User is not in team');
+            session()->flash('danger', 'User is not in team');
             return redirect()->back();
         }
 
         if (!Gate::allows('demote', $user)) {
-            session()->flash('error', 'You are not allowed to remove this user from the administrative team');
+            session()->flash('danger', [
+                'title' => 'Insufficient Permissions',
+                'message' => 'You must be an administrator to perform this action.'
+            ]);
+
             return redirect()->back();
         }
         
