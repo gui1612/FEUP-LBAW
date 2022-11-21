@@ -165,3 +165,198 @@ CREATE TABLE PostImages (
     caption TEXT CONSTRAINT post_image_caption NOT NULL,
     post_id INTEGER CONSTRAINT post_image_ref_post REFERENCES Posts CONSTRAINT post_image_post_id_nn NOT NULL
 );
+
+-- Indexes
+
+CREATE INDEX idx_user_username ON Users USING HASH(username);
+CREATE INDEX idx_rated_content ON Ratings USING HASH(owner_id); 
+CREATE INDEX idx_post_created_at ON Posts USING BTREE(created_at);
+CREATE INDEX idx_comment_created_at ON Comments USING BTREE(created_at);
+CREATE INDEX idx_follows ON Follows USING HASH(owner_id);
+CREATE INDEX idx_user_followers ON Follows USING HASH(followed_user_id);
+CREATE INDEX idx_forum_followers ON Follows USING HASH(followed_forum_id);
+CREATE INDEX idx_user_notifications ON Notifications USING HASH(receiver_id);
+CREATE INDEX idx_notifications_created_at ON Notifications USING BTree(created_at);
+
+
+-- Triggers
+
+CREATE OR REPLACE FUNCTION immutable_creation_date() RETURNS TRIGGER AS
+$BODY$
+BEGIN
+  IF NEW.created_at <> OLD.created_at THEN
+    RAISE EXCEPTION 'The creation date of content cannot be changed.';
+  END IF;
+  RETURN NEW;
+END
+$BODY$
+LANGUAGE plpgsql;
+
+CREATE TRIGGER immutable_user_creation_date
+BEFORE INSERT OR UPDATE ON Users
+FOR EACH ROW
+EXECUTE PROCEDURE immutable_creation_date();
+
+---
+
+CREATE TRIGGER immutable_comment_creation_date
+BEFORE INSERT OR UPDATE ON Comments
+FOR EACH ROW
+EXECUTE PROCEDURE immutable_creation_date();
+
+---
+
+CREATE TRIGGER immutable_post_creation_date
+BEFORE INSERT OR UPDATE ON Posts
+FOR EACH ROW
+EXECUTE PROCEDURE immutable_creation_date();
+
+---
+
+CREATE TRIGGER immutable_forum_creation_date
+BEFORE INSERT OR UPDATE ON Forums
+FOR EACH ROW
+EXECUTE PROCEDURE immutable_creation_date();
+
+---
+
+CREATE OR REPLACE FUNCTION update_last_edited() RETURNS TRIGGER AS
+$BODY$
+BEGIN
+  NEW.last_edited = NOW();
+  RETURN NEW;
+END
+$BODY$
+LANGUAGE plpgsql;
+
+CREATE TRIGGER update_comment_last_edited
+BEFORE INSERT OR UPDATE ON Comments
+FOR EACH ROW
+EXECUTE PROCEDURE update_last_edited();
+
+---
+
+CREATE TRIGGER update_post_last_edited
+BEFORE UPDATE ON Posts
+FOR EACH ROW
+EXECUTE PROCEDURE update_last_edited();
+
+---
+
+CREATE OR REPLACE FUNCTION at_least_one_forum_owner() RETURNS TRIGGER AS
+$BODY$
+BEGIN
+  IF EXISTS (SELECT count(*) AS num_owners FROM ForumOwners WHERE ForumOwners.forum_id = OLD.forum_id HAVING num_owners > 1) THEN
+    RAISE EXCEPTION 'A forum must have at least one owner.';
+  END IF;
+END
+$BODY$
+LANGUAGE plpgsql;
+
+CREATE TRIGGER at_least_one_forum_owner
+  BEFORE UPDATE OR DELETE ON ForumOwners
+  FOR EACH ROW
+  EXECUTE PROCEDURE at_least_one_forum_owner();
+
+---
+
+CREATE OR REPLACE FUNCTION no_self_follow() RETURNS TRIGGER AS
+$BODY$
+BEGIN
+  IF NEW.owner_id = NEW.followed_user_id THEN
+    RAISE EXCEPTION 'An user cannot follow themselves.';
+  END IF;
+  RETURN NEW;
+END
+$BODY$
+LANGUAGE plpgsql;
+
+CREATE TRIGGER no_self_follow
+  BEFORE INSERT OR UPDATE ON Follows
+  FOR EACH ROW
+  EXECUTE PROCEDURE no_self_follow();
+
+---
+
+CREATE OR REPLACE FUNCTION self_content_report() RETURNS TRIGGER AS
+$BODY$
+BEGIN
+  IF NEW.type = 'post' AND NEW.reporter_id IN (SELECT owner_id FROM Posts WHERE id = NEW.post_id) THEN
+    RAISE EXCEPTION 'A user cannot report their own posts';
+  ELSIF NEW.type = 'comment' AND NEW.reporter_id IN (SELECT owner_id FROM Comments WHERE id = NEW.comment_id) THEN
+    RAISE EXCEPTION 'A user cannot report their own comments';
+  ELSIF NEW.type = 'forum' AND NEW.reporter_id IN (SELECT ForumOwners.owner_id FROM ForumOwners WHERE ForumOwners.forum_id = NEW.forum_id) THEN
+    RAISE EXCEPTION 'A user cannot report their own forums';
+  END IF;
+  RETURN NEW;
+END
+$BODY$
+LANGUAGE plpgsql;
+
+CREATE TRIGGER self_content_report
+  BEFORE INSERT OR UPDATE ON Reports
+  FOR EACH ROW
+  EXECUTE PROCEDURE self_content_report();
+
+---
+
+CREATE OR REPLACE FUNCTION update_user_rating() RETURNS TRIGGER AS
+$BODY$
+DECLARE
+  ratings RECORD;
+  rating_diff INTEGER;
+BEGIN
+
+  IF NEW.type = 'like' THEN
+    rating_diff := 1;
+  ELSE
+    rating_diff := -1;
+  END IF;
+  
+  IF NEW.rated_post_id IS NOT NULL THEN
+    SELECT Posts.owner_id AS rated_user_id, Users.reputation AS reputation_user, Posts.rating AS rating_post INTO ratings FROM Posts JOIN Users
+      ON Posts.owner_id = Users.id
+      WHERE Posts.id = NEW.rated_post_id;
+
+    UPDATE Posts
+      SET rating = ratings.rating_post + rating_diff
+      WHERE id = NEW.rated_post_id;
+  END IF;
+
+  UPDATE Users
+    SET reputation = ratings.reputation_user + rating_diff
+    WHERE id = ratings.rated_user_id;
+
+  -- FIXME: faltam comments
+  RETURN NEW;
+END
+$BODY$
+LANGUAGE plpgsql;
+
+CREATE TRIGGER update_user_rating
+  BEFORE INSERT OR UPDATE ON Ratings
+  FOR EACH ROW
+  EXECUTE PROCEDURE update_user_rating();
+
+---
+
+CREATE OR REPLACE FUNCTION no_post_delete_with_likes_or_comments() RETURNS TRIGGER AS
+$BODY$
+BEGIN
+  IF EXISTS (SELECT * FROM Ratings WHERE Ratings.rated_post_id = OLD.id) THEN
+    RAISE EXCEPTION 'A post cannot be deleted if it has ratings';
+  END IF;
+
+  IF EXISTS (SELECT * FROM Comments WHERE Comments.post_id = OLD.id) THEN
+    RAISE EXCEPTION 'A post cannot be deleted if it has comments';
+  END IF;
+  
+  RETURN OLD;
+END
+$BODY$
+LANGUAGE plpgsql;
+
+CREATE TRIGGER no_post_delete_with_likes_or_comments
+  BEFORE DELETE ON Posts
+  FOR EACH ROW
+  EXECUTE PROCEDURE no_post_delete_with_likes_or_comments();
