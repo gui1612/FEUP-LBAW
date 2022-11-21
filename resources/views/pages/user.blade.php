@@ -11,11 +11,13 @@
             </div>
         </div>   
         <div class="d-flex align-items-center p-4 justify-content-center position-relative">
+            @auth
             <div class="position-absolute top-0 end-0 translate-middle">
                 <a class="text-decoration-none text-secondary" href=" {{ route('post.create') }} ">
                      Edit Profile<i class='bi bi-arrow-right"'></i>
                 </a>
             </div> 
+            @endauth
             <div class="d-flex flex-column p-4 gap-2 align-items-center">
                 <span>{{ '@' . $user->username }} <i class="bi bi-dot"></i> {{ $user->posts()->get()->count() }} posts</span>
                 <span> <i class="bi bi-stars"></i> {{ $user->reputation }} reputation points</span>
