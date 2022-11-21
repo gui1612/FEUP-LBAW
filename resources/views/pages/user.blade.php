@@ -17,7 +17,6 @@
                 <div id="user_bio">
                     <p class="d-flex text-center">{{ $user->bio }}</p>
                 </div>
-                <button class="btn btn-primary d-flex justify-content-center gap-2"><i class="bi bi-people"></i>Follow</button>
             </div>
         </div>
         <div class="d-flex flex-column align-items-center">

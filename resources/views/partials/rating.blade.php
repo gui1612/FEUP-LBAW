@@ -1,5 +1,5 @@
 <div class="post_content_rating d-flex align-items-center">
-    <button class="btn btn-lg"> 
+    <button class="btn btn-lg" style="on"> 
         <i class="bi bi-hand-thumbs-up"></i>
     </button>
     {{ $post->rating }} 
