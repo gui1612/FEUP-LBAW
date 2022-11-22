@@ -12,8 +12,10 @@ const LiveReloadPlugin = require('webpack-livereload-plugin');
  |
  */
 
-mix.js('resources/assets/js/app.js', 'public/js')
-    .copyDirectory('resources/assets/images', 'public/images')
+mix.options({ publicPath: 'public' });
+mix.copyDirectory('resources/assets/images', 'public/images')
+    .copyDirectory('resources/assets/fonts', 'public/fonts')
+    .js('resources/assets/js/app.js', 'public/js')
     .sass('resources/assets/sass/app.scss', 'public/css', undefined, [
         require('tailwindcss'),
         require('autoprefixer')
