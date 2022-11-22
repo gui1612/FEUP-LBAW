@@ -13,7 +13,7 @@
         <div class="d-flex align-items-center p-4 justify-content-center position-relative">
             @auth
             <div class="position-absolute top-0 end-0 translate-middle">
-                <a class="text-decoration-none text-secondary" href=" {{ route('post.create') }} ">
+                <a href="{{ route('user.edit', ['id'=>$user->id]) }}" class="text-decoration-none text-secondary">
                      Edit Profile<i class='bi bi-arrow-right"'></i>
                 </a>
             </div> 

@@ -22,7 +22,9 @@ Route::get('/home', 'FeedController@show_rated')->name('feed.rated');
 Route::get('cards', 'CardController@list')->name('user.settings');
 Route::get('cards/{id}', 'CardController@show');
 
+// Users
 Route::get('users/{id}', 'UserController@show')->name('user.show');
+Route::get('users/{id}/edit', 'UserController@edit')->name('user.edit');
 
 Route::get('admin/team', 'AdminController@show_team')->name('admin.team');
 Route::post('admin/team/{id}', 'AdminController@promote')->name('admin.team.promote');
