@@ -8,6 +8,15 @@
         @csrf
         <fieldset class="bg-white px-5 py-4 mb-2">
             <legend class="text-center mb-3">Register</legend>
+            <div class="mb-3">
+                <label for="exampleInputUsername1" class="form-label">Username</label>
+                <input type="text" class="form-control @error('username') is-invalid @enderror" id="exampleInputUsername1" name="username" placeholder="Username" value="{{ old('username') }}" required>
+                @error('username')
+                    <div class="invalid-feedback">
+                        {{ $message }}
+                    </div>
+                @enderror
+            </div>
             <div class="row mb-3">
               <div class="col">
                 <label for="exampleInputFirstName1" class="form-label">First name</label>
@@ -28,7 +37,6 @@
                 @enderror
               </div>
             </div>
-
             <div class="mb-3">
                 <label for="exampleInputEmail1" class="form-label">Email</label>
                 <input type="email" class="form-control @error('email') is-invalid @enderror" id="exampleInputEmail1" name="email" placeholder="name@example.com" value="{{ old('email') }}" required>
@@ -37,26 +45,28 @@
                         {{ $message }}
                     </div>
                 @enderror
-              </div>
-              <div class="mb-3">
-                  <label for="exampleInputPassword1" class="form-label">Password</label>
-                  <input type="password" class="form-control  @error('password') is-invalid @enderror" id="exampleInputPassword1" name="password" placeholder="Password" value="{{ old('password') }}" required>
-                  @error('password')
-                    <div class="invalid-feedback">
-                        {{ $message }}
-                    </div>
-                  @enderror
-              </div>
-              <div class="mb-3">
-                <label for="exampleInputConfirmPassword1" class="form-label">Confirm password</label>
-                <input type="password" class="form-control  @error('password_confirmation') is-invalid @enderror" id="exampleInputConfirmPassword1" name="password_confirmation" placeholder="Password" value="{{ old('password_confirmation') }}" required>
-                @error('password_confirmation')
+            </div>
+            <div class="mb-3">
+                <label for="exampleInputPassword1" class="form-label">Password</label>
+                <input type="password" class="form-control  @error('password') is-invalid @enderror" id="exampleInputPassword1" name="password" placeholder="Password" value="{{ old('password') }}" required>
+                @error('password')
                   <div class="invalid-feedback">
                       {{ $message }}
                   </div>
                 @enderror
             </div>
+            <div class="mb-3">
+              <label for="exampleInputConfirmPassword1" class="form-label">Confirm password</label>
+              <input type="password" class="form-control  @error('password_confirmation') is-invalid @enderror" id="exampleInputConfirmPassword1" name="password_confirmation" placeholder="Password" value="{{ old('password_confirmation') }}" required>
+              @error('password_confirmation')
+                <div class="invalid-feedback">
+                    {{ $message }}
+                </div>
+              @enderror
+            </div>
+            <div class="d-flex justify-content-center">
               <button type="submit" class="btn btn-primary mt-3 mb-2">Submit</button>
+            </div>  
         </fieldset>
         <div class="bg-white p-3 text-center">
             <p class="mb-0">Already have an account? <a href="{{ route('login.show') }}">Sign in</a></p>    
