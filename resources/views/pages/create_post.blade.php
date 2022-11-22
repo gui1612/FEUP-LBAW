@@ -11,11 +11,11 @@
     <form class="col-md-11 mx-auto" method="POST" action="{{ route('post.create') }}" enctype="multipart/form-data">
         <div class="mb-3">
             <label for="title" class="form-label visually-hidden">Title</label>
-            <input class="form-control" id="title" placeholder="Title">
+            <input class="form-control" id="title" placeholder="Title" required>
         </div>
         <div class="mb-3">
             <label for="body" class="form-label visually-hidden">Body</label>
-            <textarea rows="18" class="form-control" id="body" placeholder="Share your thoughts"></textarea>
+            <textarea rows="18" class="form-control" id="body" placeholder="Share your thoughts" required></textarea>
         </div>
         <div class="mb-3">
           <label for="images" class="form-label visually-hidden">Images</label>

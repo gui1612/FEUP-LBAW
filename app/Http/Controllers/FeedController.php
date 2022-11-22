@@ -20,7 +20,7 @@ class FeedController extends Controller
     }
 
     public function show_rated() {
-      $posts = Post::orderBy('rating')->paginate(30);
+      $posts = Post::orderBy('rating', 'desc')->paginate(30);
       return view('pages.feed', ['paginator' => $posts]);
     }
 

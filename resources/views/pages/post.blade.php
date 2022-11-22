@@ -50,7 +50,7 @@
                     <a href="{{ route('post.edit', ['id'=>$id]) }}" class="dropdown-item">Edit</a>
                 </li>
                 <!-- Button trigger modal -->
-                <li><type="button" class="btn btn-primary dropdown-item text-danger" data-bs-toggle="modal" data-bs-target="#exampleModal">Delete</a></li>
+                <li><button type="button" class="btn btn-primary dropdown-item text-danger" data-bs-toggle="modal" data-bs-target="#exampleModal">Delete</a></li>
             </ul>
             <!-- Modal -->
             <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
