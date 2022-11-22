@@ -1,47 +1,80 @@
 @extends('layouts.app')
 
-@section('title', $post->title)
+@section('header')
+  @include('partials.header')
+@endsection
 
 @section('content')
 <body>
+  <div class="container w-75 m-4 bg-white px-4 py-3 d-flex flex-column gap-2 justify-content-center">
+    <h3>New Post</h3>
+    <form class="col-md-11 mx-auto" method="POST" action="{{ route('post.create') }}" enctype="multipart/form-data">
+        <div class="mb-3">
+            <label for="title" class="form-label visually-hidden">Title</label>
+            <input class="form-control" id="title" value="{{ $post->title }}">
+        </div>
+        <div class="mb-3">
+            <label for="body" class="form-label visually-hidden">Body</label>
+            <textarea rows="18" class="form-control" id="body">{{ $post->body }}</textarea>
+        </div>
+        <div class="mb-3">
+          <label for="images" class="form-label visually-hidden">Images</label>
+          <input type="file" class="form-control-file" multiple>
+        </div>
+        <button type="submit" class="btn btn-primary">Save Changes</button>
+    </form>
+
+    <div class="col-md-11 mx-auto">
+        <a href="{{ route('post', $post->id) }}" class="btn btn-secondary mb-2 ">Cancel</a>    
+    </div>
+  </div>
+</body>
+@endsection
+<!-- <body>
+  <div class="container w-75 m-4 bg-white px-4 py-3 d-flex flex-column gap-2 justify-content-center">
     <form class="post" method="POST" action="{{ route('post.edit', $post->id) }}" enctype="multipart/form-data">
       <div class="form-group">
         <div class="editable_title">
           <label>Title: </label>
-          <input class="edit_title" name="title" value="{{ $post->title }}">
+          <input class="form-control mb-2" name="title" value="{{ $post->title }}">
       </div>
 
-        <div class="editable_body">
-          <label hidden>body</label>        
-          <textarea class="edit_body" name ="body" col150">{{ $post->body }}</textarea>
+        <div class="form-group">
+          <label hidden></label>        
+          <textarea class="form-control mb-2" name ="body" col150">{{ $post->body }}</textarea>
         </div>
 
-        <div class="post_images">
+        <div class="form-group">
           @foreach ($post->images()->get() as $img)
             <span class="font-light">{{ $img->path }}</span>
           @endforeach
         </div>
 
-        <div class="editable_images">
+        <div class="form-group">
           <label>Images: </label>
-          <input class="edit_images" type="file" name="images[]" multiple>
+          <input class="form-control-file mb-2" type="file" name="images[]" multiple>
         </div>
 
-        <button class="edit_button">
-          <span>add image</span>
-          <img src="{{ asset('images/icons/plus.svg') }}" alt="add an embed" width="20" height="20">
-        </button>
+        <div class="form-group">
+            <button class="btn btn-primary mb-2">
+            <span>add image</span>
+            <img src="{{ asset('images/icons/plus.svg') }}" alt="add an embed" width="20" height="20">
+            </button>
+        </div>
 
         @csrf
         @method('post')
-        <button class="edit_button" type="submit">Save Changes</button>
-        <a href="{{ route('post', $post->id) }}" class="edit_button">Cancel</a>    
+        <div class="form-row">
+            <button class="btn btn-primary mb-2" type="submit">Save Changes</button>
+
+            <a href="{{ route('post', $post->id) }}" class="btn btn-primary mb-2">Cancel</a>    
+        </div>
       </div>
     </form>
     <form method="POST" action="{{ route('post.delete', $post->id)}}">
         @csrf
         @method('delete')
-        <button class="edit_button" type="submit">Delete</button>
+        <button class="btn btn-primary mb-2" type="submit">Delete</button>
     </form>
-</body>
-@endsection
+  </div>
+</body> -->
