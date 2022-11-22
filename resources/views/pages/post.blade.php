@@ -41,9 +41,16 @@
                 
             @include('partials.user_info', ['user' => $post->owner, 'clickable'=>True])
 
-            <a href="{{ route('post.edit', ['id'=>$id]) }}" class="text-reset btn-lg btn"> 
-                <i class="bi bi-pencil"></i>
-            </a>
+            <button class="btn d-flex align-items-center gap-2 bg-white m-4" style="width: min-content" data-bs-toggle="dropdown" aria-expanded="false">
+            <i class="bi bi-three-dots-vertical"></i>
+            <span class="visually-hidden">Options</span>
+            </button>
+            <ul class="dropdown-menu dropdown-menu-end">
+                <li>
+                    <a href="{{ route('post.edit', ['id'=>$id]) }}" class="dropdown-item">Edit</a>
+                </li>
+                <li><a class="dropdown-item text-danger" href="{{ route('feed') }}">Delete</a></li>
+            </ul>
         </div>
         
 
