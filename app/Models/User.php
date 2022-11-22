@@ -25,6 +25,10 @@ class User extends AuthUser {
         'created_at' => 'datetime:Y-m-d H:i:s',
     ];
 
+    public function profile_picture_or_default() {
+        return $this->profile_picture ?? mix('images/defaults/user.png');
+    }
+
     public function followed_by() {
         return $this->belongsToMany(User::class, 'follows', 'followed_user_id', 'owner_id');
     }
