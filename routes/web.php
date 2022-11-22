@@ -24,7 +24,9 @@ Route::get('cards/{id}', 'CardController@show');
 
 // Users
 Route::get('users/{id}', 'UserController@show')->name('user.show');
-Route::get('users/{id}/edit', 'UserController@edit')->name('user.edit');
+Route::get('users/{id}/edit', 'UserController@showEditForm')->name('user.edit');
+Route::post('users/{id}/edit', 'UserController@update')->name('user.edit');
+
 
 Route::get('admin/team', 'AdminController@show_team')->name('admin.team');
 Route::post('admin/team/{id}', 'AdminController@promote')->name('admin.team.promote');
