@@ -25,7 +25,7 @@ Route::get('cards/{id}', 'CardController@show');
 // Users
 Route::get('users/{id}', 'UserController@show')->name('user.show');
 Route::get('users/{id}/edit', 'UserController@showEditForm')->name('user.edit');
-Route::put('users/{id}/edit', 'UserController@update')->name('user.edit');
+Route::patch('users/{id}/edit', 'UserController@update')->name('user.edit');
 
 
 Route::get('admin/team', 'AdminController@show_team')->name('admin.team');

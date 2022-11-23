@@ -11,9 +11,10 @@ class User extends AuthUser {
     public $timestamps = false;
 
     protected $fillable = [
-        'name',
+        'username',
         'email',
         'password',
+        'bio',
     ];
 
     protected $hidden = [

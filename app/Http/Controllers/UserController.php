@@ -4,8 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Validator;
+
 
 
 
@@ -25,40 +25,21 @@ class UserController extends Controller
   }
 
   public function update(Request $request, $id) 
-  {
+  {     
     $user = User::find($id);
-    
-    Validator::make($request->all(), [
-      'username' => 'required|string|regex:/^[a-zA-Z0-9._]+$/|  
-                           max:255|unique:users',
-      'bio' => 'nullable|string|max:500',
-      'email' => 'required|string|email|max:255|unique:users',
-      'password' => 'required|string|min:6|confirmed', 
-      'bannerPicture' => 'nullable|file|image',
-      'profilePicture' => 'nullable|file|image',
-    ])->validate();
-
+    $this->authorize('update', $user);
+    $request->validate([
+        'username' => 'required|string|regex:/^[a-zA-Z0-9._]+$/|max:255|unique:users',
+        'bio' => 'nullable|max:500',
+    ]);
     $user->username = $request->input('username');
-    $user->email = $request->email;
-    $user->bio = $request->bio;
-    if(!is_null($request->password)) $user->password = bcrypt($request->password);
-    
-    if($request->hasFile('bannerPicture')) {
-      $file = $request->bannerPicture;
-      $filename = $user->id.'_'.time().'_'.Str::random(12).'.'.$file->getClientOriginalExtension();
-      $request->bannerPicture->storeAs('users',$filename,'profile_upload');
-      $user->bannerPicture = $filename;
-    }
-
-    if($request->hasFile('profilePicture')) {
-      $file = $request->profilePicture;
-      $filename = $user->id.'_'.time().'_'.Str::random(12).'.'.$file->getClientOriginalExtension();
-      $request->profilePicture->storeAs('users',$filename,'profile_upload');
-      $user->profilePicture = $filename;
-    }
+    $user->bio = $request->input('bio');     
+        
 
     $user->save();
-
-    return redirect()->route('pages.edit_user', ['user'=>$user,'id'=> $user->id]);
+    if (Auth::user()->id == $id)
+        return redirect("/users/$user->id"); 
+    else
+        return redirect("/admin/users");
   }
-}
+}  
