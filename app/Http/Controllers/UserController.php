@@ -24,7 +24,7 @@ class UserController extends Controller
   {
     $user = User::find($id);
     
-    if (!Gate::allows('update-user', $post)) {
+    if (!Gate::allows('update-user', $user)) {
       abort(403);
     }
 
