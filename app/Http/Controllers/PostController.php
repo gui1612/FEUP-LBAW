@@ -32,24 +32,24 @@ class PostController extends Controller {
     public function create(Request $request) {
       $post = new Post();
 
-      // $this->authorize('create', $post);
-
       $post->title = $request->input('title');
       $post->body = $request->input('body');
       $post->owner_id = Auth::user()->id;
       $post->save();
 
-      return $post;
+      return redirect()->route('post', ['id' => $post->id]);
     }
 
     public function delete(Request $request, $id) {
       $post = Post::find($id);
+      //print_r(Auth::user());
 
       $this->authorize('delete', $post);
 
       $post->delete();
 
-      return $post;
+      //   return $post;
+      return redirect()->route('user.profile');
     }
 
     public function edit_with_new_data(Request $request, $id) {

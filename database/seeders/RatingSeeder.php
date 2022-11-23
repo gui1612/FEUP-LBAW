@@ -16,11 +16,11 @@ class RatingSeeder extends Seeder
      */
     public function run() {
         Rating::factory()
-            ->count(5000)
+            ->count(0)
             ->create();
 
         Rating::factory()
-            ->count(5000)
+            ->count(0)
             ->dislike()
             ->create();
     }

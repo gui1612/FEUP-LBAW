@@ -163,7 +163,7 @@ CREATE TABLE PostImages (
     id SERIAL CONSTRAINT post_image_pk PRIMARY KEY,
     path TEXT CONSTRAINT post_image_path_nn NOT NULL,
     caption TEXT CONSTRAINT post_image_caption NOT NULL,
-    post_id INTEGER CONSTRAINT post_image_ref_post REFERENCES Posts CONSTRAINT post_image_post_id_nn NOT NULL
+    post_id INTEGER CONSTRAINT post_image_ref_post REFERENCES Posts CONSTRAINT post_image_post_id_nn NOT NULL ON DELETE CASCADE
 );
 
 -- Indexes

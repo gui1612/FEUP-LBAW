@@ -50,5 +50,4 @@ Route::get('post/{id}/edit', 'PostController@edit')->name('post.edit');
 Route::get('post/', 'PostController@create_post')->name('post.create');
 Route::put('post/{id}/edit', 'PostController@edit_with_new_data');
 Route::delete('api/post/{id}', 'PostController@delete')->name('post.delete');
-
 Route::post('post/', 'PostController@create');

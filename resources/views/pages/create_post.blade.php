@@ -14,15 +14,15 @@
         @csrf
         <div class="mb-3">
             <label for="title" class="form-label visually-hidden">Title</label>
-            <input class="form-control" id="title" placeholder="Title" required>
+            <input class="form-control" id="title" name="title" placeholder="Title" required>
         </div>
         <div class="mb-3">
             <label for="body" class="form-label visually-hidden">Body</label>
-            <textarea rows="18" class="form-control" id="body" placeholder="Share your thoughts" required></textarea>
+            <textarea rows="18" class="form-control" name="body" id="body" placeholder="Share your thoughts" required></textarea>
         </div>
         <div class="mb-3">
           <label for="images" class="form-label visually-hidden">Images</label>
-          <input type="file" class="form-control-file" multiple>
+          <input type="file" name="images" class="form-control-file" multiple>
         </div>
         <button type="submit" class="btn btn-primary">Submit</button>
     </form>
