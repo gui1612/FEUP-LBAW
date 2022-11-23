@@ -62,7 +62,7 @@ class UserPolicy
      * @param  \App\Models\User  $model
      * @return \Illuminate\Auth\Access\Response|bool
      */
-    public function delete(User $user, User $admin)
+    public function delete(User $user, User $target)
     {
         //
     }
@@ -89,5 +89,13 @@ class UserPolicy
     public function forceDelete(User $user, User $model)
     {
         //
+    }
+
+    public function isAdmin(User $user, User $target) {
+        if ($user->is_admin) {
+            return True;
+        }
+
+        return False;
     }
 }

@@ -31,11 +31,14 @@ class AdminController extends Controller
     public function demote($id) {
         $user = User::find($id);
         if (!$user->is_admin) {
-            session()->flash('danger', 'User is not in team');
+            session()->flash('danger', [
+                'title' => 'Insufficient Permissions',
+                'message' => 'You must be an administrator to perform this action.'
+            ]);
             return redirect()->back();
         }
 
-        if (!Gate::allows('demote', $user)) {
+        if (!Gate::allows('isAdmin', $user)) {
             session()->flash('danger', [
                 'title' => 'Insufficient Permissions',
                 'message' => 'You must be an administrator to perform this action.'

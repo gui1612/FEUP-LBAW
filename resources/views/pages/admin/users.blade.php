@@ -36,11 +36,11 @@
                                         <button type="submit" class="btn btn-secondary d-flex gap-2"><i class="bi bi-arrow-up-circle"></i>Promote User</button>
                                     </form>
                                 @endif
-                                <form method="POST" action="{{ route('admin.user.delete', $user->id) }}">
+                                {{-- <form method="POST" action="{{ route('admin.user.delete', $user->id) }}">
                                     @csrf
                                     @method('DELETE')
                                     <button type="submit" class="btn btn-danger d-flex gap-2"><i class="bi bi-trash"></i>Delete User</button>
-                                </form>
+                                </form> --}}
                             </td>
                         </tr>
                     @endforeach
