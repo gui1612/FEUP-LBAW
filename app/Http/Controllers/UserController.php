@@ -3,6 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\Facades\Validator;
+
 
 
 class UserController extends Controller
@@ -24,10 +28,6 @@ class UserController extends Controller
   {
     $user = User::find($id);
     
-    if (!Gate::allows('update-user', $user)) {
-      abort(403);
-    }
-
     Validator::make($request->all(), [
       'username' => 'required|string|regex:/^[a-zA-Z0-9._]+$/|  
                            max:255|unique:users',
@@ -59,8 +59,6 @@ class UserController extends Controller
 
     $user->save();
 
-    return redirect()->route('pages.edit_user', [
-      'user' => $user->id,
-    ]);
+    return redirect()->route('pages.edit_user', ['user'=>$user,'id'=> $user->id]);
   }
 }
