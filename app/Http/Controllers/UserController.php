@@ -31,15 +31,14 @@ class UserController extends Controller
     $request->validate([
         'username' => 'required|string|regex:/^[a-zA-Z0-9._]+$/|max:255|unique:users',
         'bio' => 'nullable|max:500',
+        'banner_picture' => 'nullable|image|mimes:jpeg,jpg,png,bmp,tiff,gif|max:4096',
     ]);
     $user->username = $request->input('username');
     $user->bio = $request->input('bio');     
-        
+
+
 
     $user->save();
-    if (Auth::user()->id == $id)
-        return redirect("/users/$user->id"); 
-    else
-        return redirect("/admin/users");
+    return view('pages.edit_user');    
   }
-}  
+}    

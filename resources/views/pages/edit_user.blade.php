@@ -24,16 +24,17 @@
 
         </div>    
         
-        <div class="form-group">
-            <label for="username">Username</label>
-            <input type="text" class="form-control" name="username" id="username" value="{{ $user->username }}">
-        </div>
+        <div class="d-flex align-items-start flex-column p-5">
+            <div class="form-group p-2 bd-highlight">
+                <label for="username">Username:</label>
+                <input type="text" class="form-control w-75" name="username" id="username" value="{{ $user->username }}"> 
+            </div>  
+            <div class="form-group p-2 bd-highlight w-100">
+                <label for="bio">Bio:</label>
+                <textarea id="bio" type="text" class="form-control w-100" name="bio"> {{ $user->bio }} </textarea>
         
-        <div class="form-group">
-            <label for="bio">bio</label>
-            <textarea id="bio" type="text" class="form-control" name="bio" cols="5" rows="5"> {{ $user->bio }} </textarea>
+            </div>
         </div>
-
         <button type="submit">Update profile</button>
     </form>
 </div>
