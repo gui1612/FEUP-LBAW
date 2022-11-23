@@ -4,6 +4,8 @@
   @include('partials.header')
 @endsection
 
+@section('title', "Create Post")
+
 @section('content')
 <body>
   <div class="container w-75 m-4 bg-white px-4 py-3 d-flex flex-column gap-2 justify-content-center">

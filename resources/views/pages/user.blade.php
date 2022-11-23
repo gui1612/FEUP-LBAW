@@ -1,4 +1,5 @@
 @extends('layouts.app')
+@section('title', $user->username)
 
 @section('content')
     <div class="d-flex flex-column bg-white container m-3 px-0">

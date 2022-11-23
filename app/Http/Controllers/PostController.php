@@ -16,11 +16,11 @@ class PostController extends Controller {
     public function edit($id) {
       $post = Post::find($id);
 
-      return view('pages.edit_post', ['post' => $post, 'id' => $id]);
+      return view('pages.edit_post', ['post' => $post, 'id' => $id, 'new_post' => false]);
     }
 
     public function create_post() {
-      return view('pages.create_post');
+      return view('pages.create_post', ['new_post' => true]);
     }
 
     public function list() {
@@ -32,7 +32,7 @@ class PostController extends Controller {
     public function create(Request $request) {
       $post = new Post();
 
-      $this->authorize('create', $post);
+      // $this->authorize('create', $post);
 
       $post->title = $request->input('title');
       $post->body = $request->input('body');
