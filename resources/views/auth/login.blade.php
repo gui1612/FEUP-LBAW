@@ -29,7 +29,6 @@
               <div class="d-flex justify-content-center">
                 <button type="submit" class="btn btn-primary mt-3 mb-2">Submit</button>
               </div>
-              <a class="d-block pt-3" href="">Forgot your password?</a>
         </fieldset>
         <div class="bg-white p-3 text-center">
             <p class="mb-0">Don't have an account? <a href="{{ route('register.show') }}">Create one</a></p>    
