@@ -11,6 +11,7 @@
   <div class="container w-75 m-4 bg-white px-4 py-3 d-flex flex-column gap-2 justify-content-center">
     <h3>New Post</h3>
     <form class="col-md-11 mx-auto" method="POST" action="{{ route('post.create') }}" enctype="multipart/form-data">
+        @csrf
         <div class="mb-3">
             <label for="title" class="form-label visually-hidden">Title</label>
             <input class="form-control" id="title" placeholder="Title" required>

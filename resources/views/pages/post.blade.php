@@ -43,7 +43,8 @@
             @include('partials.post_actions')
             </div>
         
-        @include('partials.post_content')
+        @include('partials.post_title')
+        @include('partials.post_body')
 
         <span class="my-2"> on {{ date_format($post->created_at, 'Y-m-d') }}</span>
         
