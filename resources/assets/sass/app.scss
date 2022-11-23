@@ -1,5 +1,7 @@
 // @use 'header.scss';
 // @use 'post.scss';
+@import "lib/variables";
+@import "lib/bootswatch";
 
 @import "bootstrap/scss/bootstrap";
 @import "bootstrap-icons/font/bootstrap-icons";
