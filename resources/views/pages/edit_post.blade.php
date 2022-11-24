@@ -1,8 +1,6 @@
 @extends('layouts.app')
 
-@section('header')
-  @include('partials.header')
-@endsection
+@section('title', 'Edit Post')
 
 @section('content')
 <body>
@@ -11,20 +9,33 @@
     <form class="col-md-11 mx-auto" method="POST" action="{{ route('post.edit_with_new_data', $post->id) }}" enctype="multipart/form-data">
         @csrf
         <div class="mb-3">
-            <label for="title" class="form-label visually-hidden">Title</label>
-            <input class="form-control" name="title" id="title" value="{{ $post->title }}" required>
+            <label for="title" class="form-label">Title</label>
+            <input class="form-control" name="title" id="title" value="{{ old('title') ?? $post->title }}" required>
         </div>
         <div class="mb-3">
-            <label for="body" class="form-label visually-hidden">Body</label>
-            <textarea rows="18" name="body" class="form-control" id="body" required>{{ $post->body }}</textarea>
+            <label for="body" class="form-label">Body</label>
+            <textarea rows="18" name="body" class="form-control" id="body" required>{{ old('body') ?? $post->body }}</textarea>
         </div>
-        <div class="mb-3">
-          <label for="images" class="form-label visually-hidden">Images</label>
-          <input type="file" name="images" id="images" class="form-control-file" multiple>
-        </div>
-        <button type="submit" class="btn btn-primary">Save Changes</button>
-    </form>
+        <button type="submit" class="btn btn-primary mb-4">Save Changes</button>
+      </form>
+    <code>{{ $post->images }}</code>
 
+    @forelse($post->images as $img)
+      @include('partials.post_image', ['image' => $img])
+    @endforeach
+
+    <form class="col-md-11 mx-auto" method="POST" action="{{ route('post.edit_with_new_data', $post->id) }}" enctype="multipart/form-data">
+      @csrf
+      @method('POST')
+      <div class="mb-3">
+        <label for="caption" class="form-label">Add caption</label>
+        <input type="text" name="caption" id="caption" class="form-control" requeired>
+
+        <label for="image" class="form-label mt-4">Add Image</label>
+        <input type="file" name="image" id="image" class="form-control" accept="image/*">
+      </div>
+      <button type="submit" class="btn btn-primary mb-4">Upload Image</button>
+    </form>
     <div class="col-md-11 mx-auto">
         <a href="{{ route('post', $post->id) }}" class="btn btn-secondary mb-2 ">Cancel</a>    
     </div>

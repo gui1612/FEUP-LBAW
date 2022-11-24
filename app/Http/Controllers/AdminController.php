@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Admin;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
@@ -25,23 +26,20 @@ class AdminController extends Controller
         ]);
     }
 
-    public function promote($id) {
-        $user = User::find($id);
+    public function promote(Request $request) {
+        $validated = $request->validate([
+            'id' => 'required|exists:App\Models\User,id'
+        ]);
+
+        $user = User::find($validated['id']);
         $user->is_admin = true;
         $user->save();
+        
         return redirect()->route('admin.team');
     }
 
-    public function demote($id) {
-        $user = User::find($id);
-        if (!$user->is_admin) {
-            session()->flash('danger', [
-                'title' => 'Insufficient Permissions',
-                'message' => 'You must be an administrator to perform this action.'
-            ]);
-            return redirect()->back();
-        }
-
+    public function demote(Admin $admin) {
+        // FIXME
         if (!Gate::allows('isAdmin', $user)) {
             session()->flash('danger', [
                 'title' => 'Insufficient Permissions',

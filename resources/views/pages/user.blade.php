@@ -5,7 +5,7 @@
     <div class="d-flex flex-column bg-white container m-3 px-0">
         <div id="user-info" class="position-relative" style="margin-bottom: clamp(1.5rem, 5vw, 4rem);">
             <div id="banner-picture" class="bg-primary" style="min-height: 12.5rem;">
-                @if($user->profile_picture)
+                @if($user->banner_picture)
                     <img src="{{ $user->banner_picture }}" alt="{{ $user->username }}'s banner picture" width="100" height="500" class="w-100" style="height: clamp(12.5rem, 25vw, 20rem); object-fit: cover">
                 @endif
             </div>

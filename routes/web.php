@@ -34,13 +34,19 @@ Route::get('logout', 'Auth\LoginController@logout')->name('logout');
 Route::get('register', 'Auth\RegisterController@showRegistrationForm')->name('register.show');
 Route::post('register', 'Auth\RegisterController@register')->name('register.submit');
 
-Route::get('posts/new', 'PostController@create_post')->name('post.create');
-Route::get('posts/{post}', 'PostController@show')->name('post');
-Route::get('posts/{post}/edit', 'PostController@edit')->name('post.edit');
-Route::post('posts/{post}/edit', 'PostController@edit_with_new_data')->name('post.edit_with_new_data');
-Route::delete('api/posts/{post}', 'PostController@delete')->name('post.delete');
-Route::post('posts/', 'PostController@create')->name('post.create_post');
+// Post
+Route::post('posts/', 'PostController@create_post')->name('post.create_post');
+Route::get('posts/new', 'PostController@show_create_post_form')->name('post.create');
+Route::get('posts/{post}', 'PostController@show_post')->name('post');
+Route::patch('posts/{post}', 'PostController@edit_post')->name('post.edit_with_new_data');
+Route::delete('posts/{post}', 'PostController@delete_post')->name('post.delete');
+Route::get('posts/{post}/edit', 'PostController@show_edit_post_form')->name('post.edit');
 
+// Post Images
+Route::put('posts/{post}/images', 'PostImagesController@add_image');
+Route::delete('posts/{post}/images/{images}', 'PostImagesController@delete_image');
+
+// Ratings API
 Route::get('api/posts/{post}/rating', 'PostRatingController@show')->name('post.rating.get');
 Route::post('api/posts/{post}/rating', 'PostRatingController@save')->name('post.rating.rate');
 Route::delete('api/posts/{post}/rating', 'PostRatingController@destroy')->name('post.rating.remove');

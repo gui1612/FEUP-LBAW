@@ -4,120 +4,94 @@ namespace App\Http\Controllers;
 
 use App\Http\Resources\RatingResource;
 use App\Models\Post;
+use App\Models\PostImage;
 use App\Models\Rating;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
 
 class PostController extends Controller {
-    public function show($id) {
-        $post = Post::find($id);
 
-        return view('pages.post', ['post' => $post, 'id' => $id, 'preview' => False]);
+  /*
+
+Route::get('posts/{post}', 'PostController@show')->name('post');
+Route::get('posts/{post}/edit', 'PostController@edit')->name('post.edit');
+Route::post('posts/', 'PostController@create')->name('post.create_post');
+Route::patch('posts/{post}', 'PostController@edit_with_new_data')->name('post.edit_with_new_data');
+Route::delete('api/posts/{post}', 'PostController@delete')->name('post.delete');
+
+*/
+
+  public function show_create_post_form() {
+    $this->authorize('create', Post::class);
+    return view('pages.create_post', ['new_post' => true]);
+  }
+
+  public function show_post(Post $post) {
+    $this->authorize('view', $post);
+    return view('pages.post', ['post' => $post, 'preview' => False]);
+  }
+
+  public function show_edit_post_form(Post $post) {
+    $this->authorize('edit', $post);
+    return view('pages.edit_post', ['post' => $post, 'new_post' => false]);
+  }
+
+  public function create_post(Request $request) {
+    $this->authorize('create', Post::class);
+
+    $data = $request->validate([
+      'title' => 'required|string|max:255',
+      'body' => 'required|string',
+      'images.*.caption' => 'required|string',
+      'images.*.file' => 'required|image|dimensions:min_width:400,min_height:225,max_width=1920,max_height=1080',
+    ]);
+
+    if (count($data['images']) > 0) {
+      $this->authorize('create', PostImage::class);
     }
 
-    public function edit($id) {
-      $post = Post::find($id);
+    $post = new Post();
+    $post->title = $data['title'];
+    $post->body = $data['body'];
+    $post->user()->associate(Auth::user());
+    $post->save();
 
-      return view('pages.edit_post', ['post' => $post, 'id' => $id, 'new_post' => false]);
+    for ($i = 0; $i < count($data['images']); $i++) {
+      $image = $data['images'][$i];
+      $path = $image['file']->store('images/posts', 'public');
+      
+      $post_image = new PostImage();
+      $post_image->path = $path;
+      $post_image->caption = $image['caption'];
+      $post_image->post()->associate($post);
+      $post_image->save();
     }
 
-    public function create_post() {
-      return view('pages.create_post', ['new_post' => true]);
-    }
+    return redirect()->route('post', ['post' => $post]);
+  }
 
-    public function list() {
-      $this->authorize('list', Post::class);
-      $posts = Post::all()->orderBy('rating')->get();
-      return view('pages.posts', ['posts' => $posts]);
-    }
-
-    public function create(Request $request) {
-      $post = new Post();
-
-      $post->title = $request->input('title');
-      $post->body = $request->input('body');
-      $post->owner_id = Auth::user()->id;
+    public function edit_post(Request $request, Post $post) {
+      $this->authorize('edit', $post);
+      
+      $validated = $request->validate([
+        'title' => 'string|max:255',
+        'body' => 'string',
+      ]);
+      
+      $post->title = $validated['title'] ?? $post->title;
+      $post->body = $validated['body'] ?? $post->body;
       $post->save();
 
-      return redirect()->route('post', ['id' => $post->id]);
+      return redirect()->back();
     }
 
-    public function delete(Request $request, $id) {
-      $post = Post::find($id);
-      //print_r(Auth::user());
-
+    public function delete_post(Request $request, Post $post) {
       $this->authorize('delete', $post);
 
-      $post->delete();
-
-      //   return $post;
-      return redirect()->route('user.profile');
-    }
-
-    public function edit_with_new_data(Request $request, $id) {
-      $post = Post::find($id);
-
-      $this->authorize('edit_post', $post);
-
-      $post->title = $request->input('title');
-      $post->body = $request->input('body');
-
+      $post->hidden = True;
       $post->save();
 
-      return redirect( route('user.show', $post->owner) );
+      return redirect()->back();
     }
-
-  function api_get_rating($id) {
-    if (!Auth::check()) {
-      return response()->json([], 401);
-    }
-
-    $user_id = Auth::user()->id;
-    $post = Post::find($id);
-    $rating = $post->ratings()->where('owner_id', $user_id)->first();
-
-    return [
-      'type' => $rating->type,
-      'rating' => $post->rating
-    ];
-  }
-
-  function api_rate($id) {
-    if (!Auth::check()) {
-      return response()->json([], 401);
-    }
-
-    $user_id = Auth::user()->id;
-    $post = Post::find($id);
-    $query = $post->ratings()->where('owner_id', $user_id);
-    $rating = $query->first();
-
-    if ($rating) {
-      if (is_null(request('type'))) {
-        $query->delete();
-        $post->refresh();
-
-        return [
-          'type' => null,
-          'rating' => $post->rating
-        ];
-      } else {
-        $rating->type = request('type');
-        $query->save($rating);
-      }
-    } else {
-      $rating = new Rating;
-      $rating->type = request('type');
-      $rating->owner_id = $user_id;
-      $rating->rated_post_id = $id;
-      $rating->save();
-    }
-
-    $post->refresh();
-    
-    return [
-      'type' => $rating->type,
-      'rating' => $post->rating
-    ];
-  }
 }
