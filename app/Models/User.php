@@ -26,12 +26,20 @@ class User extends AuthUser {
         'remember_token',
     ];
     
-    public function profile_picture_or_default() {
-        return str_starts_with($this->profile_picture, 'http') ? $this->profile_picture : asset('\/storage\/' . $this->profile_picture) ?? mix('images/defaults/user.png');
+    public function profile_picture_or_default_url() {
+        if (is_null($this->profile_picture)) {
+            return mix('images/defaults/user.png');
+        }
+        
+        return str_starts_with($this->profile_picture, 'http') ? $this->profile_picture : asset('/storage/' . $this->profile_picture);
     }
 
-    public function banner_picture() {
-        return str_starts_with($this->banner_picture, 'http') ? $this->banner_picture : asset('\/storage\/' . $this->banner_picture); 
+    public function banner_picture_url() {
+        if (is_null($this->banner_picture)) {
+            return null;
+        }
+
+        return str_starts_with($this->banner_picture, 'http') ? $this->banner_picture : asset('/storage/' . $this->banner_picture); 
     }
 
     public function posts() {

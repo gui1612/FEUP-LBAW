@@ -23,5 +23,7 @@ class UserPolicy
         return true;
     }
     
-
+    public function edit(User $user, User $target) {
+        return $user->id === $target->id;
+    }
 }

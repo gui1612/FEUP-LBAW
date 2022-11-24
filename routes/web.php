@@ -27,8 +27,8 @@ Route::post('register', 'Auth\RegisterController@register')->name('register.subm
 
 // Users
 Route::get('users/{user}', 'UserController@show_user')->name('user.show');
-Route::get('users/{id}/edit', 'UserController@showEditForm')->name('user.edit');
-Route::put('user/{id}/edit', 'UserController@update')->name('editProfile')->where(['id' => '[0-9]+']);
+Route::get('users/{user}/edit', 'UserController@showEditForm')->name('user.edit');
+Route::put('user/{user}/edit', 'UserController@update')->name('editProfile')->where(['id' => '[0-9]+']);
 
 // Administrationposts/
 Route::get('admin/users', 'AdminController@show_users')->name('admin.users');

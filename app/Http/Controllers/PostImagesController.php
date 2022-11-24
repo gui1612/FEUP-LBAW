@@ -14,7 +14,7 @@ class PostImagesController extends Controller {
 
         $image = $request->validate([
             'caption' => 'required|string',
-            'file' => 'required|image',
+            'file' => 'required|image|max:4096',
         ]);
 
         $path = $image['file']->store('images/posts', 'public');
@@ -35,7 +35,7 @@ class PostImagesController extends Controller {
 
         $this->authorize('delete', $image);
 
-        if (!Storage::delete($image->path)) {
+        if (!str_starts_with($image->path, 'http') && !Storage::delete($image->path)) {
             return abort(500);
         }
         

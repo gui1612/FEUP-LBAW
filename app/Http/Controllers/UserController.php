@@ -7,8 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Storage;
-
-
+use Illuminate\Validation\Rule;
 
 class UserController extends Controller {
 
@@ -18,52 +17,72 @@ class UserController extends Controller {
     return view('pages.user', ['user' => $user]);
   }
   
-  public function showEditForm($id) 
-  {
-    $user = User::find($id);
+  public function showEditForm(User $user) {
+    $this->authorize('edit', $user);
 
-    return view('pages.edit_user', ['user' => $user, 'id' => $id]);
+    return view('pages.edit_user', ['user' => $user]);
   }
 
 
-  public function update(Request $request, int $id): RedirectResponse
+  public function update(Request $request, User $user)
   {
-      $user = User::find($id);
+    $this->authorize('edit', $user);
 
-      $validator = Validator::make($request->all(), [
-          'username' => 'string|regex:/^[a-zA-Z0-9._]+$/|max:255|unique:users',
-          'banner_picture' => 'nullable|image|mimes:jpg,png,jpeg,gif,svg|max:4096', // max 5MB
-          'profile_picture' => 'nullable|image|mimes:jpg,png,jpeg,gif,svg|max:4096', // max 5MB
-          'bio' => 'nullable|string|max:500',
+      $validated = $request->validate([
+        'username' => ['sometimes', 'string', 'regex:/^[a-zA-Z0-9._]+$/', 'max:255', Rule::unique('users')->ignore($user->id)],
+        'first_name' => 'sometimes|string|alpha_num|max:255',
+        'last_name' => 'sometimes|string|alpha_num|max:255',
+        'email' => ['sometimes', 'string', 'email', 'max:255', Rule::unique('users')->ignore($user->id)],
+        'banner_picture' => 'sometimes|image|max:4096', // max 4MB
+        'profile_picture' => 'sometimes|image|max:4096', // max 4MB
+        'bio' => 'sometimes|string|max:500',
       ]);
-      
-      if (isset($request->username)) $user->username = $request->username;
-      if (isset($request->bio)) $user->bio = $request->bio;
-      
-      if (isset($request->banner_picture)) {
-          $newBanner = $request->file('banner_picture');
-          $imgName = $newBanner->getClientOriginalName();
-          $destinationPath = public_path('/storage/banners/');
-          $newBanner->move($destinationPath, $imgName);
-          $newPath = $destinationPath . $imgName;
 
-          $user->banner_picture = $newPath;
+      if (isset($validated['username'])) $user->username = $validated['username'];
+      if (isset($validated['first_name'])) $user->first_name = $validated['first_name'];
+      if (isset($validated['last_name'])) $user->last_name = $validated['last_name'];
+      if (isset($validated['email'])) $user->email = $validated['email'];
+      if (isset($validated['bio'])) $user->bio = $validated['bio'];
+
+      if ($request->has('new_password')) {
+        $passwords = $request->validate([
+          'password' => 'required|current_password',
+          'new_password' => 'required|string|min:6|confirmed',
+        ]);
+
+        $user->password = bcrypt($passwords['new_password']);
       }
 
-      if (isset($request->profile_picture)) {
-        $newProfile = $request->profile_picture;
-        $oldProfile = $user->profile_picture;
-        $imgName = round(microtime(true)*1000) . '.' . $newProfile->extension();
-        
-        $newProfile->storeAs('public/profile', $imgName);
-        $user->profile_picture = $imgName;
-        
-        if (!is_null($oldProfile))
-            Storage::delete('public/thumbnails/' . $oldProfile);
+      if (isset($validated['profile_picture'])) {
+        $profile_picture = $request->file('profile_picture');
+        $path = $profile_picture->store('images/users', 'public');
+
+        if (isset($user->profile_picture)) {
+          if (!str_starts_with($user->profile_picture, 'http') && !Storage::delete($user->profile_picture)) {
+            Storage::delete($path);
+            return abort(500);
+          }
+        }
+
+        $user->profile_picture = $path;
       }
-      
+
+      if (isset($validated['banner_picture'])) {
+        $banner_picture = $request->file('banner_picture');
+        $path = $banner_picture->store('images/users/banners', 'public');
+
+        if (isset($user->banner_picture)) {
+          if (!str_starts_with($user->banner_picture, 'http') && !Storage::delete($user->banner_picture)) {
+            Storage::delete($path);
+            return abort(500);
+          }
+        }
+
+        $user->banner_picture = $path;
+      }
+
       $user->save();
-      
-      return redirect("/users/${id}/");
+
+      return redirect()->route('user.show', ['user' => $user]);
     }
 }    

@@ -47,7 +47,7 @@ Route::delete('api/posts/{post}', 'PostController@delete')->name('post.delete');
       'title' => 'required|string|max:255',
       'body' => 'required|string',
       'images.*.caption' => 'required|string',
-      'images.*.file' => 'required|image',
+      'images.*.file' => 'required|image|max:4096',
     ]);
 
     if (!isset($data['images'])) {
