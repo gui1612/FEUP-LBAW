@@ -4,8 +4,10 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Storage;
 
 
 
@@ -42,7 +44,7 @@ class UserController extends Controller
           $newBanner = $request->banner_picture;
           $oldBanner = $user->banner_picture;
           $imgName = round(microtime(true)*1000) . '.' . $newBanner->extension();
-          $newAvatar->storeAs('public/banners', $imgName);
+          $newBanner->storeAs('public/banners', $imgName);
           $user->banner_picture = $imgName;
           if (!is_null($oldBanner))
               Storage::delete('public/thumbnails/' . $oldBanner);
@@ -59,6 +61,6 @@ class UserController extends Controller
       }
       $user->save();
       
-      return redirect("/user/${id}/edit");
+      return redirect("/users/${id}/edit");
     }
 }    
