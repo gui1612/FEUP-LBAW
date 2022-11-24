@@ -40,12 +40,15 @@ class UserController extends Controller
       
       if (isset($request->username)) $user->username = $request->username;
       if (isset($request->bio)) $user->bio = $request->bio;
+      
       if (isset($request->banner_picture)) {
           $newBanner = $request->banner_picture;
           $oldBanner = $user->banner_picture;
+
           $imgName = round(microtime(true)*1000) . '.' . $newBanner->extension();
           $newBanner->storeAs('public/banners', $imgName);
           $user->banner_picture = $imgName;
+          
           if (!is_null($oldBanner))
               Storage::delete('public/thumbnails/' . $oldBanner);
       }
@@ -54,11 +57,14 @@ class UserController extends Controller
         $newProfile = $request->profile_picture;
         $oldProfile = $user->profile_picture;
         $imgName = round(microtime(true)*1000) . '.' . $newProfile->extension();
+        
         $newProfile->storeAs('public/profile', $imgName);
         $user->banner_picture = $imgName;
+        
         if (!is_null($oldProfile))
             Storage::delete('public/thumbnails/' . $oldProfile);
       }
+      
       $user->save();
       
       return redirect("/users/${id}/edit");

@@ -23,7 +23,7 @@
                     <div class="input-group-prepend">
                         <span class="input-group-text" id="basic-addon1">@</span>
                     </div>
-                    <input id="username-input" type="text" class="form-control" placeholder="Username"  value="{{ old('username') ? old('username') : $user['username'] }}" aria-label="Username" aria-describedby="basic-addon1">
+                    <input id="username-input" type="text" name="username" class="form-control" placeholder="Username"  value="{{ old('username') ? old('username') : $user['username'] }}" aria-label="Username" aria-describedby="basic-addon1">
                 </div>
 
                 <label for="formFile" class="form-label pt-4">Banner Picture:</label>
@@ -38,7 +38,7 @@
                 <div class="align-items-start">    
                     <div class="form-group pt-4 bd-highlight">
                         <label for="exampleFormControlTextarea1" class="form-label">Bio:</label>
-                        <textarea id="bio-text-area" class="form-control w-100" id="exampleFormControlTextarea1" rows="3" columns="20">{{ old('bio') ? old('bio') : $user['bio'] }}</textarea>
+                        <textarea id="bio-text-area"  name="bio" class="form-control w-100" id="exampleFormControlTextarea1" rows="3" columns="20">{{ old('bio') ? old('bio') : $user['bio'] }}</textarea>
                     </div>
                 </div>       
             </div>
