@@ -15,7 +15,7 @@
         </div>
     </div>    
     <form  name="profileForm" method="POST" action="{{ route('editProfile', ['id'=>$user->id]) }}" enctype="multipart/form-data" id="editProfileForm">
-        @method('PATCH')
+        @method('PUT')
         @csrf
         <div class="d-flex align-items-center p-4 position-relative">
             <div class="flex-column p-5 gap-2 ">
@@ -37,7 +37,7 @@
                 </div>
                 <div class="align-items-start">    
                     <div class="form-group pt-4 bd-highlight">
-                        <label id:""for="exampleFormControlTextarea1" class="form-label">Bio:</label>
+                        <label for="exampleFormControlTextarea1" class="form-label">Bio:</label>
                         <textarea id="bio-text-area" class="form-control w-100" id="exampleFormControlTextarea1" rows="3" columns="20">{{ old('bio') ? old('bio') : $user['bio'] }}</textarea>
                     </div>
                 </div>       
