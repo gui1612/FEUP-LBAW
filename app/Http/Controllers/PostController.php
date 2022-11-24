@@ -8,6 +8,7 @@ use App\Models\PostImage;
 use App\Models\Rating;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 
 class PostController extends Controller {
@@ -54,19 +55,26 @@ Route::delete('api/posts/{post}', 'PostController@delete')->name('post.delete');
     $post = new Post();
     $post->title = $data['title'];
     $post->body = $data['body'];
-    $post->user()->associate(Auth::user());
-    $post->save();
+    $post->owner()->associate(Auth::user());
 
-    for ($i = 0; $i < count($data['images']); $i++) {
-      $image = $data['images'][$i];
+    $images = [];
+    foreach ($data['images'] as $image) {
       $path = $image['file']->store('images/posts', 'public');
-      
+
       $post_image = new PostImage();
       $post_image->path = $path;
       $post_image->caption = $image['caption'];
       $post_image->post()->associate($post);
-      $post_image->save();
+      
+      $images[] = $post_image;
     }
+
+    DB::transaction(function () use ($post, $images) {
+      $post->save();
+      foreach ($images as $image) {
+        $image->save();
+      }
+    });
 
     return redirect()->route('post', ['post' => $post]);
   }
