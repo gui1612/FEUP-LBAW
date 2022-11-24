@@ -15,6 +15,8 @@ class User extends AuthUser {
         'email',
         'password',
         'bio',
+        'profile_picture',
+        'banner_picture',
     ];
 
     protected $hidden = [
