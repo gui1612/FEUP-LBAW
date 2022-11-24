@@ -5,7 +5,7 @@ namespace App\Models;
 class PostRating extends Rating
 {
 
-    protected $hidden = ['rated_comment_id'];
+    protected $hidden = ['rated_comment_id', 'id'];
     
     public static function boot() {
         parent::boot();

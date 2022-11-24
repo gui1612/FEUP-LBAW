@@ -10,8 +10,8 @@
     @else
     <div class="d-flex justify-content-between align-items-center">
         @include('partials.post_title', ['preview'=>True])
-            @include('partials.post_actions', ['id' => $post->id])
-        </div>
+        @include('partials.post_actions', ['id' => $post->id])
+    </div>
     @endif
     @include('partials.post_body', ['preview'=>True])
 

@@ -7,20 +7,16 @@
 @section('content')
 <body>
   <div class="container w-75 m-4 bg-white px-4 py-3 d-flex flex-column gap-2 justify-content-center">
-    @if($new_post)
-      <h3>New Post</h3>
-    @else
-      <h3>Edit Post</h3>
-    @endif
-    <form class="col-md-11 mx-auto" method="POST" action="{{ route('post.create') }}" enctype="multipart/form-data">
+    <h3>Edit Post</h3>
+    <form class="col-md-11 mx-auto" method="POST" action="{{ route('post.edit_with_new_data', $post->id) }}" enctype="multipart/form-data">
         @csrf
         <div class="mb-3">
             <label for="title" class="form-label visually-hidden">Title</label>
-            <input class="form-control" name="title" id="title" value="{{ $post->title }}">
+            <input class="form-control" name="title" id="title" value="{{ $post->title }}" required>
         </div>
         <div class="mb-3">
             <label for="body" class="form-label visually-hidden">Body</label>
-            <textarea rows="18" name="body" class="form-control" id="body">{{ $post->body }}</textarea>
+            <textarea rows="18" name="body" class="form-control" id="body" required>{{ $post->body }}</textarea>
         </div>
         <div class="mb-3">
           <label for="images" class="form-label visually-hidden">Images</label>

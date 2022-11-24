@@ -1,7 +1,7 @@
 const endpoints = {
-    'rating.get': (postId) => ['GET', `/api/post/${postId}/rating`],
-    'rating.set': (postId) => ['POST', `/api/post/${postId}/rating`],
-    'rating.remove': (postId) => ['DELETE', `/api/post/${postId}/rating`]
+    'rating.get': (postId) => ['GET', `/api/posts/${postId}/rating`],
+    'rating.set': (postId) => ['POST', `/api/posts/${postId}/rating`],
+    'rating.remove': (postId) => ['DELETE', `/api/posts/${postId}/rating`]
 }
 
 export function makeRequest([key, ...params], { data, ...rest }) {

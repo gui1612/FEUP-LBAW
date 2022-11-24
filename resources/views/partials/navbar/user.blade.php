@@ -1,6 +1,6 @@
 <nav class="navbar navbar-expand-md bg-light">
     <div class="container-fluid">
-        <a class="navbar-brand d-flex align-items-center" href="{{ route('feed.chronological') }}">
+        <a class="navbar-brand d-flex align-items-center" href="{{ route('feed.show') }}">
             <img src="{{ asset('images/logo.svg') }}" alt="Wrottit logo" width="60" height="32" class="d-inline-block">
             Wrottit
         </a>
@@ -22,9 +22,6 @@
                 <li class="d-md-none nav-item">
                     <a class="nav-link" href="{{ route('user.show', Auth::user()->id) }}">Profile</a>
                 </li>
-                <li class="d-md-none nav-item">
-                    <a class="nav-link" href="{{ route('user.settings') }}">Settings</a>
-                </li>
                 <li><hr class="offcanvas-divider"></li>
                 <li class="d-md-none nav-item">
                     <a class="nav-link" href="{{ route('logout') }}">Logout</a>
@@ -36,7 +33,6 @@
                 </button>
                 <ul class="dropdown-menu dropdown-menu-end">
                     <li><a class="dropdown-item" href="{{ route('user.show', Auth::user()->id) }}">Your Profile</a></li>
-                    {{-- <li><a class="dropdown-item" href="{{ route('user.settings') }}">Settings</a></li> --}}
                     <li><hr class="dropdown-divider"></li>
                     <li><a class="dropdown-item" href="{{ route('logout') }}">Logout</a></li>
                 </ul>

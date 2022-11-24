@@ -26,4 +26,7 @@ class PostPolicy
         return $post->owner_id === $user->id;
     }
     
+    public function edit_post(User $user, Post $post) {
+        return $post->owner_id === $user->id;
+    }
 }

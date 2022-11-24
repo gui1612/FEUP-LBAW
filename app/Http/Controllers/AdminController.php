@@ -9,6 +9,10 @@ use Illuminate\Support\Facades\Gate;
 class AdminController extends Controller
 {
 
+    public function __construct() {
+        $this->middleware('admin');
+    }
+
     public function show_users() {
         $users = User::whereNotNull('email')->orderBy('id')->paginate(20);
         return view('pages.admin.users', ['paginator' => $users]);
