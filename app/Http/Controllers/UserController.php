@@ -6,7 +6,6 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Validator;
-use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Storage;
 
 
@@ -42,15 +41,13 @@ class UserController extends Controller
       if (isset($request->bio)) $user->bio = $request->bio;
       
       if (isset($request->banner_picture)) {
-          $newBanner = $request->banner_picture;
-          $oldBanner = $user->banner_picture;
+          $newBanner = $request->file('banner_picture');
+          $imgName = $newBanner->getClientOriginalName();
+          $destinationPath = public_path('/storage/banners/');
+          $newBanner->move($destinationPath, $imgName);
+          $newPath = $destinationPath . $imgName;
 
-          $imgName = round(microtime(true)*1000) . '.' . $newBanner->extension();
-          $newBanner->storeAs('public/banners', $imgName);
-          $user->banner_picture = $imgName;
-          
-          if (!is_null($oldBanner))
-              Storage::delete('public/thumbnails/' . $oldBanner);
+          $user->banner_picture = $newPath;
       }
 
       if (isset($request->profile_picture)) {
@@ -67,6 +64,6 @@ class UserController extends Controller
       
       $user->save();
       
-      return redirect("/users/${id}/edit");
+      return redirect("/users/${id}/");
     }
 }    
