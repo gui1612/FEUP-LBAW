@@ -30,7 +30,7 @@ Route::get('users/{user}', 'UserController@show_user')->name('user.show');
 Route::get('users/{id}/edit', 'UserController@showEditForm')->name('user.edit');
 Route::put('user/{id}/edit', 'UserController@update')->name('editProfile')->where(['id' => '[0-9]+']);
 
-// Administration
+// Administrationposts/
 Route::get('admin/users', 'AdminController@show_users')->name('admin.users');
 Route::get('admin/team', 'AdminController@show_team')->name('admin.team');
 Route::post('admin/team', 'AdminController@promote')->name('admin.team.promote');
