@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Validator;
 
 class PostController extends Controller {
 
@@ -69,7 +70,6 @@ Route::delete('api/posts/{post}', 'PostController@delete')->name('post.delete');
       $post_image = new PostImage();
       $post_image->path = $path;
       $post_image->caption = $image['caption'];
-      $post_image->post()->associate($post);
       
       $images[] = $post_image;
     }
@@ -77,6 +77,7 @@ Route::delete('api/posts/{post}', 'PostController@delete')->name('post.delete');
     DB::transaction(function () use ($post, $images) {
       $post->save();
       foreach ($images as $image) {
+        $image->post()->associate($post);
         $image->save();
       }
     });

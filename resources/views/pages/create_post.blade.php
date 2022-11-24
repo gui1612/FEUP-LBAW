@@ -15,10 +15,14 @@
           <label for="body" class="form-label visually-hidden">Body</label>
           <textarea rows="18" class="form-control" name="body" id="body" placeholder="Share your thoughts" required></textarea>
       </div>
-      {{-- <div class="mb-3">
-        <label for="images" class="form-label visually-hidden">Images</label>
-        <input type="file" name="images" class="form-control-file" multiple>
-      </div> --}}
+      <div class="mb-3">
+        <label for="image1" class="form-label">Image</label>
+        <input type="file" id="image1" name="images[][file]" class="form-control" accept="image/*">
+      </div>
+      <div class="mb-3">
+        <label for="caption1" class="form-label">Caption</label>
+        <input type="text" id="caption1" name="images[][caption]" class="form-control">
+      </div>
       <button type="submit" class="btn btn-primary">Submit</button>
   </form>
   <div class="col-md-11 mx-auto">
