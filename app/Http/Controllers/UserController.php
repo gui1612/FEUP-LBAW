@@ -59,7 +59,7 @@ class UserController extends Controller
         $imgName = round(microtime(true)*1000) . '.' . $newProfile->extension();
         
         $newProfile->storeAs('public/profile', $imgName);
-        $user->banner_picture = $imgName;
+        $user->profile_picture = $imgName;
         
         if (!is_null($oldProfile))
             Storage::delete('public/thumbnails/' . $oldProfile);
