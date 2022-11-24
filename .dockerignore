@@ -8,6 +8,7 @@
 /public/js
 /public/images
 /public/fonts
+/public/storage
 /public/mix-manifest.json
 /public/hot
 
@@ -30,6 +31,7 @@
 /vendor
 /.dockerignore
 /.editorconfig
+/.vscode/
 /.gitattributes
 /.gitignore
 /.styleci.yml

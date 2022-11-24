@@ -49,5 +49,4 @@ class LoginController extends Controller
     public function homepage() {
         return view('pages.homepage');
     }
-
 }

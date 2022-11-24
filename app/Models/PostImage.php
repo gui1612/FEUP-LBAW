@@ -10,10 +10,13 @@ class PostImage extends Model
     use HasFactory;
 
     public $timestamps = false;
-
     protected $table = 'postimages';
 
+    public function url() {
+        return asset('\/storage\/' . $this->path);
+    }
+
     public function post() {
-        return $this->belongsTo(Post::class, 'post_id', 'id');
+        return $this->belongsTo(Post::class, 'post_id');
     }
 }

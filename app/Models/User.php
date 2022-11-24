@@ -9,6 +9,7 @@ class User extends AuthUser {
     use HasFactory;
 
     public $timestamps = false;
+    protected $table = 'users';
 
     protected $fillable = [
         'username',
@@ -20,31 +21,32 @@ class User extends AuthUser {
     ];
 
     protected $hidden = [
+        'is_admin',
         'password',
         'remember_token',
     ];
-
-    protected $casts = [
-        'created_at' => 'datetime:Y-m-d H:i:s',
-    ];
-
-    public function followed_by() {
-        return $this->belongsToMany(User::class, 'follows', 'followed_user_id', 'owner_id');
+    
+    public function profile_picture_or_default() {
+        return str_starts_with($this->profile_picture, 'http') ? $this->profile_picture : asset('\/storage\/' . $this->profile_picture) ?? mix('images/defaults/user.png');
     }
 
-    public function followed_users() {
-        return $this->belongsToMany(User::class, 'follows', 'owner_id', 'followed_user_id')->wherePivotNotNull('followed_user_id');
+    public function banner_picture() {
+        return str_starts_with($this->banner_picture, 'http') ? $this->banner_picture : asset('\/storage\/' . $this->banner_picture); 
     }
 
     public function posts() {
         return $this->hasMany(Post::class, 'owner_id', 'id');
     }
 
-    // public function followed_forums() {
-    //     return $this->belongsToMany(Forum::class, 'follows', 'owner_id', 'followed_forum_id')->wherePivotNotNull('followed_forum_id');
-    // }
+    public function rated_posts() {
+        return $this->hasMany(Rating::class, 'owner_id', 'id');
+    }
 
-    // public function owned_forums() {
-    //     return $this->belongsToMany(Forum::class, 'forumowners', 'owner_id', 'forum_id');
-    // }
+    public function is_deleted() {
+        return is_null($this->email);
+    }
+
+    public function scopeActive($query) {
+        return $query->whereNotNull('email');
+    }
 }

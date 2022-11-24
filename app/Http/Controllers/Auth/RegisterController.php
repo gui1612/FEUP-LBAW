@@ -46,9 +46,12 @@ class RegisterController extends Controller
      * @return \Illuminate\Contracts\Validation\Validator
      */
     protected function validator(array $data)
-    {
+    {  
         return Validator::make($data, [
-            'name' => 'required|string|max:255',
+            'username' => 'required|string|regex:/^[a-zA-Z0-9._]+$/|  
+                           max:255|unique:users',
+            'first_name' => 'required|string|alpha_num|max:255',
+            'last_name' => 'required|string|alpha_num|max:255',
             'email' => 'required|string|email|max:255|unique:users',
             'password' => 'required|string|min:6|confirmed',
         ]);
@@ -63,9 +66,12 @@ class RegisterController extends Controller
     protected function create(array $data)
     {
         return User::create([
-            'name' => $data['name'],
+            'username' => $data['username'],
+            'first_name' => $data['first_name'], // verificar espaços
+            'last_name' => $data['last_name'],
             'email' => $data['email'],
             'password' => bcrypt($data['password']),
         ]);
     }
+
 }

@@ -1,11 +1,11 @@
 <nav class="navbar navbar-expand-md bg-light">
     <div class="container-fluid">
-        <a class="navbar-brand d-flex align-items-center" href="{{ route('feed') }}">
+        <a class="navbar-brand d-flex align-items-center" href="{{ route('feed.show') }}">
             <img src="{{ asset('images/logo.svg') }}" alt="Wrottit logo" width="60" height="32" class="d-inline-block">
             Wrottit
         </a>
         <button class="navbar-toggler p-0 mx-2 overflow-hidden rounded-circle" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbar" aria-controls="offcanvasNavbar" aria-label="Toggle navigation">
-            <img src="{{ Auth::user()->profile_picture }}" alt="{{ Auth::user()->username }}'s profile picture" width="32" height="32" class="d-inline-block img-fluid">
+            <img src="{{ Auth::user()->profile_picture_or_default() }}" alt="{{ Auth::user()->username }}'s profile picture" width="32" height="32" class="d-inline-block img-fluid">
         </button>
         <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasNavbar" aria-labelledby="offcanvasNavbarLabel">
             <div class="offcanvas-header">
@@ -22,9 +22,6 @@
                 <li class="d-md-none nav-item">
                     <a class="nav-link" href="{{ route('user.show', Auth::user()->id) }}">Profile</a>
                 </li>
-                <li class="d-md-none nav-item">
-                    <a class="nav-link" href="{{ route('user.settings') }}">Settings</a>
-                </li>
                 <li><hr class="offcanvas-divider"></li>
                 <li class="d-md-none nav-item">
                     <a class="nav-link" href="{{ route('logout') }}">Logout</a>
@@ -32,11 +29,10 @@
                 </ul>
                 <div class="d-none d-md-flex dropdown mx-2 align-items-center">
                 <button class="dropdown-toggle btn p-0 border-0 d-flex align-items-center" href="#" data-bs-toggle="dropdown" aria-expanded="false">
-                    <img src="{{ Auth::user()->profile_picture }}" alt="{{ Auth::user()->username }}'s profile picture" width="32" height="32" class="d-inline-block img-fluid rounded-circle">
+                    <img src="{{ Auth::user()->profile_picture_or_default() }}" alt="{{ Auth::user()->username }}'s profile picture" width="32" height="32" class="d-inline-block img-fluid rounded-circle">
                 </button>
                 <ul class="dropdown-menu dropdown-menu-end">
                     <li><a class="dropdown-item" href="{{ route('user.show', Auth::user()->id) }}">Your Profile</a></li>
-                    {{-- <li><a class="dropdown-item" href="{{ route('user.settings') }}">Settings</a></li> --}}
                     <li><hr class="dropdown-divider"></li>
                     <li><a class="dropdown-item" href="{{ route('logout') }}">Logout</a></li>
                 </ul>
