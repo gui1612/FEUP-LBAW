@@ -29,7 +29,6 @@ class UserFactory extends Factory
             'first_name' => $this->faker->firstName,
             'last_name' => $this->faker->lastName,
             'bio' => $this->faker->paragraph(),
-            'reputation' => $this->faker->numberBetween(0, 1000),
             'block_reason' => null,
             'profile_picture' => $this->faker->imageUrl(200, 200),
             'banner_picture' => $this->faker->imageUrl(800, 200),

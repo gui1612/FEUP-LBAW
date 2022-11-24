@@ -10,28 +10,22 @@ class Post extends Model
     use HasFactory;
 
     public $timestamps = false;
+    protected $table = 'posts';
 
     protected $casts = [
-        'created_at' => 'datetime:Y-m-d H:i:s',
+        'created_at' => 'datetime',
+        'last_edited' => 'datetime'
     ];
 
     public function owner() {
-        return $this->belongsTo(User::class, 'owner_id', 'id');
-    }
-
-    public function forum() {
-        return $this->belongsTo(Forum::class, 'forum_id', 'id');
-    }
-
-    public function comments() {
-        return $this->hasMany(Comment::class, 'post_id', 'id'); 
+        return $this->belongsTo(User::class, 'owner_id');
     }
 
     public function images() {
-        return $this->hasMany(PostImage::class, 'post_id', 'id');
+        return $this->hasMany(PostImage::class, 'post_id');
     }
 
     public function ratings() {
-        return $this->hasMany(Rating::class, 'post_id', 'id');
+        return $this->hasMany(PostRating::class, 'rated_post_id');
     }
 }

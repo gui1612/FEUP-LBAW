@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\RatingResource;
 use App\Models\Post;
+use App\Models\Rating;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -70,4 +72,58 @@ class PostController extends Controller {
 
       return $post;
     }
+
+  function api_get_rating($id) {
+    if (!Auth::check()) {
+      return response()->json([], 401);
+    }
+
+    $user_id = Auth::user()->id;
+    $post = Post::find($id);
+    $rating = $post->ratings()->where('owner_id', $user_id)->first();
+
+    return [
+      'type' => $rating->type,
+      'rating' => $post->rating
+    ];
+  }
+
+  function api_rate($id) {
+    if (!Auth::check()) {
+      return response()->json([], 401);
+    }
+
+    $user_id = Auth::user()->id;
+    $post = Post::find($id);
+    $query = $post->ratings()->where('owner_id', $user_id);
+    $rating = $query->first();
+
+    if ($rating) {
+      if (is_null(request('type'))) {
+        $query->delete();
+        $post->refresh();
+
+        return [
+          'type' => null,
+          'rating' => $post->rating
+        ];
+      } else {
+        $rating->type = request('type');
+        $query->save($rating);
+      }
+    } else {
+      $rating = new Rating;
+      $rating->type = request('type');
+      $rating->owner_id = $user_id;
+      $rating->rated_post_id = $id;
+      $rating->save();
+    }
+
+    $post->refresh();
+    
+    return [
+      'type' => $rating->type,
+      'rating' => $post->rating
+    ];
+  }
 }

@@ -7,15 +7,8 @@
 
 require('./bootstrap');
 
-import { Toast } from 'bootstrap';
+import { setupButtons } from './buttons/setup';
+import { showEphemeralToasts } from './utils/toasts';
 
-document.querySelectorAll('.toast.js-toast-ephemeral')
-    .forEach(toastEl => {
-        const toast = new Toast(toastEl);
-        toast.show();
-
-        toastEl.addEventListener('hidden.bs.toast', () => {
-            toast.dispose();
-            toastEl.remove();
-        });
-    });
+showEphemeralToasts();
+setupButtons();

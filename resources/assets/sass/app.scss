@@ -20,28 +20,10 @@
     text-decoration: underline !important;
 }
 
-.wt-like-click {
-    .like_filled {
-        display: none;
-    }
-
-    .dislike_filled {
-        display: none;
-    }
+.wt-icon-like[class*="fill"] {
+    color: #853EC7;
 }
 
-.wt-like-click:hover {
-    .unfilled {
-        display: none;
-    }
-
-    .like_filled {
-        display: inline-block;
-        color: rgb(133, 62, 199);
-    }
-
-    .dislike_filled {
-        display: inline-block;
-        color: rgb(212, 45, 68);
-    }
+.wt-icon-dislike[class*="fill"] {
+    color: #E65757;
 }

@@ -87,29 +87,23 @@ CREATE TABLE Comments (
   hidden BOOLEAN DEFAULT FALSE CONSTRAINT comment_hidden_nn NOT NULL
 );
 
--- CREATE TABLE Ratings (
---   owner_id INTEGER CONSTRAINT rating_ref_owner REFERENCES Users CONSTRAINT rating_owner_id_nn NOT NULL,
---   rated_post_id INTEGER CONSTRAINT rating_ref_rated_post REFERENCES Posts,
---   rated_comment_id INTEGER CONSTRAINT rating_ref_rated_comment REFERENCES Comments,
---   type RatingType CONSTRAINT rating_type_nn NOT NULL,
---   CONSTRAINT rating_pk PRIMARY KEY (owner_id, rated_post_id, rated_comment_id),
-
---   CONSTRAINT rating_xor_refs CHECK ((rated_post_id IS NULL) <> (rated_comment_id IS NULL))
--- );
-
 CREATE TABLE Ratings (
+  id SERIAL CONSTRAINT rating_pk PRIMARY KEY,
   owner_id INTEGER CONSTRAINT rating_ref_owner REFERENCES Users CONSTRAINT rating_owner_id_nn NOT NULL,
-  rated_post_id INTEGER CONSTRAINT rating_ref_rated_post REFERENCES Posts CONSTRAINT rated_post_id_nn NOT NULL,
+  rated_post_id INTEGER CONSTRAINT rating_ref_rated_post REFERENCES Posts,
+  rated_comment_id INTEGER CONSTRAINT rating_ref_rated_comment REFERENCES Comments,
   type RatingType CONSTRAINT rating_type_nn NOT NULL,
-  CONSTRAINT rating_pk PRIMARY KEY (owner_id, rated_post_id)
+  CONSTRAINT rating_refs_uk UNIQUE (owner_id, rated_post_id, rated_comment_id),
+
+  CONSTRAINT rating_xor_refs CHECK ((rated_post_id IS NULL) <> (rated_comment_id IS NULL))
 );
 
-
 CREATE TABLE Follows (
+  id SERIAL CONSTRAINT follows_pk PRIMARY KEY, 
   owner_id INTEGER CONSTRAINT follow_ref_owner REFERENCES Users CONSTRAINT follow_owner_id_nn NOT NULL,
   followed_user_id INTEGER CONSTRAINT follow_ref_followed_user REFERENCES Users,
   followed_forum_id INTEGER CONSTRAINT follow_ref_followed_forum REFERENCES Forums,
-  CONSTRAINT follow_pk PRIMARY KEY (owner_id, followed_user_id, followed_forum_id),
+  CONSTRAINT follow_refs_uk UNIQUE (owner_id, followed_user_id, followed_forum_id),
 
   CONSTRAINT follow_xor_refs CHECK ((followed_user_id IS NULL) <> (followed_forum_id IS NULL)),
   CONSTRAINT follow_no_self_follow CHECK (followed_user_id <> owner_id)
@@ -139,31 +133,22 @@ CREATE TABLE Notifications (
   type NotificationType CONSTRAINT notification_type_nn NOT NULL,
   receiver_id INTEGER CONSTRAINT notification_ref_receiver REFERENCES Users CONSTRAINT notification_receiver_id_nn NOT NULL,
 
-  follow_owner_id INTEGER,
-  followed_user_id INTEGER,
-  followed_forum_id INTEGER,
-  CONSTRAINT notification_ref_follow FOREIGN KEY (follow_owner_id, followed_user_id, followed_forum_id) REFERENCES Follows(owner_id, followed_user_id, followed_forum_id),
-  
+  follow_id INTEGER CONSTRAINT notification_ref_follow REFERENCES Follows,
   comment_id INTEGER CONSTRAINT notification_ref_comment REFERENCES Comments,
   report_id INTEGER CONSTRAINT notification_ref_report REFERENCES Reports,
+  rating_id INTEGER CONSTRAINT notification_ref_rating REFERENCES Ratings,
 
-  rating_owner_id INTEGER,
-  rated_post_id INTEGER,
-  -- rated_comment_id INTEGER,
-  CONSTRAINT notification_ref_rating FOREIGN KEY (rating_owner_id, rated_post_id/*, rated_comment_id*/) REFERENCES Ratings(owner_id, rated_post_id/*, rated_comment_id*/),
-
-
-  CONSTRAINT notification_xor_ref_follow CHECK ((type = 'follow_user') = (follow_owner_id IS NOT NULL AND ((followed_user_id IS NULL) <> (followed_forum_id IS NULL)))),
+  CONSTRAINT notification_xor_ref_follow CHECK ((type = 'follow_user') = (follow_id IS NOT NULL)),
   CONSTRAINT notification_xor_ref_comment CHECK ((type = 'post_comment') = (comment_id IS NOT NULL)),
   CONSTRAINT notification_xor_ref_report CHECK ((type = 'content_reported') = (report_id IS NOT NULL)),
-  CONSTRAINT notification_xor_ref_rating CHECK ((type = 'like') = (rating_owner_id IS NOT NULL AND ((rated_post_id IS NULL)/* <> (rated_comment_id IS NULL)*/)))
+  CONSTRAINT notification_xor_ref_rating CHECK ((type = 'like') = (rating_id IS NOT NULL))
 );
 
 CREATE TABLE PostImages (
     id SERIAL CONSTRAINT post_image_pk PRIMARY KEY,
     path TEXT CONSTRAINT post_image_path_nn NOT NULL,
     caption TEXT CONSTRAINT post_image_caption NOT NULL,
-    post_id INTEGER CONSTRAINT post_image_ref_post REFERENCES Posts CONSTRAINT post_image_post_id_nn NOT NULL ON DELETE CASCADE
+    post_id INTEGER CONSTRAINT post_image_ref_post REFERENCES Posts ON DELETE CASCADE CONSTRAINT post_image_post_id_nn NOT NULL
 );
 
 -- Indexes
@@ -303,60 +288,90 @@ CREATE TRIGGER self_content_report
 CREATE OR REPLACE FUNCTION update_user_rating() RETURNS TRIGGER AS
 $BODY$
 DECLARE
-  ratings RECORD;
+  ratings RECORD; -- (post, user, post_rating, user_rep)
   rating_diff INTEGER;
 BEGIN
 
-  IF NEW.type = 'like' THEN
-    rating_diff := 1;
-  ELSE
-    rating_diff := -1;
-  END IF;
-  
-  IF NEW.rated_post_id IS NOT NULL THEN
-    SELECT Posts.owner_id AS rated_user_id, Users.reputation AS reputation_user, Posts.rating AS rating_post INTO ratings FROM Posts JOIN Users
-      ON Posts.owner_id = Users.id
-      WHERE Posts.id = NEW.rated_post_id;
+    IF TG_OP = 'INSERT' OR TG_OP = 'UPDATE' THEN
+      IF TG_OP = 'INSERT' THEN
+        IF NEW.type = 'like' THEN
+          rating_diff := 1;
+        ELSE
+          rating_diff := -1;
+        END IF;
+      ELSIF TG_OP = 'UPDATE' THEN
+        IF NEW.type = OLD.type THEN
+          rating_diff := 0;
+        ELSIF NEW.type = 'like' THEN
+          rating_diff := 2;
+        ELSE
+          rating_diff := -2;
+        END IF;
+      END IF;
 
-    UPDATE Posts
-      SET rating = ratings.rating_post + rating_diff
-      WHERE id = NEW.rated_post_id;
-  END IF;
+      SELECT NEW.rated_post_id AS post_id, Posts.owner_id AS user_id, Posts.rating AS post_rating, Users.reputation AS user_rep INTO ratings
+        FROM Posts JOIN Users
+        ON Posts.owner_id = Users.id
+        WHERE Posts.id = NEW.rated_post_id;
+
+    END IF;
+      
+    IF TG_OP = 'DELETE' THEN
+      IF OLD.type = 'like' THEN
+        rating_diff := -1;
+      ELSE
+        rating_diff := 1;
+      END IF;
+
+      SELECT OLD.rated_post_id AS post_id, Posts.owner_id AS user_id, Posts.rating AS post_rating, Users.reputation AS user_rep INTO ratings
+        FROM Posts JOIN Users
+        ON Posts.owner_id = Users.id
+        WHERE Posts.id = OLD.rated_post_id;
+    END IF;
+
+  UPDATE Posts
+    SET rating = ratings.post_rating + rating_diff
+    WHERE id = ratings.post_id;
 
   UPDATE Users
-    SET reputation = ratings.reputation_user + rating_diff
-    WHERE id = ratings.rated_user_id;
+    SET reputation = ratings.user_rep + rating_diff
+    WHERE id = ratings.user_id;
 
   -- FIXME: faltam comments
-  RETURN NEW;
+
+  IF TG_OP = 'INSERT' OR TG_OP = 'UPDATE' THEN
+    RETURN NEW;
+  ELSIF TG_OP = 'DELETE' THEN
+    RETURN OLD;
+  END IF;
 END
 $BODY$
 LANGUAGE plpgsql;
 
 CREATE TRIGGER update_user_rating
-  BEFORE INSERT OR UPDATE ON Ratings
+  AFTER INSERT OR UPDATE OR DELETE ON Ratings
   FOR EACH ROW
   EXECUTE PROCEDURE update_user_rating();
 
 ---
 
-CREATE OR REPLACE FUNCTION no_post_delete_with_likes_or_comments() RETURNS TRIGGER AS
-$BODY$
-BEGIN
-  IF EXISTS (SELECT * FROM Ratings WHERE Ratings.rated_post_id = OLD.id) THEN
-    RAISE EXCEPTION 'A post cannot be deleted if it has ratings';
-  END IF;
+-- CREATE OR REPLACE FUNCTION no_post_delete_with_likes_or_comments() RETURNS TRIGGER AS
+-- $BODY$
+-- BEGIN
+--   IF EXISTS (SELECT * FROM Ratings WHERE Ratings.rated_post_id = OLD.id) THEN
+--     RAISE EXCEPTION 'A post cannot be deleted if it has ratings';
+--   END IF;
 
-  IF EXISTS (SELECT * FROM Comments WHERE Comments.post_id = OLD.id) THEN
-    RAISE EXCEPTION 'A post cannot be deleted if it has comments';
-  END IF;
+--   IF EXISTS (SELECT * FROM Comments WHERE Comments.post_id = OLD.id) THEN
+--     RAISE EXCEPTION 'A post cannot be deleted if it has comments';
+--   END IF;
   
-  RETURN OLD;
-END
-$BODY$
-LANGUAGE plpgsql;
+--   RETURN OLD;
+-- END
+-- $BODY$
+-- LANGUAGE plpgsql;
 
-CREATE TRIGGER no_post_delete_with_likes_or_comments
-  BEFORE DELETE ON Posts
-  FOR EACH ROW
-  EXECUTE PROCEDURE no_post_delete_with_likes_or_comments();
+-- CREATE TRIGGER no_post_delete_with_likes_or_comments
+--   BEFORE DELETE ON Posts
+--   FOR EACH ROW
+--   EXECUTE PROCEDURE no_post_delete_with_likes_or_comments();

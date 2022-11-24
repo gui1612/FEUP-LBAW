@@ -10,11 +10,16 @@ class Rating extends Model
     use HasFactory;
 
     public $timestamps = false;
-    
-    public $primaryKey = ['owner_id', 'rated_post_id'];
-    public $incrementing = false;
+    protected $table = 'ratings';
 
+    protected $hidden = ['id'];
+    protected $guarded = [];
+    
     public function owner() {
-        return $this->belongsTo(User::class, 'owner_id', 'id');
+        return $this->belongsTo(User::class, 'owner_id');
+    }
+
+    public function post() {
+        return $this->belongsTo(Post::class, 'rated_post_id');
     }
 }

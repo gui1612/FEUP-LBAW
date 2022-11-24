@@ -2,17 +2,17 @@
 
 namespace App\Policies;
 
-use App\Models\Admin;
+use App\Models\DeletedUser;
 use App\Models\User;
 use Illuminate\Auth\Access\HandlesAuthorization;
 
-class AdminPolicy
+class DeletedUserPolicy
 {
     use HandlesAuthorization;
 
     public function before(User $user) {
-        if ($user->is_admin) {
-            return true;
+        if ($user->is_deleted()) {
+            return false;
         }
     }
 }

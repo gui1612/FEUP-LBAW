@@ -10,15 +10,22 @@ class UserPolicy
 {
     use HandlesAuthorization;
 
-    /**
-     * Determine whether the user can view any models.
-     *
-     * @param  \App\Models\User  $user
-     * @return \Illuminate\Auth\Access\Response|bool
-     */
-    public function viewAny(User $user)
-    {
-        //
+    public function before(User $user, $ability) {
+        if ($user->is_admin) {
+            return true;
+        }
+    }
+
+    public function promote(User $user, User $target) {
+        return false;
+    }
+
+    public function demote(User $user, User $target) {
+        return false;
+    }
+
+    public function edit(User $user, Post $post) {
+        return $user->id === $post->owner_id;
     }
 
     /**
