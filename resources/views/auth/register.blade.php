@@ -69,7 +69,7 @@
             </div>  
         </fieldset>
         <div class="bg-white p-3 text-center">
-            <p class="mb-0">Already have an account? <a href="{{ route('login.show') }}">Sign in</a></p>    
+            <p class="mb-0">Already have an account? <a href="{{ route('login') }}">Sign in</a></p>    
         </div>
     </form>
 </div>
