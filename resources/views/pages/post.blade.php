@@ -10,7 +10,7 @@
                 <div class="carousel-inner">
                     @php($img = $images[0])
                     <div class="carousel-item active h-100 bg-black">
-                        <img src="{{ $img->path }}" alt= "{{ $img->caption }}" class="d-block mx-auto h-100 w-100" style="object-fit: contain;">
+                        <img src="{{ $img->url() }}" alt= "{{ $img->caption }}" class="d-block mx-auto h-100 w-100" style="object-fit: contain;">
                         <div class="carousel-caption d-none d-md-block bg-white text-black start-0 end-0 bottom-0 px-2 py-1 text-start" style="--bs-bg-opacity: 0.85">
                             <span> {{ $img->caption }} </span>
                         </div>
@@ -18,7 +18,7 @@
                     @for ($i = 1; $i < $images->count(); $i++)
                     @php($img = $images[$i])
                     <div class="carousel-item h-100 bg-black">
-                        <img src= "{{ $img->path }}" alt= "{{ $img->caption }}" class="d-block mx-auto h-100 w-100" style="object-fit: contain;">
+                        <img src= "{{ $img->url() }}" alt= "{{ $img->caption }}" class="d-block mx-auto h-100 w-100" style="object-fit: contain;">
                         <div class="carousel-caption d-none d-md-block bg-white text-black start-0 end-0 bottom-0 px-2 py-1 text-start" style="--bs-bg-opacity: 0.85">
                             <span> {{ $img->caption }} </span>
                         </div>

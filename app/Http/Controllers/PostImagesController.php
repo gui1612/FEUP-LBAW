@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Post;
 use App\Models\PostImage;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class PostImagesController extends Controller {
 
@@ -13,7 +14,7 @@ class PostImagesController extends Controller {
 
         $image = $request->validate([
             'caption' => 'required|string',
-            'file' => 'required|image|dimensions:min_width:400,min_height:225,max_width=1920,max_height=1080',
+            'file' => 'required|image',
         ]);
 
         $path = $image['file']->store('images/posts', 'public');
@@ -27,13 +28,17 @@ class PostImagesController extends Controller {
         return redirect()->back();
     }
 
-    public function delete_image(Post $post, PostImage $image) {
+    public function remove_image(Post $post, PostImage $image) {
         if ($image->post->id != $post->id) {
-            abort(404);
+            return abort(404);
         }
 
         $this->authorize('delete', $image);
 
+        if (!Storage::delete($image->path)) {
+            return abort(500);
+        }
+        
         $image->delete();
 
         return redirect()->back();

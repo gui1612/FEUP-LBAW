@@ -25,6 +25,8 @@ class PostRatingController extends Controller {
     }
     
     public function save(Request $request, Post $post) {
+        $this->authorize('rate', $post);
+
         $validated = $request->validate([
             'type' => [
                 'required',
@@ -57,6 +59,8 @@ class PostRatingController extends Controller {
     }
     
     public function destroy(Post $post) {
+        $this->authorize('rate', $post);
+
         $user_id = Auth::id();
         $ratings = $post->ratings->where('owner_id', $user_id)->toQuery()->limit(1);
         $deleted = $ratings->delete();

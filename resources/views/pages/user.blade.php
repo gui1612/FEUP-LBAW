@@ -1,6 +1,8 @@
 @extends('layouts.app')
 @section('title', $user->username)
 
+@php($paginator = $user->posts()->visible()->paginate(10))
+
 @section('content')
     <div class="d-flex flex-column bg-white container m-3 px-0">
         <div id="user-info" class="position-relative" style="margin-bottom: clamp(1.5rem, 5vw, 4rem);">
@@ -15,7 +17,7 @@
         </div>
         <div class="d-flex align-items-center p-4 justify-content-center">
             <div class="d-flex flex-column p-4 gap-2 align-items-center">
-                <span>{{ '@' . $user->username }} <i class="bi bi-dot"></i> {{ $user->posts()->get()->count() }} posts</span>
+                <span>{{ '@' . $user->username }} <i class="bi bi-dot"></i> {{ $paginator->total() }} posts</span>
                 <span> <i class="bi bi-stars"></i> {{ $user->reputation }} reputation points</span>
                 <div id="user_bio">
                     <p class="d-flex text-center">{{ $user->bio }}</p>
@@ -23,9 +25,10 @@
             </div>
         </div>
         <div class="d-flex flex-column align-items-center">
-            @foreach($user->posts()->get() as $post)
+            @foreach($paginator->items() as $post)
                 @include('partials.post_preview', ['on_profile'=>True])
             @endforeach
+            {{ $paginator }}
         </div>
     </div>
 @endsection

@@ -15,12 +15,12 @@ class AdminController extends Controller
     }
 
     public function show_users() {
-        $users = User::whereNotNull('email')->orderBy('id')->paginate(20);
+        $users = User::active()->orderBy('id')->paginate(20);
         return view('pages.admin.users', ['paginator' => $users]);
     }
 
     public function show_team() {
-        $admins = User::where('is_admin', true)->orderBy('id')->paginate(20);
+        $admins = Admin::active()->orderBy('id')->paginate(20);
         return view('pages.admin.team', [
             'paginator' => $admins
         ]);
@@ -32,25 +32,30 @@ class AdminController extends Controller
         ]);
 
         $user = User::find($validated['id']);
+
+        $this->authorize('promote', $user);
+
         $user->is_admin = true;
         $user->save();
         
-        return redirect()->route('admin.team');
+        return redirect()->back();
     }
 
     public function demote(Admin $admin) {
-        // FIXME
-        if (!Gate::allows('isAdmin', $user)) {
-            session()->flash('danger', [
-                'title' => 'Insufficient Permissions',
-                'message' => 'You must be an administrator to perform this action.'
-            ]);
+        $this->authorize('demote', $admin);
 
-            return redirect()->back();
-        }
+        // if (!Gate::allows('isAdmin', $user)) {
+        //     session()->flash('danger', [
+        //         'title' => 'Insufficient Permissions',
+        //         'message' => 'You must be an administrator to perform this action.'
+        //     ]);
+
+        //     return redirect()->back();
+        // }
         
-        $user->is_admin = false;
-        $user->save();
-        return redirect()->route('admin.team');
+        $admin->is_admin = false;
+        $admin->save();
+        
+        return redirect()->back();
     }
 }

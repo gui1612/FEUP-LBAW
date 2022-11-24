@@ -5,10 +5,11 @@ namespace App\Http\Controllers;
 use App\Models\User;
 
 
-class UserController extends Controller
-{
+class UserController extends Controller {
 
-  public function show($id) {
-    return view('pages.user', ['user' => User::find($id)]);
+  public function show_user(User $user) {
+    $this->authorize('view', $user);
+    
+    return view('pages.user', ['user' => $user]);
   }
 }

@@ -9,6 +9,7 @@ use App\Models\Rating;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Storage;
 
 class PostController extends Controller {
@@ -45,8 +46,12 @@ Route::delete('api/posts/{post}', 'PostController@delete')->name('post.delete');
       'title' => 'required|string|max:255',
       'body' => 'required|string',
       'images.*.caption' => 'required|string',
-      'images.*.file' => 'required|image|dimensions:min_width:400,min_height:225,max_width=1920,max_height=1080',
+      'images.*.file' => 'required|image',
     ]);
+
+    if (!isset($data['images'])) {
+      $data['images'] = [];
+    }
 
     if (count($data['images']) > 0) {
       $this->authorize('create', PostImage::class);
@@ -91,7 +96,7 @@ Route::delete('api/posts/{post}', 'PostController@delete')->name('post.delete');
       $post->body = $validated['body'] ?? $post->body;
       $post->save();
 
-      return redirect()->back();
+      return redirect()->route('post', ['post' => $post]);
     }
 
     public function delete_post(Request $request, Post $post) {
@@ -100,6 +105,6 @@ Route::delete('api/posts/{post}', 'PostController@delete')->name('post.delete');
       $post->hidden = True;
       $post->save();
 
-      return redirect()->back();
+      return redirect()->route('home');
     }
 }

@@ -2,26 +2,21 @@
 
 namespace App\Policies;
 
+use App\Models\Admin;
 use App\Models\User;
 use Illuminate\Auth\Access\HandlesAuthorization;
 
-class UserPolicy
+class AdminPolicy
 {
     use HandlesAuthorization;
 
     public function before(User $user, $ability) {
-        if ($user->is_deleted()) {
+        if ($user->is_deleted() || !$user->is_admin) {
             return false;
-        }
+        } 
     }
 
-    public function promote(User $user, User $target) {
-        return $user->is_admin && !$target->is_admin;
-    }
-
-    public function view(?User $user, User $target) {
+    public function demote(User $user, Admin $target) {
         return true;
     }
-    
-
 }

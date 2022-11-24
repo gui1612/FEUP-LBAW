@@ -1,34 +1,28 @@
 @extends('layouts.app')
 
-@section('header')
-  @include('partials.header')
-@endsection
-
 @section('title', "Create Post")
 
 @section('content')
-<body>
-  <div class="container w-75 m-4 bg-white px-4 py-3 d-flex flex-column gap-2 justify-content-center">
-    <h3>New Post</h3>
-    <form class="col-md-11 mx-auto" method="POST" action="{{ route('post.create') }}" enctype="multipart/form-data">
-        @csrf
-        <div class="mb-3">
-            <label for="title" class="form-label visually-hidden">Title</label>
-            <input class="form-control" id="title" name="title" placeholder="Title" required>
-        </div>
-        <div class="mb-3">
-            <label for="body" class="form-label visually-hidden">Body</label>
-            <textarea rows="18" class="form-control" name="body" id="body" placeholder="Share your thoughts" required></textarea>
-        </div>
-        <div class="mb-3">
-          <label for="images" class="form-label visually-hidden">Images</label>
-          <input type="file" name="images" class="form-control-file" multiple>
-        </div>
-        <button type="submit" class="btn btn-primary">Submit</button>
-    </form>
-    <div class="col-md-11 mx-auto">
-        <a href="{{ url()->previous(); }}" class="btn btn-secondary mb-2 ">Cancel</a>    
-    </div>
+<div class="container w-75 m-4 bg-white px-4 py-3 d-flex flex-column gap-2 justify-content-center">
+  <h3>New Post</h3>
+  <form class="col-md-11 mx-auto" method="POST" action="{{ route('post.create_post') }}" enctype="multipart/form-data">
+      @csrf
+      <div class="mb-3">
+          <label for="title" class="form-label visually-hidden">Title</label>
+          <input class="form-control" id="title" name="title" placeholder="Title" required>
+      </div>
+      <div class="mb-3">
+          <label for="body" class="form-label visually-hidden">Body</label>
+          <textarea rows="18" class="form-control" name="body" id="body" placeholder="Share your thoughts" required></textarea>
+      </div>
+      {{-- <div class="mb-3">
+        <label for="images" class="form-label visually-hidden">Images</label>
+        <input type="file" name="images" class="form-control-file" multiple>
+      </div> --}}
+      <button type="submit" class="btn btn-primary">Submit</button>
+  </form>
+  <div class="col-md-11 mx-auto">
+      <a href="{{ url()->previous(); }}" class="btn btn-secondary mb-2 ">Cancel</a>    
   </div>
-</body>
+</div>
 @endsection

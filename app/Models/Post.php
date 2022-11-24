@@ -28,4 +28,8 @@ class Post extends Model
     public function ratings() {
         return $this->hasMany(PostRating::class, 'rated_post_id');
     }
+
+    public function scopeVisible($query) {
+        return $query->where('hidden', false);
+    }
 }
