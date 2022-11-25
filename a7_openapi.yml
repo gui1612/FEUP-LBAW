@@ -161,7 +161,7 @@ paths:
       summary: "R106: View user profile"
       description: "Show the individual user profile. Access: PUB"
       tags:
-        - "M02: Authentication and User Profile"
+        - "M01: Authentication and User Profile"
 
       parameters:
         - in: path
@@ -178,8 +178,8 @@ paths:
 
   /users/{id}/edit:
     get:
-      operationId: R109
-      summary: "R109: User profile edition form"
+      operationId: R107
+      summary: "R107: User profile edition form"
       description: "Provide form for user profile edition. Access: OWN"
       tags:
         - "M01: Authentication and User Profile"
@@ -202,11 +202,11 @@ paths:
           description: "User not found"
 
     put:
-      operationId: R107
-      summary: "R107: Edit user profile action"
+      operationId: R108
+      summary: "R108: Edit user profile action"
       description: "Processes the user edit profile submission. Access: OWN"
       tags:
-        - "M02: Authentication and User Profile"
+        - "M01: Authentication and User Profile"
 
       parameters:
         - in: path
