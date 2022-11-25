@@ -1,9 +1,5 @@
 @extends('layouts.app')
 
-@section('header')
-  @include('partials.header')
-@endsection
-
 @section('content')
 <body>
     <div class="d-flex flex-column align-items-end">

@@ -1,7 +1,7 @@
 @extends('layouts.app')
 @section('title', $user->username)
 
-@php($paginator = $user->posts()->visible()->paginate(10))
+@php($paginator = $user->posts->visible()->paginate(10))
 
 @section('content')
     <div class="d-flex flex-column bg-white container m-3 px-0">

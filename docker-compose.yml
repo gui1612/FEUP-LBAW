@@ -21,6 +21,13 @@ services:
     depends_on:
       - postgres
 
+  # app:
+  #   image: git.fe.up.pt:5050/lbaw/lbaw2223/lbaw2264
+  #   ports:
+  #     - "80:80"
+  #   depends_on:
+  #     - postgres
+
   postgres:
     image: postgres:11
     restart: always
