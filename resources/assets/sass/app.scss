@@ -1,20 +1,8 @@
-// @use 'header.scss';
-// @use 'post.scss';
 @import "lib/variables";
 @import "lib/bootswatch";
 
 @import "bootstrap/scss/bootstrap";
 @import "bootstrap-icons/font/bootstrap-icons";
-// @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@100;300&display=swap');
-
-// @tailwind base;
-// @tailwind components;
-// @tailwind utilities;
-
-// body {
-    // font-family: 'Roboto', sans-serif;
-    // background-color: rgb(231, 231, 231);
-// }
 
 .wt-hoverable:hover {
     text-decoration: underline !important;
