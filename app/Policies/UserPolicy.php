@@ -24,6 +24,6 @@ class UserPolicy
     }
     
     public function edit(User $user, User $target) {
-        return $user->id === $target->id;
+        return $user->is_admin || $user->id === $target->id;
     }
 }

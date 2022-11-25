@@ -16,13 +16,13 @@
             </div>
         </div>   
         <div class="d-flex align-items-center p-4 justify-content-center position-relative">
-            @auth
+            @can('edit', $user)    
             <div class="position-absolute top-0 end-0 translate-middle">
                 <a href="{{ route('user.edit', ['user'=>$user]) }}" class="btn btn-secondary text-decoration-none text-white">
                      Edit Profile<i class='bi bi-arrow-right"'></i>
                 </a>
             </div> 
-            @endauth
+            @endcan
             <div class="d-flex flex-column p-4 gap-2 align-items-center">
                 <span>{{ '@' . $user->username }} <i class="bi bi-dot"></i> {{ $paginator->total() }} posts</span>
                 <span> <i class="bi bi-stars"></i> {{ $user->reputation }} reputation points</span>
