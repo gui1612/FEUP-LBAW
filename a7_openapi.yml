@@ -28,7 +28,7 @@ paths:
       tags:
         - "M01: Authentication and User Profile" 
       
-      response:  
+      responses:  
         "200": 
           description: "Ok. Show Administrators Listing UI02" 
       
@@ -90,22 +90,22 @@ paths:
                   description: "Successful logout. Redirect to homepage."
                   value: "/"
 
-  /signup:
+  /register:
     get:
       operationId: R104
-      summary: "R104: Sign-up Form"
+      summary: "R104: Register Form"
       description: "Provide form for new users. Access: PUB"
       tags:
         - "M01: Authentication and User Profile"
 
       responses:
         "200":
-          description: "Ok. Show sign-up form"
+          description: "Ok. Show register form"
 
     post:
       operationId: R105
-      summary: "R105: Sign-up action"
-      description: "Processes the new user sign-up form submission. Access: PUB"
+      summary: "R105: Register action"
+      description: "Processes the new user register form submission. Access: PUB"
       tags:
         - "M01: Authentication and User Profile"
 
@@ -155,7 +155,7 @@ paths:
                   description: "Failed registration. Redirect to sign-up form."
                   value: "/signup"
 
-  /user/{id}:
+  /users/{id}:
     get:
       operationId: R106
       summary: "R106: View user profile"
@@ -174,7 +174,32 @@ paths:
         "200":
           description: "Ok. Show user profile (UI07)"
         "404":
-          description: "User does not exist"  
+          description: "User does not exist"
+
+  /users/{id}/edit:
+    get:
+      operationId: R109
+      summary: "R109: User profile edition form"
+      description: "Provide form for user profile edition. Access: OWN"
+      tags:
+        - "M01: Authentication and User Profile"
+
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+          required: true
+
+      responses:
+        "200":
+          description: "Ok. Show user profile edition form (UI07)"
+        "401":
+          description: "Unauthorized. User must be authenticated"
+        "403":
+          description: "Forbidden. User must be owner of the profile"
+        "404":
+          description: "User not found"
 
     put:
       operationId: R107
@@ -195,7 +220,6 @@ paths:
         content:
           multipart/form-data:
             schema:
-              schema:
               type: object
               properties:
                 bannerPicture:
@@ -224,69 +248,13 @@ paths:
               examples:
                 302Success:
                   description: "Successful profile edition. Redirect to user profile."
-                  value: "/user/{id}"
+                  value: "/users/{id}"
                 302Failure:
                   description: "Failed profile edition. Redirect to edit profile form."
-                  value: "/user/{id}/edit" 
+                  value: "/users/{id}/edit"           
 
-    delete:
-      operationId: R108
-      summary: "R108: Delete user account action"
-      description: "Processes a request to delete a user account. Access: OWN"
-      tags:
-        - "M01: Authentication and User Profile"
-
-      parameters:
-        - in: path
-          name: id
-          schema:
-            type: integer
-          required: true
-
-      responses:
-        "302":
-          description: "Redirect after deleting user account."
-          headers:
-            Location:
-              schema:
-                type: string
-              examples:
-                302Success:
-                  description: "Successful user account deletion. Redirect to homepage."
-                  value: "/"
-                302Failure:
-                  description: "Failed to delete user account. Redirect to user profile."
-                  value: "/user/{id}"            
-  
-  /user/{id}/edit:
-    get:
-      operationId: R109
-      summary: "R109: User profile edition form"
-      description: "Provide form for user profile edition. Access: OWN"
-      tags:
-        - "M01: Authentication and User Profile"
-
-      parameters:
-        - in: path
-          name: id
-          schema:
-            type: integer
-          required: true
-
-      responses:
-        "200":
-          description: "Ok. Show user profile edition form (UI07)"
-        "401":
-          description: "Unauthorized. User must be authenticated"
-        "403":
-          description: "Forbidden. User must be owner of the profile"
-        "404":
-          description: "User not found"
-
-     ## TODO falta o follow e o unfollow
-          
   # M02 - System Administration
-  /admin:
+  /admin/users:
     get:
       operationId: "R201"
       summary: "R201: View Administration Panel"
@@ -301,7 +269,7 @@ paths:
   /admin/team:
     get:
       operationId: "R202"
-      summary: "R202: View Administrators"
+      summary: "R202: Show Administration Team"
       description: "View all system administrators. Access: ADM"
       tags:
         - "M02 - System Administration"
@@ -309,27 +277,16 @@ paths:
       responses:
         "200":
           description: "Ok. Show Administrators Listing UI"
-
-  /api/admin/team/{username}:
-    put:
+    post:
       operationId: "R203"
-      summary: "R203: Add Administrator API Route"
-      description: "Add user to the team of system administrators. Access: ADM"
+      summary: "R203: Promote User to Admin"
+      description: "Promote Regular User to Admin Action. Access: ADM"
       tags:
         - "M02 - System Administration"
 
-      parameters:
-        - in: path
-          name: username
-          description: "The username of the user to add to the team of system administrators."
-          required: true
-          schema:
-            type: string
-
       responses:
         "200":
-          description: "Ok. Successfuly added member to the administration team."
-
+          description: "Ok. Show Administrators Listing UI"
         "422":
           description: "Validation error. The member was not added to the administration team."
           content:
@@ -341,6 +298,7 @@ paths:
                     enum:
                       - user:not-found
 
+  /admin/team/{username}:
     delete:
       operationId: "R204"
       summary: "R204: Remove Administrator API Route"
@@ -393,31 +351,10 @@ paths:
         200:
           description: "Ok. Show Homepage UI01"
 
-  /post:
-    get:
-      operationId: R302
-      summary: "R302 : Create post form"
-      description: "Provide new post creation form. Access: USR"
-      tags:
-        - "M03: Forums, Posts and Comments"
-
-      responses:
-        200:
-          description: 'Ok. Show Create Post Form'
-        302:
-          description: 'Redirect after trying to get Create Post Form'
-          headers:
-            Location:
-              schema:
-                type: string  
-              examples:
-                302Failure:
-                  description: 'You are not logged in. Failed post creation. Redirect to login Page.'
-                  value: '/login' 
-
+  /posts:
     post:
-      operationId: R303
-      summary: "R4303 : Create post action"
+      operationId: R302
+      summary: "R302 : Create post action"
       description: "Processes the new post creation form. Access: USR"
       tags:
         - "M03: Forums, Posts and Comments"
@@ -460,6 +397,27 @@ paths:
                   description: "Failed post creation. Redirect to Create Post form."
                   value: "/post"
 
+  /posts/new:
+    get:
+      operationId: R303
+      summary: "R303 : Create post form"
+      description: "Provide new post creation form. Access: USR"
+      tags:
+        - "M03: Forums, Posts and Comments"
+
+      responses:
+        200:
+          description: 'Ok. Show Create Post Form'
+        302:
+          description: 'Redirect after trying to get Create Post Form'
+          headers:
+            Location:
+              schema:
+                type: string  
+              examples:
+                302Failure:
+                  description: 'You are not logged in. Failed post creation. Redirect to login Page.'
+                  value: '/login' 
 
   /post/{id}:
     get:
@@ -510,35 +468,9 @@ paths:
                 302Failure:
                   description: "Failed to delete post. Redirect to post page"
                   value: "/post/{id}"
-
-  /post/{id}/edit:
-    get:
-      operationId: R306
-      summary: "R306 : Post edition form"
-      description: "Provide a form for post edition. Access: OWN"
-      tags:
-        - "M03: Forums, Posts and Comments"
-
-      parameters:
-        - in: path
-          name: id
-          required: true
-          schema:
-            type: integer
-
-      responses:
-        200:
-          description: "OK. Show post edition form"
-        401:
-          description: "Unauthorized. Must be authenticated."
-        403:
-          description: "Unauthorized. Must be the owner of the post"
-        404:
-          description: "Post not found"
-
     put:
-      operationId: R307
-      summary: "R307 : Edit post action"
+      operationId: R306
+      summary: "R306 : Edit post action"
       description: "Processes the user edit profile form submission. Access: OWN"
       tags:
         - "M03: Forums, Posts and Comments"
@@ -577,11 +509,36 @@ paths:
                   description: "Failed post edition. Redirect to the edit post page."
                   value: "/post/{id}/edit"
 
-  /api/post/{id}/posts:
+  /posts/{id}/edit:
     get:
-      operationId: R408
-      summary: "R308 : Like a post"
-      description: "Processes a request to like a post. Access: USR"
+      operationId: R307
+      summary: "R307 : Show post edition form"
+      description: "Provide a form for post edition. Access: OWN"
+      tags:
+        - "M03: Forums, Posts and Comments"
+
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+
+      responses:
+        200:
+          description: "OK. Show post edition form"
+        401:
+          description: "Unauthorized. Must be authenticated."
+        403:
+          description: "Unauthorized. Must be the owner of the post"
+        404:
+          description: "Post not found"
+
+  /posts/{id}/images:
+    post:
+      operationId: R308
+      summary: "R308 : Add Post Image Action"
+      description: "Processes a request to add a image to the post. Access: OWN"
       tags:
         - "M03: Forums, Posts and Comments"
       parameters:
@@ -594,15 +551,89 @@ paths:
 
       responses:
         200:
-          description: "OK. Successfully liked the post"
+          description: "OK. Successfully added an image to the post"
+        401:
+          description: "Unauthorized. Must be authenticated."
+        403:
+          description: "Unauthorized. Must be the owner of the post"
         404:
-          description: "Post Id not found."
+          description: "Post not found"
 
-  /api/post/{id}/posts:
+  /posts/{post_id}/{image_id}:
+    delete:
+      operationId: R309
+      summary: "R309 : Remove Post Image Action"
+      description: "Remove Post Image Action. Access: OWN"
+      tags:
+        - "M03: Forums, Posts and Comments"
+      parameters:
+        - in: path
+          name: post_id
+          description: "Post Id"
+          required: true
+          schema:
+            type: integer
+        - in: path
+          name: image_id
+          description: "Image Id"
+          required: true
+          schema:
+            type: integer
+
+      responses:
+        200:
+          description: "OK. Successfully removed the image from the post"
+        401:
+          description: "Unauthorized. Must be authenticated."
+        403:
+          description: "Unauthorized. Must be the owner of the post"
+        404:
+          description: "Post or Image not found"
+
+  /api/posts/{id}/rating:
     get:
-      operationId: R409
-      summary: "R409 : Disike a post"
-      description: "Processes a request to dislike a post. Access: USR"
+      operationId: R310
+      summary: "R310 : Show Post Rating"
+      description: "Provide the rating from the post. Access: OWN"
+      tags:
+        - "M03: Forums, Posts and Comments"
+
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+
+      responses:
+        200:
+          description: "OK. Show post rating"
+        404:
+          description: "Post not found"
+    post:
+      operationId: R311
+      summary: "R311 : Save Post Rating Action"
+      description: "Save Post Rating Action. Access: USR"
+      tags:
+        - "M03: Forums, Posts and Comments"
+
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+
+      responses:
+        200:
+          description: "OK. Post rating saved"
+        404:
+          description: "Post not found"
+    
+    delete:
+      operationId: R312
+      summary: "R312 : Remove Post Rating Action"
+      description: "Remove Post Rating Action. Access: USR"
       tags:
         - "M03: Forums, Posts and Comments"
       parameters:
@@ -612,9 +643,8 @@ paths:
           required: true
           schema:
             type: integer
-
       responses:
         200:
-          description: "OK. Successfully disliked the post"
+          description: "OK. Successfully removed the post rating"
         404:
-          description: "Post Id not found."
+          description: "Post or Image not found"
