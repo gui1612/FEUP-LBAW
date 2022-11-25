@@ -158,6 +158,7 @@ CREATE INDEX idx_rated_content ON Ratings USING HASH(owner_id);
 CREATE INDEX idx_rated_post ON Ratings USING HASH(rated_post_id); 
 CREATE INDEX idx_rated_comment ON Ratings USING HASH(rated_comment_id); 
 CREATE INDEX idx_post_created_at ON Posts USING BTREE(created_at);
+CREATE INDEX idx_post_rating ON Posts USING BTREE(rating);
 CREATE INDEX idx_posts ON Posts USING HASH(owner_id);
 -- CREATE INDEX idx_posts ON Posts USING HASH(forum_id);
 CREATE INDEX idx_comment_created_at ON Comments USING BTREE(created_at);
