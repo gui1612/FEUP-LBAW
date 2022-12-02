@@ -1,11 +1,11 @@
-<div class="bg-sucess d-flex flex-column justify-content-between px-5 pb-4 pt-4">
-    <a class="navbar-brand p-2 text-black d-flex align-items-center gap-2" href="/">
+<div class="bg-sucess d-flex flex-column justify-content-between px-5 pb-3 pt-3">
+    <a class="navbar-brand p-2 text-black d-flex align-items-center gap-2" href="{{ route('about') }}">
         About Us
     </a>
-    <a class="navbar-brand p-2 text-black d-flex align-items-center gap-2" href="/">
+    <a class="navbar-brand p-2 text-black d-flex align-items-center gap-2" href="{{ route('contact')}}">
         Contact Us
     </a>
-    <a class="navbar-brand p-2 text-black d-flex align-items-center gap-2" href="/">
+    <a class="navbar-brand p-2 text-black d-flex align-items-center gap-2" href="{{ route('features')}}">
         Main Features
     </a>
 </div>
