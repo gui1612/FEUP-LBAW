@@ -5,12 +5,11 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Post extends Model
-{
+class Comment extends Model {
     use HasFactory;
 
     public $timestamps = false;
-    protected $table = 'posts';
+    protected $table = 'comments';
 
     protected $casts = [
         'created_at' => 'datetime',
@@ -21,16 +20,12 @@ class Post extends Model
         return $this->belongsTo(User::class, 'owner_id');
     }
 
-    public function images() {
-        return $this->hasMany(PostImage::class, 'post_id');
+    public function post() {
+        return $this->belongsTo(Post::class, 'post_id');
     }
 
     public function ratings() {
-        return $this->hasMany(PostRating::class, 'rated_post_id');
-    }
-
-    public function comments() {
-        return $this->hasMany(Comment::class, 'post_id');
+        return $this->hasMany(CommentRating::class, 'rated_comment_id');
     }
 
     public function scopeVisible($query) {

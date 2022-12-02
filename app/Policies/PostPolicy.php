@@ -27,7 +27,7 @@ class PostPolicy
     }
 
     public function view(?User $user, Post $post) {
-        if ($post->hidden) {
+        if ($post->hidden && $user->id !== $post->owner_id) {
             return Response::denyAsNotFound();
         }
         
@@ -36,9 +36,13 @@ class PostPolicy
     
     public function edit(User $user, Post $post) {
         if ($post->hidden) {
+            if ($user->id === $post->owner_id) {
+                return Response::denyWithStatus(403, 'You cannot edit a hidden post.');
+            }
+        
             return Response::denyAsNotFound();
         }
-        
+
         if ($user->id !== $post->owner_id) {
             return Response::denyWithStatus(403, 'You are not the owner of this post.');
         }
@@ -48,15 +52,23 @@ class PostPolicy
     
     public function delete(User $user, Post $post) {
         if ($post->hidden) {
-            return Response::denyAsNotFound();
-        }
+            if ($user->id === $post->owner_id) {
+                return Response::denyWithStatus(403, 'You cannot delete a hidden post.');
+            }
         
-        if ($post->ratings()->count() > 0) {
-            return Response::denyWithStatus(403, 'You cannot delete a post that has ratings.');
+            return Response::denyAsNotFound();
         }
         
         if ($post->owner_id !== $user->id) {
             return Response::denyWithStatus(403, 'You are not the owner of this post.');
+        }
+        
+        if ($post->ratings->count() > 0) {
+            return Response::denyWithStatus(403, 'You cannot delete a post that has ratings.');
+        }
+
+        if ($post->comments->count() > 0) {
+            return Response::denyWithStatus(403, 'You cannot delete a post that has comments.');
         }
         
         return true;

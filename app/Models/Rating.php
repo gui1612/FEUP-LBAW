@@ -22,4 +22,8 @@ class Rating extends Model
     public function post() {
         return $this->belongsTo(Post::class, 'rated_post_id');
     }
+
+    public function comment() {
+        return $this->belongsTo(Comment::class, 'rated_comment_id');
+    }
 }

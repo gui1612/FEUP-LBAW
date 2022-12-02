@@ -50,6 +50,10 @@ class User extends AuthUser {
         return $this->hasMany(Rating::class, 'owner_id', 'id');
     }
 
+    public function comments() {
+        return $this->hasMany(Comment::class, 'owner_id', 'id');
+    }
+
     public function is_deleted() {
         return is_null($this->email);
     }

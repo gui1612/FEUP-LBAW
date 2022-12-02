@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Resources\RatingResource;
+use App\Models\Comment;
 use App\Models\Post;
 use App\Models\PostImage;
 use App\Models\Rating;
@@ -14,17 +15,6 @@ use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 
 class PostController extends Controller {
-
-  /*
-
-Route::get('posts/{post}', 'PostController@show')->name('post');
-Route::get('posts/{post}/edit', 'PostController@edit')->name('post.edit');
-Route::post('posts/', 'PostController@create')->name('post.create_post');
-Route::patch('posts/{post}', 'PostController@edit_with_new_data')->name('post.edit_with_new_data');
-Route::delete('api/posts/{post}', 'PostController@delete')->name('post.delete');
-
-*/
-
   public function show_create_post_form() {
     $this->authorize('create', Post::class);
     return view('pages.create_post', ['new_post' => true]);
@@ -85,27 +75,46 @@ Route::delete('api/posts/{post}', 'PostController@delete')->name('post.delete');
     return redirect()->route('post', ['post' => $post]);
   }
 
-    public function edit_post(Request $request, Post $post) {
-      $this->authorize('edit', $post);
-      
-      $validated = $request->validate([
-        'title' => 'string|max:255',
-        'body' => 'string',
-      ]);
-      
-      $post->title = $validated['title'] ?? $post->title;
-      $post->body = $validated['body'] ?? $post->body;
-      $post->save();
+  public function edit_post(Request $request, Post $post) {
+    $this->authorize('edit', $post);
+    
+    $validated = $request->validate([
+      'title' => 'string|max:255',
+      'body' => 'string',
+    ]);
+    
+    $post->title = $validated['title'] ?? $post->title;
+    $post->body = $validated['body'] ?? $post->body;
+    $post->save();
 
-      return redirect()->route('post', ['post' => $post]);
-    }
+    return redirect()->route('post', ['post' => $post]);
+  }
 
-    public function delete_post(Request $request, Post $post) {
-      $this->authorize('delete', $post);
+  public function delete_post(Request $request, Post $post) {
+    $this->authorize('delete', $post);
 
-      $post->hidden = True;
-      $post->save();
+    $post->hidden = True;
+    $post->save();
 
-      return redirect()->route('feed.show');
-    }
+    return redirect()->route('feed.show');
+  }
+
+  public function comment_post(Request $request, Post $post) {
+    $this->authorize('view', $post);
+    $this->authorize('create', Comment::class);
+
+    $data = $request->validate([
+      'body' => 'required|string',
+    ]);
+
+    $comment = new Comment();
+    $comment->body = $data['body'];
+    $comment->owner()->associate(Auth::user());
+    $comment->post()->associate($post);
+    
+    $this->authorize('update', $comment);
+    $comment->save();
+
+    return redirect()->route('post', ['post' => $post]);
+  }
 }
