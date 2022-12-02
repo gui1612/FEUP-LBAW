@@ -106,6 +106,6 @@ Route::delete('api/posts/{post}', 'PostController@delete')->name('post.delete');
       $post->hidden = True;
       $post->save();
 
-      return redirect()->route('home');
+      return redirect()->route('feed.show');
     }
 }

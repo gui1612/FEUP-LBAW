@@ -19,7 +19,7 @@ class FeedController extends Controller
      */
     public function show(Request $request) {
       $validated = $request->validate([
-        'order' => 'in:popularity,chronological'
+        'order' => 'sometimes|in:popularity,chronological'
       ]);
 
       $order = $validated['order'] ?? 'popularity';
