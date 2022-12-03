@@ -9,16 +9,14 @@
   <div class="col-md-11 px-4">
     <p class="p-0 m-0">
       Wrottit is platform developed by a group of students
-      in LEIC utmost care. Our goal is for your experience
-      to be the best possible.
-      Our goal is for your experience
+      in LEIC with utmost care. Our goal is for your experience
       to be the best possible.
     </p>
     <p>
       We want to give you a possibility
       to see all the world's news in a single platform, while 
       having the freedom to post whatever you want and connect
-      with people alike
+      with people alike.
     </p>
   </div>
 </div>
