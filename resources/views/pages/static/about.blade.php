@@ -3,7 +3,7 @@
 @section('title', 'About Us')
 
 @section('content')
-<div class="container w-75 m-4 bg-white pt-5 px-5 py-5 d-flex flex-column gap-2 justify-content-start">
+<div class="container w-75 m-4 bg-white d-flex flex-column gap-2 justify-content-start p-5">
   <h3>About Us</h3>
   <div class="horizontalDivider mb-3"></div>
   <div class="col-md-11 px-4">
