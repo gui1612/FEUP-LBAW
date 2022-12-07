@@ -52,3 +52,8 @@ Route::delete('posts/{post}/images/{image}', 'PostImagesController@remove_image'
 Route::get('api/posts/{post}/rating', 'PostRatingController@show')->name('post.rating.get');
 Route::post('api/posts/{post}/rating', 'PostRatingController@save')->name('post.rating.rate');
 Route::delete('api/posts/{post}/rating', 'PostRatingController@destroy')->name('post.rating.remove');
+
+// Static pages 
+Route::get('about', 'StaticPagesController@showAboutPage')->name('about');
+Route::get('contact', 'StaticPagesController@showContactPage')->name('contact');
+Route::get('features', 'StaticPagesController@showFeaturesPage')->name('features');
