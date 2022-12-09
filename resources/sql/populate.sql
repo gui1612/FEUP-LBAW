@@ -12217,5 +12217,6 @@ INSERT INTO Ratings (owner_id, rated_post_id, rated_comment_id, type) VALUES (79
 INSERT INTO Ratings (owner_id, rated_post_id, rated_comment_id, type) VALUES (316, 1433, NULL, 'dislike');
 INSERT INTO Ratings (owner_id, rated_post_id, rated_comment_id, type) VALUES (19, 406, NULL, 'dislike');
 
+INSERT INTO Comments VALUES (1, '2021-07-14 23:52:26', '2021-08-14 23:52:26', 'Hello, this is a comment by mari', 0, 1, 143, FALSE);
 
 

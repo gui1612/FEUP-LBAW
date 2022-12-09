@@ -28,14 +28,14 @@
                 </li>
                 </ul>
                 <div class="d-none d-md-flex dropdown mx-2 align-items-center">
-                <button class="dropdown-toggle btn p-0 border-0 d-flex align-items-center" href="#" data-bs-toggle="dropdown" aria-expanded="false">
-                    <img src="{{ Auth::user()->profile_picture_or_default_url() }}" alt="{{ Auth::user()->username }}'s profile picture" width="32" height="32" class="d-inline-block img-fluid rounded-circle">
-                </button>
-                <ul class="dropdown-menu dropdown-menu-end">
-                    <li><a class="dropdown-item" href="{{ route('user.show', Auth::user()->id) }}">Your Profile</a></li>
-                    <li><hr class="dropdown-divider"></li>
-                    <li><a class="dropdown-item" href="{{ route('logout') }}">Logout</a></li>
-                </ul>
+                    <button class="dropdown-toggle btn p-0 border-0 d-flex align-items-center" href="#" data-bs-toggle="dropdown" aria-expanded="false">
+                        <img src="{{ Auth::user()->profile_picture_or_default_url() }}" alt="{{ Auth::user()->username }}'s profile picture" width="32" height="32" class="d-inline-block img-fluid rounded-circle">
+                    </button>
+                    <ul class="dropdown-menu dropdown-menu-end">
+                        <li><a class="dropdown-item" href="{{ route('user.show', Auth::user()->id) }}">Your Profile</a></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><a class="dropdown-item" href="{{ route('logout') }}">Logout</a></li>
+                    </ul>
                 </div>
             </div>
         </div>

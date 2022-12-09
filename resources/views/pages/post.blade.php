@@ -6,7 +6,7 @@
 @section('content')
     <article class="container w-75 my-4 bg-white px-4 py-3 mx-auto">
         @if($images->isNotEmpty())
-            <div id="carouselExampleControls" class="carousel slide d-flex justify-content-center bg-black mx-auto w-100" style="height:30rem;" data-bs-ride="carousel" data-bs-interval="9999999">
+            <div id="carouselExampleControls" class="mb-3 carousel slide d-flex justify-content-center bg-black mx-auto w-100" style="height:30rem;" data-bs-ride="carousel" data-bs-interval="9999999">
                 <div class="carousel-inner">
                     @php($img = $images[0])
                     <div class="carousel-item active h-100 bg-black">
@@ -35,20 +35,38 @@
                 </button>
             </div>
         @endif
-
-
-        <div class="d-flex align-items-center justify-content-between pe-2">
-                
-            @include('partials.user_info', ['user' => $post->owner, 'clickable'=>True])
-            @include('partials.post_actions')
-            </div>
         
         @include('partials.post_title')
         @include('partials.post_body')
 
-        <span class="my-2"> on {{ date_format($post->created_at, 'Y-m-d') }}</span>
-        
+        <div class="d-flex gap-4">
+            <span class="mb-2">By 
+                <a href={{ route('user.show', $post->owner) }}>{{ $post->owner->username }}</a> 
+                on {{ date_format($post->last_edited, 'Y-m-d') }}</span>
+        </div>
+
         @include('partials.rating')
+
+        @auth
+            <form method="POST" class="d-flex gap-3 py-4" style="align-items: start"> <!-- to-do: form routing -->
+                @csrf
+                @method('POST')
+                <img src="{{ Auth::user()->profile_picture }}" alt="Your profile picture" width="30" height="30" class="rounded-circle ratio ratio-1x1" style="width: 3rem; height: auto;">
+                <label for="comment" class="visually-hidden">Comment</label>
+                <textarea id="comment" placeholder="Add a comment" class="form-control"></textarea>
+            </form>
+
+            <div class="d-flex justify-content-end w-100 gap-3">
+                <button type="submit" class="btn btn-primary mb-3">Submit</button>
+                <button class="btn btn-danger mb-3">Cancel</button> <!-- to-do: make buttons appear on click js -->
+            </div>
+        @endauth
+
+        <section class="container" id="comment-section">
+            @foreach ($post->comments as $comment)
+                @include('partials.comment', ['comment' => $comment])
+            @endforeach
+        </section>
     </article>
     
 @endsection

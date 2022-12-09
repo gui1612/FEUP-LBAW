@@ -18,4 +18,6 @@
         @endif
         <span class="visually-hidden">Dislike</span>
     </button>
+    <i class="bi bi-dot"></i>
+    <span>{{ $post->comments()->count() }} comments</span>
 </div>
