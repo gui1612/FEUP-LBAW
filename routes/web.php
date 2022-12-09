@@ -44,6 +44,11 @@ Route::put('posts/{post}', 'PostController@edit_post')->name('post.edit_with_new
 Route::delete('posts/{post}', 'PostController@delete_post')->name('post.delete');
 Route::get('posts/{post}/edit', 'PostController@show_edit_post_form')->name('post.edit');
 
+// Post Comments
+Route::post('posts/{post}/comments', 'PostCommentsController@create_comment')->name('post.comments.add');
+Route::put('posts/{post}/comments/{comment}', 'PostCommentsController@edit_comment')->name('post.comments.edit');
+Route::delete('posts/{post}/comments/{comment}', 'PostCommentsController@delete_comment')->name('post.comments.delete');
+
 // Post Images
 Route::post('posts/{post}/images', 'PostImagesController@add_image')->name('post.images.add');
 Route::delete('posts/{post}/images/{image}', 'PostImagesController@remove_image')->name('post.images.remove');

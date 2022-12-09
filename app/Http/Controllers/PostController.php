@@ -98,23 +98,4 @@ class PostController extends Controller {
 
     return redirect()->route('feed.show');
   }
-
-  public function comment_post(Request $request, Post $post) {
-    $this->authorize('view', $post);
-    $this->authorize('create', Comment::class);
-
-    $data = $request->validate([
-      'body' => 'required|string',
-    ]);
-
-    $comment = new Comment();
-    $comment->body = $data['body'];
-    $comment->owner()->associate(Auth::user());
-    $comment->post()->associate($post);
-    
-    $this->authorize('update', $comment);
-    $comment->save();
-
-    return redirect()->route('post', ['post' => $post]);
-  }
 }
