@@ -62,6 +62,8 @@ COPY .env.production .env
 RUN composer dumpautoload
 RUN php artisan storage:link
 RUN php artisan key:generate --force
+RUN php artisan config:clear
+RUN php artisan clear-compiled
 RUN php artisan optimize
 
 RUN chown -R www-data storage bootstrap/cache
