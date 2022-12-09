@@ -13,7 +13,7 @@ class PostImage extends Model
     protected $table = 'postimages';
 
     public function url() {
-        return asset('\/storage\/' . $this->path);
+        return str_starts_with($this->path, 'http') ? $this->path : asset('/storage/' . $this->path);
     }
 
     public function post() {
