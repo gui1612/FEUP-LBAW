@@ -22,7 +22,7 @@ class PostRatingController extends Controller {
         ]);
     }
     
-    public function save_user(Request $request, User $user) {
+    public function follow(Request $request, User $user) {
         $this->authorize('follow', $user);
 
         $user_id = Auth::id();
@@ -45,7 +45,7 @@ class PostRatingController extends Controller {
         ]);
     }
     
-    public function destroy(Follow $follow, User $user) {
+    public function unfollow(Follow $follow, User $user) {
         $this->authorize('follow', $user);
 
         $user_id = Auth::id();

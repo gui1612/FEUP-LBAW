@@ -2,7 +2,7 @@
 
 namespace App\Models;
 
-class PostRating extends Rating
+class CommentRating extends Rating
 {
 
     protected $hidden = ['rated_post_id', 'id'];

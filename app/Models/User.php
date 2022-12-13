@@ -36,7 +36,7 @@ class User extends AuthUser {
 
     public function banner_picture_url() {
         if (is_null($this->banner_picture)) {
-            return null;
+            return mix('images/defaults/banner.jpg');
         }
 
         return str_starts_with($this->banner_picture, 'http') ? $this->banner_picture : asset('/storage/' . $this->banner_picture); 
@@ -56,6 +56,10 @@ class User extends AuthUser {
 
     public function followers() {
         return $this->hasMany(Follow::class, 'followed_user_id', 'id');
+    }
+
+    public function follows() {
+        return $this->hasMany(Follow::class, 'owner_id', 'id');
     }
 
     public function is_deleted() {

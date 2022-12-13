@@ -1,7 +1,8 @@
 @extends('layouts.app')
 @section('title', $user->username)
 
-@php($paginator  = $user->posts()->visible()->paginate(10))
+@php($paginator_own = $user->posts()->visible()->paginate(10))
+@php($paginator_interacted = $user->comments()->visible()->paginate(10))
 
 @section('content')
     <div class="d-flex container m-3 px-0">
@@ -12,8 +13,8 @@
                     <div class="row d-flex justify-content-center">
                         <div class="container rounded bg-white p-4" style="height: min-content">
                             <div class="card-body text-center d-flex flex-column align-items-center" style="width: min-content">
-                                <div class="mt-3 mb-4 d-flex flex-column align-items-center" style="height: 16vh">
-                                    <img src=" {{ $user->banner_picture }}" alt="{{ $user->username . '\'s banner picture' }}" 
+                                <div class="mt-3 mb-4 d-flex flex-column align-items-center" style="height: 16vh; width: auto">
+                                    <img src=" {{ $user->banner_picture_url() }}" alt="{{ $user->username . '\'s banner picture' }}" 
                                     class="img-fluid" style="width: 100%; height: 75%; object-fit: cover;">
                                     <img src=" {{ $user->profile_picture_or_default_url() }}" alt="{{ $user->username . '\'s banner picture' }}"
                                     class="rounded-circle img-fluid position-absolute" style="border: solid white 2px; width: 100px; top: 27%;">
@@ -23,13 +24,17 @@
     
                                 @auth
                                     @if($user->id == Auth::user()->id)
-                                        <button type="button" class="btn btn-primary">
+                                        <a href="{{ route('user.edit', ['user'=>$user]) }}" class="btn btn-primary"">
                                             Edit Profile
-                                        </button>
+                                        </a>
                                     @else 
-                                        <button type="button" class="btn btn-primary d-flex gap-2">
-                                            <i class="bi bi-person-add"></i>Follow
-                                        </button>
+                                        <form method="POST" action="{{ route('follow', $user->id) }}">
+                                            @csrf
+                                            @method('POST')
+                                            <button type="button" class="btn btn-primary d-flex gap-2">
+                                                <i class="bi bi-person-add"></i>Follow
+                                            </button>
+                                        </form>
                                     @endif
                                 @endauth
                                 <div class="d-flex justify-content-between text-center mt-4 mb-2">
@@ -38,7 +43,7 @@
                                     <p class="text-muted mb-0">Reputation Points</p>
                                     </div>
                                     <div class="px-3">
-                                    <p class="mb-2 h5"> {{ $paginator->total() }} </p>
+                                    <p class="mb-2 h5"> {{ $paginator_own->total() }} </p>
                                     <p class="text-muted mb-0">Posts</p>
                                     </div>
                                     <div>
@@ -92,16 +97,16 @@
             <!-- Tabs content -->
             <div class="tab-content" id="">
                 <div class="tab-pane show active" id="personal_content" role="tabpanel" aria-labelledby="personal_content_tab">
-                    @foreach($paginator->items() as $post)
+                    @foreach($paginator_own->items() as $post)
                         @include('partials.post_preview', ['on_profile'=>True])
                     @endforeach
-                    {{ $paginator }}
+                    {{ $paginator_own }}
                 </div>
                 <div class="tab-pane" id="interactions" role="tabpanel" aria-labelledby="interactions_tab">
-                    @foreach($paginator->items() as $post)
-                        @include('partials.post_preview', ['on_profile'=>False])
+                    @foreach($paginator_interacted->items() as $comment)
+                        @include('partials.comment_preview', ['comment' => $comment])
                     @endforeach
-                    {{ $paginator }}
+                    {{ $paginator_interacted }}
                 </div>
             </div>
             <!-- Tabs content -->

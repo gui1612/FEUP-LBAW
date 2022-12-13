@@ -36,7 +36,15 @@
             </div>
         @endif
         
-        @include('partials.post_title')
+        @if(Auth::check() && ($post->owner_id == Auth::user()->id))
+            <div class="d-flex align-items-center justify-content-between">
+                @include('partials.post_title')
+                @include('partials.post_actions')
+            </div>
+        @else
+            @include('partials.post_title')
+        @endif
+
         @include('partials.post_body')
 
         <div class="d-flex gap-4">

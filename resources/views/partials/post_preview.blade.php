@@ -1,4 +1,4 @@
-<article class="container w-75 p-4 shadow mb-5 bg-white rounded">
+<article class="container p-4 shadow mb-5 bg-white rounded">
 
     @if(!$on_profile)
         <div class="d-flex justify-content-between">
