@@ -15,7 +15,7 @@ class DatabaseSeeder extends Seeder
     public function run()
     {
         DB::unprepared(file_get_contents('resources/sql/seed.sql'));
-        DB::unprepared(file_get_contents('resources/sql/populate.sql'));
+        DB::unprepared(file_get_contents('resources/sql/populate1.sql'));
         
         // $this->call([
         //     UserSeeder::class,
