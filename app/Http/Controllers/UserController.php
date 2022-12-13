@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use App\Models\Follow;
 use Illuminate\Http\Request;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Validator;
@@ -16,6 +17,10 @@ class UserController extends Controller {
     
     return view('pages.user', ['user' => $user]);
   }
+
+    public function followers() {
+        return $this->hasMany(Follow::class, 'followed_user_id');
+    }
   
   public function showEditForm(User $user) {
     $this->authorize('edit', $user);

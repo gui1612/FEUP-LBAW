@@ -54,6 +54,10 @@ class User extends AuthUser {
         return $this->hasMany(Comment::class, 'owner_id', 'id');
     }
 
+    public function followers() {
+        return $this->hasMany(Follow::class, 'followed_user_id', 'id');
+    }
+
     public function is_deleted() {
         return is_null($this->email);
     }

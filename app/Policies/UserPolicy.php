@@ -26,4 +26,8 @@ class UserPolicy
     public function edit(User $user, User $target) {
         return $user->is_admin || $user->id === $target->id;
     }
+
+    public function follow(User $user, User $target) {
+        return true;
+    }
 }

@@ -62,3 +62,14 @@ INSERT INTO Ratings (owner_id, rated_post_id, rated_comment_id, type) VALUES (12
 
 INSERT INTO Comments (created_at, last_edited, body, rating, owner_id, post_id, hidden) VALUES ('2022-07-24 23:52:26', '2022-07-24 23:52:26', 'Big same, I feel so much love towards my cat', 0, 1, 1, false);
 INSERT INTO Comments (created_at, last_edited, body, rating, owner_id, post_id, hidden) VALUES ('2022-07-25 23:52:26', '2022-07-25 23:52:26', 'Muito cuidado mesmo. Nem vou sair de casa hoje', 0, 3, 3, false);
+
+INSERT INTO Follows (owner_id, followed_user_id, followed_forum_id) VALUES (1, 2, NULL);
+INSERT INTO Follows (owner_id, followed_user_id, followed_forum_id) VALUES (1, 3, NULL);
+INSERT INTO Follows (owner_id, followed_user_id, followed_forum_id) VALUES (1, 4, NULL);
+INSERT INTO Follows (owner_id, followed_user_id, followed_forum_id) VALUES (1, 7, NULL);
+INSERT INTO Follows (owner_id, followed_user_id, followed_forum_id) VALUES (1, 10, NULL);
+INSERT INTO Follows (owner_id, followed_user_id, followed_forum_id) VALUES (4, 2, NULL);
+INSERT INTO Follows (owner_id, followed_user_id, followed_forum_id) VALUES (4, 3, NULL);
+INSERT INTO Follows (owner_id, followed_user_id, followed_forum_id) VALUES (4, 10, NULL);
+INSERT INTO Follows (owner_id, followed_user_id, followed_forum_id) VALUES (5, 10, NULL);
+INSERT INTO Follows (owner_id, followed_user_id, followed_forum_id) VALUES (10, 5, NULL);

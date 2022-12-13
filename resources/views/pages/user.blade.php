@@ -42,7 +42,7 @@
                                     <p class="text-muted mb-0">Posts</p>
                                     </div>
                                     <div>
-                                    <p class="mb-2 h5"> xx </p>
+                                    <p class="mb-2 h5"> {{ $user->followers->count() }} </p>
                                     <p class="text-muted mb-0">Followers</p>
                                     </div>
                                 </div>
