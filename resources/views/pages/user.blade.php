@@ -24,11 +24,19 @@
     
                                 @auth
                                     @if($user->id == Auth::user()->id)
-                                        <a href="{{ route('user.edit', ['user'=>$user]) }}" class="btn btn-primary"">
+                                        <a href="{{ route('user.edit', ['user'=>$user]) }}" class="btn btn-primary">
                                             Edit Profile
                                         </a>
-                                    @else 
-                                        <form method="POST" action="{{ route('follow', $user->id) }}">
+                                    @elseif($user->followers()->where('owner_id', Auth::user()->id)->first())
+                                        <form method="POST" action="{{ route('follow', $user) }}">
+                                            @csrf
+                                            @method('POST')
+                                            <button type="button" class="btn btn-primary d-flex gap-2">
+                                                <i class="bi bi-person-check-fill"></i>Unfollow
+                                            </button>
+                                        </form>
+                                    @else
+                                        <form method="POST" action="{{ route('follow', $user) }}">
                                             @csrf
                                             @method('POST')
                                             <button type="button" class="btn btn-primary d-flex gap-2">

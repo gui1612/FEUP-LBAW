@@ -64,5 +64,5 @@ Route::get('contact', 'StaticPagesController@showContactPage')->name('contact');
 Route::get('features', 'StaticPagesController@showFeaturesPage')->name('features');
 
 // Follows
-Route::post('/users/{id}/follow', 'UserFollowController@follow')->name('follow');
-Route::delete('/users/{id}/unfollow', 'UserFollowController@unfollow')->name('unfollow');
+Route::post('/users/{user}/follow', 'UserFollowController@follow')->name('follow');
+Route::delete('/users/{user}/unfollow', 'UserFollowController@unfollow')->name('unfollow');

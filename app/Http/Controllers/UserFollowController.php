@@ -26,23 +26,12 @@ class PostRatingController extends Controller {
         $this->authorize('follow', $user);
 
         $user_id = Auth::id();
-        $follower = $user->followers->where('owner_id', $user_id)->first();
 
-        if (is_null($follower)) {
-            $follower = Follow::create([
+        return Follow::create([
                 'owner_id' => $user_id,
                 'followed_user_id' => $user->id,
                 'followed_forum_id' => null,
             ]);
-        } else {
-            $follower->destroy();
-        }
-
-        $user->refresh();
-
-        return response()->json([
-            'followers' => $user->followers->count(),
-        ]);
     }
     
     public function unfollow(Follow $follow, User $user) {
