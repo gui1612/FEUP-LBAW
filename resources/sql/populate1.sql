@@ -38,6 +38,14 @@ INSERT INTO PostImages (path, caption, post_id) VALUES ('https://i.pinimg.com/or
 INSERT INTO PostImages (path, caption, post_id) VALUES ('https://i.redd.it/2fd7nh9wwp5a1.jpg', 'His face while I''m eating meat', 9);
 INSERT INTO PostImages (path, caption, post_id) VALUES ('https://i.redd.it/aisvuxwvco5a1.jpg', 'My cat, meatball', 10);
 
+INSERT INTO Forums (created_at, name, description, forum_picture, banner_picture, hidden) VALUES ('2021-01-01 09:30:41', 'Animais', 'Things that make you go AWW! Like puppies, bunnies, babies, and so on... A place for really cute pictures and videos!', 'https://styles.redditmedia.com/t5_2qh1o/styles/communityIcon_6fzlk8ukx6s51.jpg', 'https://styles.redditmedia.com/t5_2qh1o/styles/bannerBackgroundImage_wmbf6g1dei301.png', false)
+INSERT INTO Forums (created_at, name, description, forum_picture, banner_picture, hidden) VALUES ('2020-11-05 10:32:51', 'Portugal', 'Um lugar para discutir Portugal ou portugueses pelo mundo. — A place to debate Portugal and portuguese people around the world.', 'https://styles.redditmedia.com/t5_2qh1o/styles/communityIcon_6fzlk8ukx6s51.jpg', 'https://styles.redditmedia.com/t5_2qmie/styles/bannerBackgroundImage_fp68a8rhz7w81.jpg', false)
+INSERT INTO Forums (created_at, name, description, forum_picture, banner_picture, hidden) VALUES ('2022-05-06 05:12:21', 'Politics', 'For news and discussion about U.S. politics', 'https://styles.redditmedia.com/t5_2cneq/styles/communityIcon_fy84mdgh75201.jpg', 'https://styles.redditmedia.com/t5_2cneq/styles/bannerBackgroundImage_4vvj1k5ldn671.png', false)
+
+INSERT INTO ForumOwners (forum_id, owner_id) VALUES (1,2)
+INSERT INTO ForumOwners (forum_id, owner_id) VALUES (5,1)
+INSERT INTO ForumOwners (forum_id, owner_id) VALUES (10,3)
+
 UPDATE Users SET reputation = 0;
 UPDATE Posts SET rating = 0;
 
@@ -68,13 +76,13 @@ E o artigo também diz que o Metro de Lisboa tem o serviço afetado, mas a circu
 Só para clarificar, não estou a tentar diminuir a importância disto, obviamente que vai ser preciso continuar a ter cuidados durante o dia de hoje. Mas vale a pena tentar consultar sempre as fontes oficiais para informações mais fiáveis e concretas do que confiar no sensacionalismo da comunicação social.', 0, 7, 3, false);
 INSERT INTO Comments (created_at, last_edited, body, rating, owner_id, post_id, hidden) VALUES ('2022-07-25 23:52:26', '2022-07-25 23:52:26', 'E hoje que tenho apresentação...', 0, 2, 3, false);
 
-INSERT INTO Follows (owner_id, followed_user_id, followed_forum_id) VALUES (1, 2, NULL);
-INSERT INTO Follows (owner_id, followed_user_id, followed_forum_id) VALUES (1, 3, NULL);
-INSERT INTO Follows (owner_id, followed_user_id, followed_forum_id) VALUES (1, 4, NULL);
-INSERT INTO Follows (owner_id, followed_user_id, followed_forum_id) VALUES (1, 7, NULL);
-INSERT INTO Follows (owner_id, followed_user_id, followed_forum_id) VALUES (1, 10, NULL);
-INSERT INTO Follows (owner_id, followed_user_id, followed_forum_id) VALUES (4, 2, NULL);
-INSERT INTO Follows (owner_id, followed_user_id, followed_forum_id) VALUES (4, 3, NULL);
-INSERT INTO Follows (owner_id, followed_user_id, followed_forum_id) VALUES (4, 10, NULL);
-INSERT INTO Follows (owner_id, followed_user_id, followed_forum_id) VALUES (5, 10, NULL);
-INSERT INTO Follows (owner_id, followed_user_id, followed_forum_id) VALUES (10, 5, NULL);
+INSERT INTO Follows (owner_id, followed_user_id, followed_forum_id) VALUES (1, 2, 1);
+INSERT INTO Follows (owner_id, followed_user_id, followed_forum_id) VALUES (1, 3, 3);
+INSERT INTO Follows (owner_id, followed_user_id, followed_forum_id) VALUES (1, 4, 2);
+INSERT INTO Follows (owner_id, followed_user_id, followed_forum_id) VALUES (1, 7, 3);
+INSERT INTO Follows (owner_id, followed_user_id, followed_forum_id) VALUES (1, 10, 1);
+INSERT INTO Follows (owner_id, followed_user_id, followed_forum_id) VALUES (4, 2, 2);
+INSERT INTO Follows (owner_id, followed_user_id, followed_forum_id) VALUES (4, 3, 2);
+INSERT INTO Follows (owner_id, followed_user_id, followed_forum_id) VALUES (4, 10, 2);
+INSERT INTO Follows (owner_id, followed_user_id, followed_forum_id) VALUES (5, 10, 1);
+INSERT INTO Follows (owner_id, followed_user_id, followed_forum_id) VALUES (10, 5, 1);

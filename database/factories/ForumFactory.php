@@ -59,11 +59,10 @@ class ForumFactory extends Factory
       });
     }
 
-
     public function hidden() {
         return $this->state(function (array $attributes) {
             return [
-                'hidden' => true
+                'hidden' => true,
             ];
         });
     }

@@ -18,9 +18,9 @@ class UserController extends Controller {
     return view('pages.user', ['user' => $user]);
   }
 
-    public function followers() {
-        return $this->hasMany(Follow::class, 'followed_user_id');
-    }
+  public function followers() {
+      return $this->hasMany(Follow::class, 'followed_user_id');
+  }
   
   public function showEditForm(User $user) {
     $this->authorize('edit', $user);
