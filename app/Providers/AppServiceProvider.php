@@ -41,18 +41,27 @@ class AppServiceProvider extends ServiceProvider
             return auth()->check() && auth()->user()->is_admin;
         });
 
-        Blade::directive('danger', function () {
-            // $expression = Blade::stripParentheses($expression);
-            return '<?php if (session()->has(\'danger\')):
-if (isset($danger)) { $__dangerOriginal = $danger; }
-function danger($key) { return session()->get(\'danger\')[$key] ?? null; }
-?>';
+        Blade::directive('foreachtoast', function () {
+            return '<?php if (session()->has(\'toasts\')):
+if (isset($type)) { $__typeOriginal = $type; }
+if (isset($category)) { $__categoryOriginal = $category; }
+if (isset($message)) { $__messageOriginal = $message; }
+foreach (session()->get(\'toasts\') as $key => $toast):
+$type = $toast[\'type\'];
+$category = $toast[\'category\'];
+$message = $toast[\'message\'];?>';
         });
 
-        Blade::directive('enddanger', function () {
-            return '<?php unset($danger);
-if (isset($__dangerOriginal)) { $danger = $__dangerOriginal; }
-endif; ?>';
+        Blade::directive('endforeachtoast', function () {
+            return '<?php endforeach;
+unset($type);
+unset($category);
+unset($message);
+if (isset($__typeOriginal)) { $type = $__typeOriginal; }
+if (isset($__categoryOriginal)) { $category = $__categoryOriginal; }
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+?>';
         });
     }
 }

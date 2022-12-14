@@ -27,8 +27,7 @@ class UserController extends Controller {
 
     return view('pages.edit_user', ['user' => $user]);
   }
-
-
+  
   public function update(Request $request, User $user)
   {
     $this->authorize('edit', $user);

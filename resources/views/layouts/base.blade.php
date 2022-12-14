@@ -23,18 +23,18 @@
 <body class="min-vh-100 d-flex flex-column">
   @yield('body')
   <div id="wt-toast-container" class="toast-container bottom-0 end-0 position-fixed p-3">
-    @danger
+    @foreachtoast
       <div class="toast fade wt-toast-ephemeral" style="--bs-toast-bg: #fff;" role="alert" aria-live="assertive" aria-atomic="true">
         <div class="toast-header">
-          <div class="bg-danger rounded-1 me-2" style="width: 1rem; height: 1rem;"></div>
-          <strong class="me-auto">{{ danger('title') }}</strong>
+          <div class="bg-{{ $type }} rounded-1 me-2" style="width: 1rem; height: 1rem;"></div>
+          <strong class="me-auto">{{ $category }}</strong>
           <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
         </div>
         <div class="toast-body">
-          <span>{{ danger('message') }}</span>
+          <span>{{ $message }}</span>
         </div>
       </div>
-    @enddanger
+    @endforeachtoast
   </div>
   <script type="text/javascript" src="{{ mix('js/app.js') }}"></script>
 </body>
