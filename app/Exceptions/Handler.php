@@ -2,10 +2,11 @@
 
 namespace App\Exceptions;
 
+use App\Utils\Toasts;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
-use Symfony\Component\HttpKernel\Exception\HttpException;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
-use Throwable;
+use Illuminate\Http\Request;
+use Illuminate\Http\Response;
+use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 
 class Handler extends ExceptionHandler
 {
@@ -36,13 +37,11 @@ class Handler extends ExceptionHandler
      */
     public function register()
     {
-        $this->renderable(function (HttpException $e) {
-            session()->flash('danger', [ 
-                'title' => $e->getStatusCode(),
-                'message' => $e->getMessage()
-            ]);
-
-            return redirect()->back();
+        $this->renderable(function (AccessDeniedHttpException $e, Request $request) {
+            if ($request->method() !== 'GET') {
+                Toasts::danger($e->getMessage(), Response::$statusTexts[$e->getStatusCode()]);
+                return redirect()->back(Response::HTTP_SEE_OTHER);
+            }
         });
     }
 }
