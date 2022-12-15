@@ -45,7 +45,7 @@ Route::delete('posts/{post}', 'PostController@delete_post')->name('post.delete')
 Route::get('posts/{post}/edit', 'PostController@show_edit_post_form')->name('post.edit');
 
 // Post Comments
-Route::post('posts/{post}/comments', 'PostCommentsController@create_comment')->name('post.comments.add');
+Route::post('posts/{post}/comments', 'PostCommentsController@create_comment')->name('post.comments.create');
 Route::put('posts/{post}/comments/{comment}', 'PostCommentsController@edit_comment')->name('post.comments.edit');
 Route::delete('posts/{post}/comments/{comment}', 'PostCommentsController@delete_comment')->name('post.comments.delete');
 

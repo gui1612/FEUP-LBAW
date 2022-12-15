@@ -19,5 +19,5 @@
         <span class="visually-hidden">Dislike</span>
     </button>
     <i class="bi bi-dot"></i>
-    <span>{{ $post->comments()->count() }} comments</span>
+    <span>{{ $post->comments()->visible()->count() }} comments</span>
 </div>

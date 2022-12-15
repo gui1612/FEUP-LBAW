@@ -49,29 +49,28 @@
 
         <div class="d-flex gap-4">
             <span class="mb-2">By 
-                <a href={{ route('user.show', $post->owner) }}>{{ $post->owner->username }}</a> 
+                <a href="{{ route('user.show', $post->owner) }}">{{ $post->owner->username }}</a> 
                 on {{ date_format($post->last_edited, 'Y-m-d') }}</span>
         </div>
 
         @include('partials.rating')
 
         @auth
-            <form method="POST" class="d-flex gap-3 py-4" style="align-items: start"> <!-- to-do: form routing -->
+            <form method="POST" action="{{ route('post.comments.create', ['post'=>$post]) }}" class="d-flex flex-column align-items-end gap-3 pt-4" style="align-items: start"> 
                 @csrf
                 @method('POST')
-                <img src="{{ Auth::user()->profile_picture }}" alt="Your profile picture" width="30" height="30" class="rounded-circle ratio ratio-1x1" style="width: 3rem; height: auto;">
-                <label for="comment" class="visually-hidden">Comment</label>
-                <textarea id="comment" placeholder="Add a comment" class="form-control"></textarea>
-            </form>
+                <div class="d-flex gap-3 pt-4 w-100">
+                    <img src="{{ Auth::user()->profile_picture_or_default_url() }}" alt="Your profile picture" width="30" height="30" class="rounded-circle" style="width: 3rem; height: 3rem;">
+                    <label for="body" class="visually-hidden">Comment</label>
+                    <textarea id="body" name="body" placeholder="Add a comment" class="form-control"></textarea>
+                </div>
 
-            <div class="d-flex justify-content-end w-100 gap-3">
                 <button type="submit" class="btn btn-primary mb-3">Submit</button>
-                <button class="btn btn-danger mb-3">Cancel</button> <!-- to-do: make buttons appear on click js -->
-            </div>
+            </form>
         @endauth
 
         <section class="container" id="comment-section">
-            @foreach ($post->comments as $comment)
+            @foreach ($post->comments()->visible()->orderBy('last_edited', 'desc')->get() as $comment)
                 @include('partials.comment', ['comment' => $comment])
             @endforeach
         </section>
