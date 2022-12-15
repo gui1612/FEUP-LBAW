@@ -24,7 +24,7 @@ INSERT INTO Posts (created_at, last_edited, title, body, rating, owner_id, hidde
 INSERT INTO Posts (created_at, title, body, rating, owner_id, hidden) VALUES ('2022-09-12 19:03:48', 'Mashup bandeiras portuguesa e espanhola', 'Achei engraçado', 0, 8, false);
 INSERT INTO Posts (created_at, title, body, rating, owner_id, hidden) VALUES ('2022-09-29 19:03:48', 'First thing I see when I get home!', 'He makes me so happy', 0, 4, false);
 INSERT INTO Posts (created_at, title, body, rating, owner_id, hidden) VALUES ('2022-09-29 19:10:48', 'a solid sleeper', 'snoozing like a pro', 0, 3, false);
-INSERT INTO Posts (created_at, title, body, rating, owner_id, hidden) VALUES ('2022-11-23 12:53:40', 'Funny pictures of my sphynx cat', 'goofy cat', 0, 2, false);
+INSERT INTO Posts (created_at, title, body, rating, owner_id, hidden) VALUES ('2022-11-23 12:53:40', 'Funny pictures of my sphynx cat', 'Just felt like sharing some of my most liked cat pictures. He''s so fat and hates this blanket my wife made him. Ungrateful cat but I love him very much', 0, 2, false);
 INSERT INTO Posts (created_at, title, body, rating, owner_id, hidden) VALUES ('2022-10-24 12:53:40', 'His face while I''m eating meat', 'Poor thing but I can''t give him any more', 0, 9, false);
 INSERT INTO Posts (created_at, title, body, rating, owner_id, hidden) VALUES ('2022-04-24 12:53:40', 'He had a rough day', 'I love watching him sleep. Not in a creepy way!', 0, 7, false);
 
@@ -33,8 +33,8 @@ INSERT INTO PostImages (path, caption, post_id) VALUES ('https://i.redd.it/jto6t
 INSERT INTO PostImages (path, caption, post_id) VALUES ('https://i.redd.it/ph1z7ls6mm5a1.png', 'Mapa que discrimina raiva sentida, portugueses quase no topo!', 4);
 INSERT INTO PostImages (path, caption, post_id) VALUES ('https://i.redd.it/nd8e1xou5g5a1.png', 'Mashup bandeiras da peninsula ibérica', 5);
 INSERT INTO PostImages (path, caption, post_id) VALUES ('https://i.redd.it/rrln22720q5a1.jpg', 'My little baby cat', 7);
-INSERT INTO PostImages (path, caption, post_id) VALUES ('https://preview.redd.it/7tmzc848io5a1.jpg?width=3024&format=pjpg&auto=webp&s=70cec8122fe6b1a389e1f7cb179785bb2137f41c', 'snif snoof', 8);
-INSERT INTO PostImages (path, caption, post_id) VALUES ('https://preview.redd.it/xyw11848io5a1.jpg?width=3024&format=pjpg&auto=webp&s=6997818f9d587b7e9326ab4dbf1268ecde0c7826', 'Took some pictures while he wasn''t looking', 8);
+INSERT INTO PostImages (path, caption, post_id) VALUES ('https://3.bp.blogspot.com/--n9CXmRTaq0/Uo-LBNfcfOI/AAAAAAAAGTM/V06SZNSePBc/s1600/Funny+Sphynx+Cat_2.jpg', 'so fat', 8);
+INSERT INTO PostImages (path, caption, post_id) VALUES ('https://i.pinimg.com/originals/b2/1b/d5/b21bd544ec6b3a887350685bdb9cbfb5.jpg', 'He hates the blankie', 8);
 INSERT INTO PostImages (path, caption, post_id) VALUES ('https://i.redd.it/2fd7nh9wwp5a1.jpg', 'His face while I''m eating meat', 9);
 INSERT INTO PostImages (path, caption, post_id) VALUES ('https://i.redd.it/aisvuxwvco5a1.jpg', 'My cat, meatball', 10);
 
@@ -62,6 +62,11 @@ INSERT INTO Ratings (owner_id, rated_post_id, rated_comment_id, type) VALUES (12
 
 INSERT INTO Comments (created_at, last_edited, body, rating, owner_id, post_id, hidden) VALUES ('2022-07-24 23:52:26', '2022-07-24 23:52:26', 'Big same, I feel so much love towards my cat', 0, 1, 1, false);
 INSERT INTO Comments (created_at, last_edited, body, rating, owner_id, post_id, hidden) VALUES ('2022-07-25 23:52:26', '2022-07-25 23:52:26', 'Muito cuidado mesmo. Nem vou sair de casa hoje', 0, 3, 3, false);
+INSERT INTO Comments (created_at, last_edited, body, rating, owner_id, post_id, hidden) VALUES ('2022-07-26 11:00:26', '2022-07-25 11:00:26', 'Mantenham-se abrigados, não se pode lá fora...', 0, 4, 3, false);
+INSERT INTO Comments (created_at, last_edited, body, rating, owner_id, post_id, hidden) VALUES ('2022-07-26 12:52:26', '2022-07-25 23:52:26', 'De facto, o site do IPMA não é tão catastrofista. Está em risco laranja até às 15h e entre as 15h e as 18h em amarelo. A partir das 18h, já está a verde. Considerando que durante a noite e manhã, estava a vermelho, pior do que foi a manhã não há de ser, pelo menos. O problema é mesmo se continuam a haver muitas zonas onda ainda esteja muita água por escoar e muito por limpar e aí é que pode complicar.
+E o artigo também diz que o Metro de Lisboa tem o serviço afetado, mas a circulação de comboios está normal (bem, normal com o ocasional atraso, mas isso é mesmo o normal), o que há é acessos condicionados. A última atualização (às 11h40) do Twitter oficial diz que neste momento a única coisa fechada é o átrio de Entre Campos que liga aos comboios. Chelas e Sete Rios estiveram fechados, mas já reabriram e os comboios a circular em todo o lado.
+Só para clarificar, não estou a tentar diminuir a importância disto, obviamente que vai ser preciso continuar a ter cuidados durante o dia de hoje. Mas vale a pena tentar consultar sempre as fontes oficiais para informações mais fiáveis e concretas do que confiar no sensacionalismo da comunicação social.', 0, 7, 3, false);
+INSERT INTO Comments (created_at, last_edited, body, rating, owner_id, post_id, hidden) VALUES ('2022-07-25 23:52:26', '2022-07-25 23:52:26', 'E hoje que tenho apresentação...', 0, 2, 3, false);
 
 INSERT INTO Follows (owner_id, followed_user_id, followed_forum_id) VALUES (1, 2, NULL);
 INSERT INTO Follows (owner_id, followed_user_id, followed_forum_id) VALUES (1, 3, NULL);
