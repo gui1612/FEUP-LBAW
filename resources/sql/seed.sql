@@ -72,7 +72,7 @@ CREATE TABLE Posts (
   body TEXT CONSTRAINT post_body_nn NOT NULL,
   rating INTEGER DEFAULT 0 CONSTRAINT post_rating_nn NOT NULL,
   owner_id INTEGER CONSTRAINT post_ref_owner REFERENCES Users CONSTRAINT post_owner_id_nn NOT NULL,
-  -- forum_id INTEGER CONSTRAINT post_ref_forum REFERENCES Forums CONSTRAINT post_forum_id_nn NOT NULL,
+  forum_id INTEGER CONSTRAINT post_ref_forum REFERENCES Forums CONSTRAINT post_forum_id_nn NOT NULL,
   hidden BOOLEAN DEFAULT FALSE CONSTRAINT post_hidden_nn NOT NULL
 );
 
@@ -164,7 +164,7 @@ CREATE INDEX idx_rated_comment ON Ratings USING HASH(rated_comment_id);
 CREATE INDEX idx_post_created_at ON Posts USING BTREE(created_at);
 CREATE INDEX idx_post_rating ON Posts USING BTREE(rating);
 CREATE INDEX idx_posts ON Posts USING HASH(owner_id);
--- CREATE INDEX idx_posts ON Posts USING HASH(forum_id);
+CREATE INDEX idx_posts_forum ON Posts USING HASH(forum_id);
 CREATE INDEX idx_comment_created_at ON Comments USING BTREE(created_at);
 CREATE INDEX idx_follows ON Follows USING HASH(owner_id);
 CREATE INDEX idx_user_followers ON Follows USING HASH(followed_user_id);
