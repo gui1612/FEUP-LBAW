@@ -153,7 +153,9 @@ CREATE TABLE PostImages (
     post_id INTEGER CONSTRAINT post_image_ref_post REFERENCES Posts ON DELETE CASCADE CONSTRAINT post_image_post_id_nn NOT NULL
 );
 
+-----------------------------------------
 -- Indexes
+-----------------------------------------
 
 CREATE INDEX idx_user_username ON Users USING HASH(username);
 CREATE INDEX idx_rated_content ON Ratings USING HASH(owner_id); 
@@ -171,7 +173,9 @@ CREATE INDEX idx_user_notifications ON Notifications USING HASH(receiver_id);
 CREATE INDEX idx_notifications_created_at ON Notifications USING BTree(created_at);
 
 
+-----------------------------------------
 -- Triggers
+-----------------------------------------
 
 CREATE OR REPLACE FUNCTION immutable_creation_date() RETURNS TRIGGER AS
 $BODY$
@@ -578,3 +582,157 @@ CREATE TRIGGER no_post_delete_with_likes_or_comments
   BEFORE UPDATE ON Posts
   FOR EACH ROW
   EXECUTE PROCEDURE no_post_delete_with_likes_or_comments();
+
+
+-----------------------------------------
+-- FTS
+-----------------------------------------
+
+ALTER TABLE Users ADD COLUMN tsvector TSVECTOR;
+
+CREATE OR REPLACE FUNCTION user_search_update() RETURNS TRIGGER AS $$
+BEGIN
+  IF TG_OP = 'INSERT' THEN 
+    NEW.tsvector = (
+      setweight(to_tsvector('english', NEW.first_name), 'A') ||
+      setweight(to_tsvector('english',NEW.last_name), 'A') || 
+      setweight(to_tsvector('english', NEW.bio), 'B')
+    );
+  END IF;
+  
+  IF TG_OP = 'UPDATE' THEN
+    IF (NEW.first_name <> OLD.first_name OR NEW.last_name <> OLD.last_name OR NEW.bio <> OLD.bio) THEN
+      NEW.tsvector = ( 
+        setweight(to_tsvector('english',NEW.first_name), 'A') || 
+        setweight(to_tsvector('english',NEW.last_name), 'A') || 
+        setweight(to_tsvector('english',NEW.bio), 'B')
+      );
+    END IF;  
+  END IF;
+  RETURN NEW;
+END 
+$$ LANGUAGE 'plpgsql';
+
+CREATE TRIGGER user_search_update
+  BEFORE INSERT OR UPDATE ON Users
+  FOR EACH ROW
+  EXECUTE PROCEDURE user_search_update();
+
+CREATE INDEX user_search ON Users USING GIST(tsvector); 
+
+---
+
+DROP AGGREGATE IF EXISTS tsvector_agg(tsvector) CASCADE;
+
+-- https://gist.github.com/glittershark/6286217?permalink_comment_id=3041994#gistcomment-3041994
+CREATE AGGREGATE tsvector_agg (tsvector) (
+	STYPE = pg_catalog.tsvector,
+	SFUNC = pg_catalog.tsvector_concat,
+	INITCOND = ''
+);
+
+ALTER TABLE Posts ADD COLUMN tsvector TSVECTOR;
+ALTER TABLE Comments ADD COLUMN tsvector TSVECTOR;
+
+CREATE OR REPLACE FUNCTION post_search_update_post() RETURNS TRIGGER AS $$
+BEGIN
+  IF TG_OP = 'INSERT' THEN 
+    NEW.tsvector = (
+      setweight(to_tsvector('english', NEW.title), 'A') ||
+      setweight(to_tsvector('english',NEW.body), 'A') ||
+      setweight((SELECT tsvector_agg(tsvector) FROM Comments WHERE Comments.post_id = NEW.id), 'B')
+    );
+  END IF;
+  
+  IF TG_OP = 'UPDATE' THEN
+    IF (NEW.title <> OLD.title OR NEW.body <> OLD.body) THEN
+      NEW.tsvector = (
+        setweight(to_tsvector('english', NEW.title), 'A') ||
+        setweight(to_tsvector('english',NEW.body), 'A') ||
+        setweight((SELECT tsvector_agg(tsvector) FROM Comments WHERE Comments.post_id = NEW.id), 'B')
+      );
+    END IF;  
+  END IF;
+  RETURN NEW;
+END 
+$$ LANGUAGE 'plpgsql';
+
+CREATE TRIGGER post_search_update_post
+  BEFORE INSERT OR UPDATE ON Posts
+  FOR EACH ROW
+  EXECUTE PROCEDURE post_search_update_post();
+
+CREATE OR REPLACE FUNCTION post_search_update_comment() RETURNS TRIGGER AS $$
+BEGIN
+  IF TG_OP = 'INSERT' THEN 
+    NEW.tsvector = (
+      setweight(to_tsvector('english', NEW.body), 'A')
+    );
+  END IF;
+  
+  IF TG_OP = 'UPDATE' THEN
+    IF (NEW.body <> OLD.body) THEN
+      NEW.tsvector = (
+        setweight(to_tsvector('english', NEW.body), 'A')
+      );
+    END IF;
+  END IF;
+  RETURN NEW;
+END 
+$$ LANGUAGE 'plpgsql';
+
+CREATE TRIGGER post_search_update_comment
+  BEFORE INSERT OR UPDATE ON Comments
+  FOR EACH ROW
+  EXECUTE PROCEDURE post_search_update_comment();
+
+CREATE OR REPLACE FUNCTION post_search_update_post_with_comments() RETURNS TRIGGER AS $$
+BEGIN
+  UPDATE Posts SET tsvector = (
+    setweight(to_tsvector('english', Posts.title), 'A') ||
+    setweight(to_tsvector('english',Posts.body), 'A') ||
+    setweight((SELECT tsvector_agg(tsvector) FROM Comments WHERE Comments.post_id = Posts.id), 'B')
+  ) WHERE Posts.id = NEW.post_id;
+
+  RETURN NEW;
+END 
+$$ LANGUAGE 'plpgsql';
+
+CREATE TRIGGER post_search_update_post_with_comments
+  AFTER INSERT OR UPDATE ON Comments
+  FOR EACH ROW
+  EXECUTE PROCEDURE post_search_update_post_with_comments();
+
+CREATE INDEX post_search ON Posts USING GIST(tsvector);
+
+---
+
+ALTER TABLE Forums ADD COLUMN tsvector TSVECTOR;
+
+CREATE OR REPLACE FUNCTION forum_search_update() RETURNS TRIGGER AS $$
+BEGIN
+  IF TG_OP = 'INSERT' THEN 
+    NEW.tsvector = (
+      setweight(to_tsvector('english', NEW.name), 'A') ||
+      setweight(to_tsvector('english',NEW.description), 'B')
+    );
+  END IF;
+  
+  IF TG_OP = 'UPDATE' THEN
+    IF (NEW.name <> OLD.name OR NEW.description <> OLD.description) THEN
+      NEW.tsvector = ( 
+        setweight(to_tsvector('english', NEW.name), 'A') ||
+        setweight(to_tsvector('english',NEW.description), 'B')
+      );
+    END IF;  
+  END IF;
+  RETURN NEW;
+END 
+$$ LANGUAGE 'plpgsql';
+
+CREATE TRIGGER forum_search_update
+  BEFORE INSERT OR UPDATE ON Forums
+  FOR EACH ROW
+  EXECUTE PROCEDURE forum_search_update();
+
+CREATE INDEX forum_search ON Forums USING GIST(tsvector); 
