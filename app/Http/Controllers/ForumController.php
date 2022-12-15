@@ -2,11 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Forum;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
-use App\Models\Post;
-use Illuminate\Contracts\Validation\Validator;
-use Illuminate\Validation\Rule;
 
 class ForumController extends Controller
 {
@@ -17,17 +14,24 @@ class ForumController extends Controller
      * @param  int  $id
      * @return Response
      */
-    public function show(Request $request) {
+    public function show(Forum $forum) {
+      // $forum = Forum::findOrFail($post->id);
+      $this->authorize('view', $forum);
+      return view('forum.show', ['forum' => $forum]);
+    }
+
+    /*public function show_forum(Forum $forum, Request $request) {
       $validated = $request->validate([
         'order' => 'sometimes|in:popularity,chronological'
       ]);
+      
 
       $order = $validated['order'] ?? 'popularity';
       if ($order === 'chronological')
-        $posts = Post::visible()->orderBy('created_at', 'desc');
+        $posts = $forum->posts::visible()->orderBy('created_at', 'desc');
       else 
-        $posts = Post::visible()->orderBy('rating', 'desc');
+        $posts = $forum->posts::visible()->orderBy('rating', 'desc');
 
       return view('pages.forum', ['paginator' => $posts->paginate(30)]);
-    }
+    }*/
 }

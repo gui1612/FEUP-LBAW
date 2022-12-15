@@ -21,6 +21,10 @@ class Forum extends Model
         return $this->belongsTo(User::class, 'owner_id');
     }
 
+    public function posts() {
+        return $this->hasMany(Post::class, 'forum_id');
+    }
+
     public function scopeVisible($query) {
         return $query->where('hidden', false);
     }
