@@ -14,7 +14,6 @@ class Forum extends Model
 
     protected $casts = [
         'created_at' => 'datetime',
-        'last_edited' => 'datetime'
     ];
 
     public function owner() {
