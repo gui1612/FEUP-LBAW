@@ -20,7 +20,7 @@
                                     <img src=" {{ $user->profile_picture_or_default_url() }}" alt="{{ $user->username . '\'s banner picture' }}"
                                     class="rounded-circle img-fluid position-absolute" style="border: solid white 2px; width: 100px; top: 27%;">
                                 </div>
-                                <h4 class="mb-2"> {{ $user->first_name . ' ' . $user->last_name }} </h4>
+                                <h4 class="mb-2"> {{ $user->username }} </h4>
                                 <p class="text-muted mb-4"> {{ '@' . $user->username }} <span class="mx-2"></span> </p>
     
                                 @auth

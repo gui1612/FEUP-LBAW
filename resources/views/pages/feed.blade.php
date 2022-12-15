@@ -12,7 +12,7 @@
 
         {{-- @each('partials.post.preview', $paginator->items(), 'post') --}}
         @foreach($paginator->items() as $post)
-        @include('partials.post_preview', ['post'=>$post, 'preview'=>True, 'on_profile'=>False, 'user'=>$post->owner, 'forum'=>$post->forum])
+        @include('partials.post_preview', ['post'=>$post, 'preview'=>True, 'on_profile'=>False, 'user'=>$post->owner, 'forum'=>$post->forum_id])
         @endforeach
         {{ $paginator }}
     </div>
