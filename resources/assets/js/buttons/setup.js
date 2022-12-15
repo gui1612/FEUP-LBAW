@@ -11,19 +11,41 @@ const actions = {
 const csrf = document.head.querySelector('meta[name="csrf-token"]')?.content;
 
 export function setupButtons() {
-    document.body.querySelectorAll('button[data-wt-action]').forEach((el) => {
-        const actionAttr = el.getAttribute('data-wt-action');
-        const action = actions[actionAttr];
+    document.body.querySelectorAll('button[data-wt-action]').forEach((button) => {
+        function attachAction(el) {
+            const actionAttr = el.getAttribute('data-wt-action');
+            const action = actions[actionAttr];
 
-        if (!action) {
-            console.warn(`No handler found for the following button with action ${actionAttr}, skipping...`);
-            console.warn(el);
-            return;
+            if (!action) {
+                console.warn(`No handler found for the following button with action ${actionAttr}, skipping...`);
+                console.warn(el);
+                return;
+            }
+
+            const listener = () => {
+                const params = action.params({ csrf, el });
+                return action.onClick(params)
+            };
+
+            el.addEventListener('click', listener);
+            return () => el.removeEventListener('click', listener);
         }
 
-        el.addEventListener('click', () => {
-            const params = action.params({ csrf, el });
-            return action.onClick(params)
+        let cleanup = attachAction(button);
+        const observer = new MutationObserver((mutations) => {
+            let reload = false;
+            mutations.forEach((mutation) => {
+                if (!reload && mutation.type === 'attributes' && mutation.attributeName === 'data-wt-action') {
+                    reload = true;
+                }
+            });
+
+            if (reload) {
+                cleanup();
+                cleanup = attachAction(button);
+            }
         });
+
+        observer.observe(button, { attributes: true });
     });
 }

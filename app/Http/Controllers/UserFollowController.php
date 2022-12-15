@@ -25,11 +25,17 @@ class UserFollowController extends Controller {
 
         $user_id = Auth::id();
 
-        return Follow::create([
-                'owner_id' => $user_id,
-                'followed_user_id' => $user->id,
-                'followed_forum_id' => null,
-            ]);
+        $follow = Follow::create([
+            'owner_id' => $user_id,
+            'followed_user_id' => $user->id,
+        ]);
+
+        $user->refresh();
+        
+        return [
+            'followers' => $user->followers->count(),
+            'current' => $follow,
+        ];
     }
     
     public function unfollow(Follow $follow, User $user) {
@@ -39,8 +45,11 @@ class UserFollowController extends Controller {
         $follow = $user->followers->where('owner_id', $user_id)->toQuery()->limit(1);
         $follow->delete();
         
-        return response()->json([
+        $user->refresh();
+
+        return [
             'followers' => $user->followers->count(),
-        ]);
+            'current' => null,
+        ];
     }
 }

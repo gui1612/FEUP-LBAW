@@ -1,14 +1,15 @@
 'use strict';
 import { makeRequest } from "../utils/requests";
+import { signal } from "../state/signals";
 import { createEphemeralToast, showEphemeralToasts } from '../utils/toasts';
 
-function syncButton({ followers, isFollowing, button }) {
+function syncButton({ isFollowing, button }) {
     if (!isFollowing) {
-        button.setAttribute('data-wt-action', 'user.unfollow');
+        button.setAttribute('data-wt-action', 'user.follow');
         button.querySelector('span').textContent = 'Follow';
         button.querySelector('i').classList.replace('bi-person-check-fill', 'bi-person-add');
     } else {
-        button.setAttribute('data-wt-action', 'user.follow');
+        button.setAttribute('data-wt-action', 'user.unfollow');
         button.querySelector('span').textContent = 'Unfollow';
         button.querySelector('i').classList.replace('bi-person-add', 'bi-person-check-fill');
     }
@@ -41,12 +42,12 @@ function onClick({ type }) {
             
         const data = await res.json();
         if (res.ok) {
-
-            syncButton({ 
-                followers: data.followers,
-                isFollowing: type === 'follow',
+            syncButton({
+                isFollowing: !!data.current,
                 button,
             });
+
+            signal(`user.${userId}.followers`).set(data.followers);
         } else {
             createEphemeralToast({
                 level: 'danger',
@@ -61,7 +62,7 @@ function onClick({ type }) {
 
 export const onUserFollow = {
     params,
-    onClick: onClick({ type: 'follow'}),
+    onClick: onClick({ type: 'follow' }),
 };
 
 export const onUserUnfollow = {

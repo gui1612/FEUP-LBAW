@@ -135,10 +135,10 @@ CREATE TABLE Notifications (
   type NotificationType CONSTRAINT notification_type_nn NOT NULL,
   receiver_id INTEGER CONSTRAINT notification_ref_receiver REFERENCES Users CONSTRAINT notification_receiver_id_nn NOT NULL,
 
-  follow_id INTEGER CONSTRAINT notification_ref_follow REFERENCES Follows,
+  follow_id INTEGER CONSTRAINT notification_ref_follow REFERENCES Follows ON DELETE CASCADE,
   comment_id INTEGER CONSTRAINT notification_ref_comment REFERENCES Comments,
   report_id INTEGER CONSTRAINT notification_ref_report REFERENCES Reports,
-  rating_id INTEGER CONSTRAINT notification_ref_rating REFERENCES Ratings,
+  rating_id INTEGER CONSTRAINT notification_ref_rating REFERENCES Ratings ON DELETE CASCADE,
 
   CONSTRAINT notification_xor_ref_follow CHECK ((type = 'follow_user') = (follow_id IS NOT NULL)),
   CONSTRAINT notification_xor_ref_comment CHECK ((type = 'post_comment') = (comment_id IS NOT NULL)),

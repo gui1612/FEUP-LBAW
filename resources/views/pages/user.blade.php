@@ -49,7 +49,7 @@
                                     <p class="text-muted mb-0">Posts</p>
                                     </div>
                                     <div>
-                                    <p class="mb-2 h5"> {{ $user->followers->count() }} </p>
+                                    <p class="mb-2 h5" data-wt-signal="user.{{ $user->id }}.followers" data-wt-value="{{ $user->followers->count() }}">-</p>
                                     <p class="text-muted mb-0">Followers</p>
                                     </div>
                                 </div>

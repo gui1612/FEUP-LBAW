@@ -8,9 +8,11 @@
 require('./bootstrap');
 
 import { setupButtons } from './buttons/setup';
+import { setupState } from './state/setup'
 import { showEphemeralToasts } from './utils/toasts';
 
 showEphemeralToasts();
+setupState();
 setupButtons();
 
 const edit_btn = document.getElementById('edit-comment-button');
