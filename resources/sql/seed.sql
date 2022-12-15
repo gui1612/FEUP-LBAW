@@ -103,7 +103,8 @@ CREATE TABLE Follows (
   owner_id INTEGER CONSTRAINT follow_ref_owner REFERENCES Users CONSTRAINT follow_owner_id_nn NOT NULL,
   followed_user_id INTEGER CONSTRAINT follow_ref_followed_user REFERENCES Users,
   followed_forum_id INTEGER CONSTRAINT follow_ref_followed_forum REFERENCES Forums,
-  CONSTRAINT follow_refs_uk UNIQUE (owner_id, followed_user_id, followed_forum_id),
+  CONSTRAINT follow_refs_user_uk UNIQUE (owner_id, followed_user_id),
+  CONSTRAINT follow_refs_forum_uk UNIQUE (owner_id, followed_forum_id),
 
   CONSTRAINT follow_xor_refs CHECK ((followed_user_id IS NULL) <> (followed_forum_id IS NULL)),
   CONSTRAINT follow_no_self_follow CHECK (followed_user_id <> owner_id)

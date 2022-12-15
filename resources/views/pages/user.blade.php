@@ -13,7 +13,7 @@
                     <div class="row d-flex justify-content-center">
                         <div class="container rounded bg-white p-4" style="height: min-content">
                             <div class="card-body text-center d-flex flex-column align-items-center" style="width: min-content">
-                                <div class="mt-3 mb-4 d-flex flex-column align-items-center" style="height: 16vh; width: auto">
+                                <div class="mt-3 mb-4 d-flex flex-column align-items-center" style="height: 16vh; width: 100%">
                                     <img src=" {{ $user->banner_picture_url() }}" alt="{{ $user->username . '\'s banner picture' }}" 
                                     class="img-fluid" style="width: 100%; height: 75%; object-fit: cover;">
                                     <img src=" {{ $user->profile_picture_or_default_url() }}" alt="{{ $user->username . '\'s banner picture' }}"
@@ -28,21 +28,15 @@
                                             Edit Profile
                                         </a>
                                     @elseif($user->followers()->where('owner_id', Auth::user()->id)->first())
-                                        <form method="POST" action="{{ route('follow', $user) }}">
-                                            @csrf
-                                            @method('POST')
-                                            <button type="button" class="btn btn-primary d-flex gap-2">
-                                                <i class="bi bi-person-check-fill"></i>Unfollow
-                                            </button>
-                                        </form>
+                                        <button class="btn btn-primary d-flex gap-2" data-wt-action="user.unfollow" data-wt-user-id="{{ $user->id }}">
+                                            <i class="bi bi-person-check-fill"></i>
+                                            <span>Unfollow</span>
+                                        </button>
                                     @else
-                                        <form method="POST" action="{{ route('follow', $user) }}">
-                                            @csrf
-                                            @method('POST')
-                                            <button type="button" class="btn btn-primary d-flex gap-2">
-                                                <i class="bi bi-person-add"></i>Follow
-                                            </button>
-                                        </form>
+                                        <button class="btn btn-primary d-flex gap-2" data-wt-action="user.follow" data-wt-user-id="{{ $user->id }}">
+                                            <i class="bi bi-person-add"></i>
+                                            <span>Follow</span>
+                                        </button>
                                     @endif
                                 @endauth
                                 <div class="d-flex justify-content-between text-center mt-4 mb-2">
@@ -86,7 +80,7 @@
             </section>
         </div>
 
-        <div class="d-flex flex-column align-items-center mx-4">
+        <div class="d-flex flex-column align-items-center mx-4 w-100">
            <!-- Tabs navs -->
             <ul class="nav nav-tabs nav-fill mb-3 flex justify-between" style="width: 100%;" role="tablist">
                 <li class="nav-item" role="presentation">
@@ -103,7 +97,7 @@
             <!-- Tabs navs -->
             
             <!-- Tabs content -->
-            <div class="tab-content" id="">
+            <div class="tab-content w-100">
                 <div class="tab-pane show active" id="personal_content" role="tabpanel" aria-labelledby="personal_content_tab">
                     @foreach($paginator_own->items() as $post)
                         @include('partials.post_preview', ['on_profile'=>True])
