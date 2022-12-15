@@ -23,7 +23,7 @@ DROP TABLE IF EXISTS PostImages CASCADE;
 
 CREATE TYPE ReportState AS ENUM ('proposed', 'ongoing', 'approved', 'denied');
 CREATE TYPE ReportType AS ENUM ('post', 'comment', 'forum');
-CREATE TYPE NotificationType AS ENUM ('follow_user', 'post_comment', 'content_reported', 'like');
+CREATE TYPE NotificationType AS ENUM ('follow_user', 'post_comment', 'content_reported', 'content_rated');
 CREATE TYPE RatingType AS ENUM ('like', 'dislike');
 
 
@@ -93,7 +93,8 @@ CREATE TABLE Ratings (
   rated_post_id INTEGER CONSTRAINT rating_ref_rated_post REFERENCES Posts,
   rated_comment_id INTEGER CONSTRAINT rating_ref_rated_comment REFERENCES Comments,
   type RatingType CONSTRAINT rating_type_nn NOT NULL,
-  CONSTRAINT rating_refs_uk UNIQUE (owner_id, rated_post_id, rated_comment_id),
+  CONSTRAINT rating_refs_post_uk UNIQUE (owner_id, rated_post_id),
+  CONSTRAINT rating_refs_comment_uk UNIQUE (owner_id, rated_comment_id),
 
   CONSTRAINT rating_xor_refs CHECK ((rated_post_id IS NULL) <> (rated_comment_id IS NULL))
 );
@@ -142,7 +143,7 @@ CREATE TABLE Notifications (
   CONSTRAINT notification_xor_ref_follow CHECK ((type = 'follow_user') = (follow_id IS NOT NULL)),
   CONSTRAINT notification_xor_ref_comment CHECK ((type = 'post_comment') = (comment_id IS NOT NULL)),
   CONSTRAINT notification_xor_ref_report CHECK ((type = 'content_reported') = (report_id IS NOT NULL)),
-  CONSTRAINT notification_xor_ref_rating CHECK ((type = 'like') = (rating_id IS NOT NULL))
+  CONSTRAINT notification_xor_ref_rating CHECK ((type = 'content_rated') = (rating_id IS NOT NULL))
 );
 
 CREATE TABLE PostImages (
@@ -237,15 +238,16 @@ EXECUTE PROCEDURE update_last_edited();
 CREATE OR REPLACE FUNCTION at_least_one_forum_owner() RETURNS TRIGGER AS
 $BODY$
 BEGIN
-  IF EXISTS (SELECT count(*) AS num_owners FROM ForumOwners WHERE ForumOwners.forum_id = OLD.forum_id HAVING num_owners > 1) THEN
+  IF (SELECT count(*) AS num_owners FROM ForumOwners WHERE ForumOwners.forum_id = OLD.forum_id) > 1 THEN
     RAISE EXCEPTION 'A forum must have at least one owner.';
   END IF;
+  RETURN OLD;
 END
 $BODY$
 LANGUAGE plpgsql;
 
 CREATE TRIGGER at_least_one_forum_owner
-  BEFORE UPDATE OR DELETE ON ForumOwners
+  BEFORE DELETE ON ForumOwners
   FOR EACH ROW
   EXECUTE PROCEDURE at_least_one_forum_owner();
 
@@ -288,6 +290,199 @@ CREATE TRIGGER self_content_report
   BEFORE INSERT OR UPDATE ON Reports
   FOR EACH ROW
   EXECUTE PROCEDURE self_content_report();
+
+---
+
+CREATE OR REPLACE FUNCTION notify_reported_content_owners() RETURNS TRIGGER AS
+$BODY$
+DECLARE
+  receivers VARCHAR;
+  receiver RECORD;
+BEGIN
+  IF OLD.status <> 'approved' AND NEW.status = 'approved' THEN
+    IF NEW.type = 'post' THEN
+      receivers := "SELECT owner_id FROM Posts WHERE id = NEW.post_id";
+    ELSIF NEW.type = 'comment' THEN
+      receivers := "SELECT owner_id FROM Comments WHERE id = NEW.comment_id";
+    ELSIF NEW.type = 'forum' THEN
+      receivers := "SELECT ForumOwners.owner_id FROM ForumOwners WHERE ForumOwners.forum_id = NEW.forum_id";
+    END IF;
+
+    FOR receiver IN EXECUTE receivers LOOP
+      INSERT INTO Notifications(type, receiver_id, report_id) VALUES ('content_reported', receiver, NEW.id);
+    END LOOP;
+  END IF;
+  RETURN NEW;
+END
+$BODY$
+LANGUAGE plpgsql;
+
+CREATE TRIGGER notify_reported_content_owners
+  BEFORE INSERT OR UPDATE ON Reports
+  FOR EACH ROW
+  EXECUTE PROCEDURE notify_reported_content_owners();
+
+---
+
+CREATE OR REPLACE FUNCTION archive_reported_content_reports() RETURNS TRIGGER AS
+$BODY$
+BEGIN
+  IF OLD.status <> 'approved' AND NEW.status = 'approved' THEN
+    IF NEW.type = 'post' THEN
+      UPDATE Reports SET status = 'archived' WHERE post_id = NEW.post_id;
+    ELSIF NEW.type = 'comment' THEN
+      UPDATE Reports SET status = 'archived' WHERE comment_id = NEW.comment_id;
+    ELSIF NEW.type = 'forum' THEN
+      UPDATE Reports SET status = 'archived' WHERE forum_id = NEW.forum_id;
+    END IF;
+  END IF;
+  RETURN NEW;
+END
+$BODY$
+LANGUAGE plpgsql;
+
+CREATE TRIGGER archive_reported_content_reports
+  BEFORE INSERT OR UPDATE ON Reports
+  FOR EACH ROW
+  EXECUTE PROCEDURE notify_reported_content_owners();
+
+---
+
+CREATE OR REPLACE FUNCTION hide_reported_content() RETURNS TRIGGER AS
+$BODY$
+BEGIN
+  IF OLD.status <> 'approved' AND NEW.status = 'approved' THEN
+    IF NEW.type = 'post' THEN
+      UPDATE Posts SET hidden = TRUE WHERE id = NEW.post_id;
+    ELSIF NEW.type = 'comment' THEN
+      UPDATE Comments SET hidden = TRUE WHERE id = NEW.comment_id;
+    ELSIF NEW.type = 'forum' THEN
+      UPDATE Forums SET hidden = TRUE WHERE id = NEW.forum_id;
+    END IF;
+  END IF;
+  RETURN NEW;
+END
+$BODY$
+LANGUAGE plpgsql;
+
+CREATE TRIGGER hide_reported_content
+  BEFORE INSERT OR UPDATE ON Reports
+  FOR EACH ROW
+  EXECUTE PROCEDURE hide_reported_content();
+
+---
+
+CREATE OR REPLACE FUNCTION hide_hidden_forum_posts() RETURNS TRIGGER AS
+$BODY$
+BEGIN
+  IF NOT OLD.hidden AND NEW.hidden THEN
+    UPDATE Posts SET hidden = TRUE WHERE forum_id = NEW.id;
+  END IF;
+  RETURN NEW;
+END
+$BODY$
+LANGUAGE plpgsql;
+
+CREATE TRIGGER hide_hidden_forum_posts
+  BEFORE UPDATE ON Forums
+  FOR EACH ROW
+  EXECUTE PROCEDURE hide_hidden_forum_posts();
+
+---
+
+CREATE OR REPLACE FUNCTION hide_hidden_post_comments() RETURNS TRIGGER AS
+$BODY$
+BEGIN
+  IF NOT OLD.hidden AND NEW.hidden THEN
+    UPDATE Comments SET hidden = TRUE WHERE post_id = NEW.id;
+  END IF;
+  RETURN NEW;
+END
+$BODY$
+LANGUAGE plpgsql;
+
+CREATE TRIGGER hide_hidden_post_comments
+  BEFORE UPDATE ON Posts
+  FOR EACH ROW
+  EXECUTE PROCEDURE hide_hidden_post_comments();
+
+---
+
+CREATE OR REPLACE FUNCTION hide_blocked_user_content() RETURNS TRIGGER AS
+$BODY$
+BEGIN
+  IF OLD.block_reason IS NULL AND NEW.block_reason IS NOT NULL THEN
+    UPDATE Posts SET hidden = TRUE WHERE owner_id = NEW.id;
+    UPDATE Comments SET hidden = TRUE WHERE owner_id = NEW.id;
+    UPDATE Forums SET hidden = TRUE WHERE owner_id = NEW.id;
+  END IF;
+  RETURN NEW;
+END
+$BODY$
+LANGUAGE plpgsql;
+
+CREATE TRIGGER hide_blocked_user_content
+  BEFORE UPDATE ON Users
+  FOR EACH ROW
+  EXECUTE PROCEDURE hide_blocked_user_content();
+
+---
+
+CREATE OR REPLACE FUNCTION notify_followed_user() RETURNS TRIGGER AS
+$BODY$
+BEGIN
+  IF NEW.followed_user_id IS NOT NULL THEN
+    INSERT INTO Notifications(type, receiver_id, follow_id) VALUES ('follow_user', NEW.followed_user_id, NEW.id);
+  END IF;
+  RETURN NEW;
+END
+$BODY$
+LANGUAGE plpgsql;
+
+CREATE TRIGGER notify_followed_user
+  AFTER INSERT ON Follows
+  FOR EACH ROW
+  EXECUTE PROCEDURE notify_followed_user();
+
+---
+
+CREATE OR REPLACE FUNCTION notify_commented_post_owner() RETURNS TRIGGER AS
+$BODY$
+BEGIN
+  INSERT INTO Notifications(type, receiver_id, comment_id) VALUES ('post_comment', (SELECT owner_id FROM Posts WHERE id = NEW.post_id), NEW.id);
+  RETURN NEW;
+END
+$BODY$
+LANGUAGE plpgsql;
+
+CREATE TRIGGER notify_commented_post_owner
+  AFTER INSERT ON Comments
+  FOR EACH ROW
+  EXECUTE PROCEDURE notify_commented_post_owner();
+
+---
+
+CREATE OR REPLACE FUNCTION notify_liked_content_owner() RETURNS TRIGGER AS
+$BODY$
+DECLARE
+  receiver INTEGER;
+BEGIN
+  IF NEW.type = 'like' THEN
+    IF NEW.rated_post_id IS NOT NULL THEN
+      INSERT INTO Notifications(type, receiver_id, rating_id) VALUES ('content_rated', (SELECT owner_id FROM Posts WHERE id = NEW.rated_post_id), NEW.id);
+    ELSIF NEW.rated_comment_id IS NOT NULL THEN
+      INSERT INTO Notifications(type, receiver_id, rating_id) VALUES ('content_rated', (SELECT owner_id FROM Comments WHERE id = NEW.rated_comment_id), NEW.id);
+    END IF;
+  END IF;
+  RETURN NEW;
+END
+$BODY$
+LANGUAGE plpgsql;
+
+CREATE TRIGGER notify_liked_content_owner
+  AFTER INSERT ON Ratings
+  FOR EACH ROW
+  EXECUTE PROCEDURE notify_liked_content_owner();
 
 ---
 
@@ -361,23 +556,25 @@ CREATE TRIGGER update_user_rating
 
 ---
 
--- CREATE OR REPLACE FUNCTION no_post_delete_with_likes_or_comments() RETURNS TRIGGER AS
--- $BODY$
--- BEGIN
---   IF EXISTS (SELECT * FROM Ratings WHERE Ratings.rated_post_id = OLD.id) THEN
---     RAISE EXCEPTION 'A post cannot be deleted if it has ratings';
---   END IF;
+CREATE OR REPLACE FUNCTION no_post_delete_with_likes_or_comments() RETURNS TRIGGER AS
+$BODY$
+BEGIN
+  IF NOT OLD.hidden AND NEW.hidden THEN
+    IF EXISTS (SELECT * FROM Ratings WHERE Ratings.rated_post_id = OLD.id) THEN
+      RAISE EXCEPTION 'A post cannot be deleted if it has ratings';
+    END IF;
 
---   IF EXISTS (SELECT * FROM Comments WHERE Comments.post_id = OLD.id) THEN
---     RAISE EXCEPTION 'A post cannot be deleted if it has comments';
---   END IF;
-  
---   RETURN OLD;
--- END
--- $BODY$
--- LANGUAGE plpgsql;
+    IF EXISTS (SELECT * FROM Comments WHERE Comments.post_id = OLD.id) THEN
+      RAISE EXCEPTION 'A post cannot be deleted if it has comments';
+    END IF;
 
--- CREATE TRIGGER no_post_delete_with_likes_or_comments
---   BEFORE DELETE ON Posts
---   FOR EACH ROW
---   EXECUTE PROCEDURE no_post_delete_with_likes_or_comments();
+  END IF;
+  RETURN NEW;
+END
+$BODY$
+LANGUAGE plpgsql;
+
+CREATE TRIGGER no_post_delete_with_likes_or_comments
+  BEFORE UPDATE ON Posts
+  FOR EACH ROW
+  EXECUTE PROCEDURE no_post_delete_with_likes_or_comments();
