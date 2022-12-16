@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Forum;
+use App\Models\User;
 use Illuminate\Http\Request;
 
 class ForumController extends Controller
@@ -14,11 +15,11 @@ class ForumController extends Controller
      * @param  int  $id
      * @return Response
      */
-  public function show(Forum $forum)
+  public function show(Forum $forum, User $user)
   {
     // $forum = Forum::findOrFail($post->id);
     //$this->authorize('view', $forum);
-    return view('pages.forum', ['forum' => $forum]);
+    return view('pages.forum', ['forum' => $forum, 'user' => $user]);
   }
 
     /*public function show_forum(Forum $forum, Request $request) {
