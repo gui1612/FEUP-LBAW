@@ -15,11 +15,11 @@ class ForumController extends Controller
      * @param  int  $id
      * @return Response
      */
-  public function show(Forum $forum, User $user)
+  public function show(Forum $forum)
   {
     // $forum = Forum::findOrFail($post->id);
     //$this->authorize('view', $forum);
-    return view('pages.forum', ['forum' => $forum, 'user' => $user]);
+    return view('pages.forum', ['forum' => $forum]);
   }
 
     /*public function show_forum(Forum $forum, Request $request) {

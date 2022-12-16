@@ -20,22 +20,16 @@
                                     <img src=" {{ $forum->forum_picture_or_default_url() }}" alt="{{ $forum->name . '\'s picture' }}"
                                     class="rounded-circle img-fluid position-absolute" style="border: solid white 2px; width: 100px; top: 27%;">
                                 </div>
-                                <h4 class="mb-2"> {{ $forum->name . ' ' }} </h4>
+                                <h4 class="mb-2"> {{ $forum->name }} </h4>
     
                                 @auth
-                                    @if($user->id == Auth::user()->id)
-                                        <a href="{{ route('user.edit', ['user'=>$user]) }}" class="btn btn-primary"">
-                                            Edit Profile
-                                        </a>
-                                    @else 
-                                        <form method="POST" action="{{ route('follow', $forum->id) }}">
-                                            @csrf
-                                            @method('POST')
-                                            <button type="button" class="btn btn-primary d-flex gap-2">
-                                                <i class="bi bi-person-add"></i>Follow
-                                            </button>
-                                        </form>
-                                    @endif
+                                    <form method="POST" action="{{ route('follow', $forum->id) }}">
+                                        @csrf
+                                        @method('POST')
+                                        <button type="button" class="btn btn-primary d-flex gap-2">
+                                            <i class="bi bi-person-add"></i>Follow
+                                        </button>
+                                    </form>
                                 @endauth
                                 <p class="my-3"> {{ $forum->description }} </p>
                             </div>
