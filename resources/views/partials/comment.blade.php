@@ -4,7 +4,7 @@
             @include('partials.user_info', ['user' => $comment->owner, 'clickable'=>True])
             <span style="font-weight: 300">on {{ date_format($comment->last_edited, 'Y-m-d') }}</span>
         </div>
-        @if(Auth::check() && (Auth::user()->id == $comment->owner_id))
+        @if(Auth::check() && ((Auth::user()->id == $comment->owner_id) || Auth::user()->is_admin))
             <div class="d-flex gap-1">
                 <button id="edit-comment-button" class="btn" action=onPencilClick()>
                     <i class="bi bi-pencil-fill"></i>

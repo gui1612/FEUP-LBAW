@@ -2,7 +2,8 @@
 @section('title', $user->username)
 
 @php($paginator_own = $user->posts()->visible()->paginate(10))
-@php($paginator_interacted = $user->comments()->visible()->paginate(10))
+@php($paginator_int_posts = $user->rated_posts()->visible()->paginate(10))
+@php($paginator_comments = $user->comments()->visible()->paginate(10))
 
 @section('content')
     <div class="d-flex container m-3 px-0">
@@ -13,7 +14,7 @@
                     <div class="row d-flex justify-content-center">
                         <div class="container rounded bg-white p-4" style="height: min-content">
                             <div class="card-body text-center d-flex flex-column align-items-center" style="width: min-content">
-                                <div class="mt-3 mb-4 d-flex flex-column align-items-center" style="height: 16vh; width: 100%">
+                                <div class="mt-3 mb-4 d-flex flex-column align-items-center position-relative" style="height: 16vh; width: 100%">
                                     <img src=" {{ $user->banner_picture_url() }}" alt="{{ $user->username . '\'s banner picture' }}" 
                                     class="img-fluid" style="width: 100%; height: 75%; object-fit: cover;">
                                     <img src=" {{ $user->profile_picture_or_default_url() }}" alt="{{ $user->username . '\'s banner picture' }}"
@@ -97,18 +98,28 @@
             <!-- Tabs navs -->
             
             <!-- Tabs content -->
-            <div class="tab-content w-100">
+            <div class="tab-content w-100 d-flex flex-column">
                 <div class="tab-pane show active" id="personal_content" role="tabpanel" aria-labelledby="personal_content_tab">
+                    <button class="dropdown-toggle btn d-flex gap-2 align-items-center bg-white ms-auto mb-3" data-bs-toggle="dropdown" aria-expanded="false">Sort By</button>
+                    <ul class="dropdown-menu dropdown-menu-end">
+                        <li><a class="dropdown-item" href="{{ route('feed.show', [ 'order' => 'chronological' ]) }}">Chronological</a></li>
+                        <li><a class="dropdown-item" href="{{ route('feed.show', [ 'order' => 'popularity' ]) }}">Popularity</a></li>
+                    </ul>
                     @foreach($paginator_own->items() as $post)
                         @include('partials.post_preview', ['on_profile'=>True])
                     @endforeach
                     {{ $paginator_own }}
                 </div>
                 <div class="tab-pane" id="interactions" role="tabpanel" aria-labelledby="interactions_tab">
-                    @foreach($paginator_interacted->items() as $comment)
-                        @include('partials.comment_preview', ['comment' => $comment])
+                    <button class="dropdown-toggle btn d-flex gap-2 align-items-center bg-white ms-auto mb-3" data-bs-toggle="dropdown" aria-expanded="false">Sort By</button>
+                    <ul class="dropdown-menu dropdown-menu-end">
+                        <li><a class="dropdown-item" href="{{ route('feed.show', [ 'order' => 'chronological' ]) }}">Chronological</a></li>
+                        <li><a class="dropdown-item" href="{{ route('feed.show', [ 'order' => 'popularity' ]) }}">Popularity</a></li>
+                    </ul>
+                    @foreach($paginator_int_posts->items() as $post)
+                        @include('partials.post_preview', ['post' => $post, 'on_profile'=>false, 'clickable'=>true])
                     @endforeach
-                    {{ $paginator_interacted }}
+                    {{ $paginator_int_posts }}
                 </div>
             </div>
             <!-- Tabs content -->

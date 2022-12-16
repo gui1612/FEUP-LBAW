@@ -47,7 +47,7 @@ class User extends AuthUser {
     }
 
     public function rated_posts() {
-        return $this->hasMany(Rating::class, 'owner_id', 'id');
+        return $this->belongsToMany(Post::class, 'ratings', 'owner_id', 'rated_post_id');
     }
 
     public function comments() {
