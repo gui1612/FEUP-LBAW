@@ -25,6 +25,11 @@ class Forum extends Model
         return $this->hasMany(Post::class, 'forum_id', 'id');
     }
 
+    public function followers()
+    {
+        return $this->hasMany(Follow::class, 'followed_forum_id', 'id');
+    }
+
     public function scopeVisible($query) {
         return $query->where('hidden', false);
     }
