@@ -21,6 +21,7 @@
                             <h4 class="mb-2"> {{ $forum->name }} </h4>
 
                             @auth
+
                             <form method="POST" action="{{ route('follow', $forum->id) }}">
                                 @csrf
                                 @method('POST')
