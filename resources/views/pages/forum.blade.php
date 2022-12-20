@@ -21,7 +21,15 @@
                             <h4 class="mb-2"> {{ $forum->name }} </h4>
 
                             @auth
-
+                            @if($forumOwner == Auth::user()->id)
+                            <form method="POST" action="{{ route('forum.manage', $forum->id) }}">
+                                @csrf
+                                @method('POST')
+                                <button type="button" class="btn btn-primary d-flex gap-2">
+                                    Manage Forum
+                                </button>
+                            </form>
+                            @else
                             <form method="POST" action="{{ route('follow', $forum->id) }}">
                                 @csrf
                                 @method('POST')
@@ -29,6 +37,7 @@
                                     <i class="bi bi-person-add"></i>Follow
                                 </button>
                             </form>
+                            @endif
                             @endauth
                             <div class="d-flex justify-content-between text-center mt-4 mb-2">
                                 <div class="px-3">

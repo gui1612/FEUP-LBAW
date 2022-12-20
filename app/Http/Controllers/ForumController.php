@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\ForumOwner;
 use App\Models\Forum;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -9,20 +10,25 @@ use Illuminate\Http\Request;
 class ForumController extends Controller
 {
 
-    /**
-     * Shows the card for a given id.
-     *
-     * @param  int  $id
-     * @return Response
-     */
+  /**
+   * Shows the card for a given id.
+   *
+   * @param  int  $id
+   * @return Response
+   */
   public function show(Forum $forum)
   {
     // $forum = Forum::findOrFail($post->id);
     //$this->authorize('view', $forum);
-    return view('pages.forum', ['forum' => $forum]);
+    $forumOwner = ForumOwner::where('forum_id', $forum->id)->first()->owner_id;
+    return view('pages.forum', ['forum' => $forum, 'forumOwner' => $forumOwner]);
   }
 
-    /*public function show_forum(Forum $forum, Request $request) {
+  public function show_manage_forum(Forum $forum)
+  {
+    return view('pages.manage_forum', ['forum' => $forum]);
+  }
+  /*public function show_forum(Forum $forum, Request $request) {
       $validated = $request->validate([
         'order' => 'sometimes|in:popularity,chronological'
       ]);

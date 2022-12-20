@@ -26,7 +26,7 @@ class ForumFollowController
   {
     $this->authorize('follow', $forum);
 
-    $user_id = Auth::id();
+    $user_id = id();
 
     $follow = Follow::create([
       'owner_id' => $user_id,
