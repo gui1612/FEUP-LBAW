@@ -22,13 +22,9 @@
 
                             @auth
                             @if($forumOwner == Auth::user()->id)
-                            <form method="POST" action="{{ route('forum.manage', $forum->id) }}">
-                                @csrf
-                                @method('POST')
-                                <button type="button" class="btn btn-primary d-flex gap-2">
-                                    Manage Forum
-                                </button>
-                            </form>
+                            <a href="{{ route('forum.management', ['forum'=>$forum->id]) }}" type="button" class="btn btn-primary d-flex gap-2">
+                                Manage Forum
+                            </a>
                             @else
                             <form method="POST" action="{{ route('follow', $forum->id) }}">
                                 @csrf

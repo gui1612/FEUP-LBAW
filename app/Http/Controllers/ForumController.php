@@ -24,7 +24,7 @@ class ForumController extends Controller
     return view('pages.forum', ['forum' => $forum, 'forumOwner' => $forumOwner]);
   }
 
-  public function show_manage_forum(Forum $forum)
+  public function show_forum_management(Forum $forum)
   {
     return view('pages.manage_forum', ['forum' => $forum]);
   }

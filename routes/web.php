@@ -69,6 +69,6 @@ Route::delete('/users/{id}/unfollow', 'UserFollowController@unfollow')->name('un
 
 //Forums
 Route::get('/forums/{forum}', 'ForumController@show')->name('forum.show');
-Route::get('/forums/{forum}/manage', 'ForumController@show_manage_forum')->name('forum.manage');
+Route::get('/forums/{forum}/management', 'ForumController@show_forum_management')->name('forum.management');
 Route::post('/forums/{id}/follow', 'ForumFollowController@follow')->name('follow');
 Route::delete('/forums/{id}/unfollow', 'ForumFollowController@unfollow')->name('unfollow');
