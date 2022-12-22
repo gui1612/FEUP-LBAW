@@ -21,7 +21,8 @@
                             <h4 class="mb-2"> {{ $forum->name }} </h4>
 
                             @auth
-                            @if($forumOwner == Auth::user()->id)
+
+                            @if($forumOwners->contains('owner_id', Auth::user()->id))
                             <a href="{{ route('forum.management', ['forum'=>$forum->id]) }}" type="button" class="btn btn-primary d-flex gap-2">
                                 Manage Forum
                             </a>
@@ -34,6 +35,7 @@
                                 </button>
                             </form>
                             @endif
+
                             @endauth
                             <div class="d-flex justify-content-between text-center mt-4 mb-2">
                                 <div class="px-3">

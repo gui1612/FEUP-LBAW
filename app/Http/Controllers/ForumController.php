@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\ForumOwner;
+use App\Models\ForumOwners;
 use App\Models\Forum;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -20,13 +20,14 @@ class ForumController extends Controller
   {
     // $forum = Forum::findOrFail($post->id);
     //$this->authorize('view', $forum);
-    $forumOwner = ForumOwner::where('forum_id', $forum->id)->first()->owner_id;
-    return view('pages.forum', ['forum' => $forum, 'forumOwner' => $forumOwner]);
+    $forumOwners = ForumOwners::where('forum_id', $forum->id)->get();
+    return view('pages.forum', ['forum' => $forum, 'forumOwners' => $forumOwners]);
   }
 
   public function show_forum_management(Forum $forum)
   {
-    return view('pages.manage_forum', ['forum' => $forum]);
+    $forumOwners = ForumOwners::where('forum_id', $forum->id)->get();
+    return view('pages.manage_forum', ['forum' => $forum, 'forumOwners' => $forumOwners]);
   }
   /*public function show_forum(Forum $forum, Request $request) {
       $validated = $request->validate([

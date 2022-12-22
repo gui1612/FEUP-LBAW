@@ -5,7 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class ForumOwner extends Model
+class ForumOwners extends Model
 {
     use HasFactory;
     public $timestamps = false;
@@ -19,10 +19,5 @@ class ForumOwner extends Model
     public function owners()
     {
         return $this->belongsToMany(User::class, 'owner_id');
-    }
-
-    public static function getOwnerOfForum($forumId)
-    {
-        return static::where('forum_id', $forumId)->first()->owner;
     }
 }
