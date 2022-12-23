@@ -7,85 +7,101 @@
 
 @section('content')
 
-<div class="d-flex flex-column gap-3 mt-5">
-  <section style="background-color: #eee;">
-    <div class="container">
-      <div class="row d-flex justify-content-center">
-        <div class="container rounded bg-white p-4" style="height: min-content">
-          <div class="card-body text-center d-flex flex-column align-items-center" style="width: min-content">
-            <div class="mt-3 mb-4 d-flex flex-column align-items-center position-relative" style="height: 16vh; width: auto">
-              <img src=" {{ $forum->banner_picture_url() }}" alt="{{ $forum->name . '\'s banner picture' }}" class="img-fluid" style="width: 100%; height: 75%; object-fit: cover;">
-              <img src=" {{ $forum->forum_picture_or_default_url() }}" alt="{{ $forum->name . '\'s picture' }}" class="rounded-circle img-fluid position-absolute" style="border: solid white 2px; width: 100px; top: 27%;">
-            </div>
-            <h4 class="mb-2"> {{ $forum->name }} </h4>
+<div class="d-flex flex-column justify-content-center bg-white container m-3 px-0">
+  <div id="forum-info" class="position-relative" style="margin-bottom: clamp(1.5rem, 5vw, 4rem);">
+    <div id="banner-picture" class="bg-primary" style="min-height: 12.5rem;">
+      @if($forum->banner_picture_url())
+      <img src="{{ $forum->banner_picture_url() }}" alt="{{ $forum->name }}'s banner picture" width="100" height="500" class="w-100" style="height: clamp(12.5rem, 25vw, 20rem); object-fit: cover">
+      @endif
+    </div>
+    <div id="forum-picture" class="ratio ratio-1x1 border border-3 rounded-circle border-white position-absolute bottom-0" style="left: 50%; width: clamp(7.5rem, 15vw, 12.5rem); transform: translate(-50%, 50%)">
+      <img src="{{ $forum->forum_picture_or_default_url() }}" alt="{{ $forum->name }}'s profile picture" width="30" height="30" class="rounded-circle position-absolute">
+    </div>
+  </div>
 
-            @auth
+  <div class="align-self-center px-5 gap-2">
+    <label for="username-input" class="form-label pt-4">Forum:</label>
+    <div class="input-group">
+      <div class="input-group-prepend">
+        <span class="input-group-text" id="basic-addon1">@</span>
+      </div>
+      <input id="forum-input" type="text" name="name" class="form-control @error('name') is-invalid @enderror" placeholder="Name" value="{{ old('name') ?? $forum->name }}" aria-label="Name" aria-describedby="basic-addon1">
+      @error('name')
+      <div class="invalid-feedback">
+        {{ $message }}
+      </div>
+      @enderror
+    </div>
 
-            @if($forumOwners->contains('owner_id', Auth::user()->id))
-            <a href="{{ route('forum.management', ['forum'=>$forum->id]) }}" type="button" class="btn btn-primary d-flex gap-2">
-              Manage Forum
-            </a>
-            @else
-            <form method="POST" action="{{ route('follow', $forum->id) }}">
-              @csrf
-              @method('POST')
-              <button type="button" class="btn btn-primary d-flex gap-2">
-                <i class="bi bi-person-add"></i>Follow
-              </button>
-            </form>
-            @endif
-
-            @endauth
-            <div class="d-flex justify-content-between text-center mt-4 mb-2">
-              <div class="px-3">
-                <p class="mb-2 h5"> {{ $paginator_own->total() }} </p>
-                <p class="text-muted mb-0">Posts</p>
-              </div>
-              <div>
-                <p class="mb-2 h5" data-wt-signal="forum.{{ $forum->id }}.followers" data-wt-value="{{ $forum->followers->count() }}">-</p>
-                <p class="text-muted mb-0">Followers</p>
-              </div>
-            </div>
-            <p class="my-3"> {{ $forum->description }} </p>
-          </div>
+    <div class="align-items-start">
+      <div class="form-group pt-4 bd-highlight">
+        <label for="exampleFormControlTextarea1" class="form-label">Description:</label>
+        <textarea id="description-text-area" name="description" class="form-control w-100 @error('description') is-invalid @enderror" id="exampleFormControlTextarea1" rows="3" columns="20">{{ old('description') ?? $forum->description }}</textarea>
+        @error('description')
+        <div class="invalid-feedback">
+          {{ $message }}
         </div>
+        @enderror
       </div>
     </div>
+
+    <div id="edit-forum-picture">
+      <label for="forumInput" class="form-label pt-4">Forum Picture:</label>
+      <input id="forumInput" class="form-control @error('forum_picture') is-invalid @enderror" accept="image/*" type="file" name="forum_picture">
+      @error('forum_picture')
+      <div class="invalid-feedback">
+        {{ $message }}
+      </div>
+      @enderror
+    </div>
+
+    <div id="edit-banner-picture">
+      <label for="bannerInput" class="form-label pt-4">Banner Picture:</label>
+      <input id="bannerInput" class="form-control @error('banner_picture') is-invalid @enderror" accept="image/*" type="file" name="banner_picture">
+      @error('banner_picture')
+      <div class="invalid-feedback">
+        {{ $message }}
+      </div>
+      @enderror
+    </div>
+
+    <button type="submit" class="btn btn-primary mt-5">Update Forum</button>
+  </div>
+
+  <section class="container-fluid mt-5">
+    <div class="table-responsive">
+      <table class="table table-hover caption-top">
+        <caption>Administrators</caption>
+        <thead>
+          <tr>
+            <th scope="col">#</th>
+            <th scope="col" class="d-none d-md-table-cell">Name</th>
+            <th scope="col">Username</th>
+            <th scope="col">Email</th>
+            <th scope="col">Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          @foreach ($paginator_own->items() as $forum)
+          <tr>
+            <th scope="row">{{ $forum->id }}</th>
+            <td class="d-none d-md-table-cell">{{ $forum->name }}</td>
+
+            <td>{{ $forum->description }}</td>
+            <td>{{ $forum->id }}</td>
+            <td>
+              <form method="POST" action="{{ route('admin.team.demote', $forum->id) }}">
+                @csrf
+                @method('DELETE')
+                <button type="submit" class="btn btn-danger d-flex gap-2"><i class="bi bi-arrow-down-circle"></i>Demote User</button>
+              </form>
+            </td>
+          </tr>
+          @endforeach
+        </tbody>
+      </table>
+    </div>
+    {{ $paginator_own}}
   </section>
 </div>
-<section class="container-fluid">
-  <div class="table-responsive">
-    <table class="table table-hover caption-top">
-      <caption>Administrators</caption>
-      <thead>
-        <tr>
-          <th scope="col">#</th>
-          <th scope="col" class="d-none d-md-table-cell">Name</th>
-          <th scope="col">Username</th>
-          <th scope="col">Email</th>
-          <th scope="col">Actions</th>
-        </tr>
-      </thead>
-      <tbody>
-        @foreach ($paginator_own->items() as $forum)
-        <tr>
-          <th scope="row">{{ $forum->id }}</th>
-          <td class="d-none d-md-table-cell">{{ $forum->name }}</td>
-
-          <td>{{ $forum->description }}</td>
-          <td>{{ $forum->id }}</td>
-          <td>
-            <form method="POST" action="{{ route('admin.team.demote', $forum->id) }}">
-              @csrf
-              @method('DELETE')
-              <button type="submit" class="btn btn-danger d-flex gap-2"><i class="bi bi-arrow-down-circle"></i>Demote User</button>
-            </form>
-          </td>
-        </tr>
-        @endforeach
-      </tbody>
-    </table>
-  </div>
-  {{ $paginator_own}}
-</section>
 @endsection
