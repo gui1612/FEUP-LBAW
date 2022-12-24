@@ -17,6 +17,10 @@ class Post extends Model
         'last_edited' => 'datetime'
     ];
 
+    public function forum() {
+        return $this->belongsTo(Forum::class, 'forum_id');
+    }
+
     public function owner() {
         return $this->belongsTo(User::class, 'owner_id');
     }

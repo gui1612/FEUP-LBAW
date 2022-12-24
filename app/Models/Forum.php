@@ -5,7 +5,6 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-
 class Forum extends Model
 {
     use HasFactory;
@@ -17,11 +16,13 @@ class Forum extends Model
         'created_at' => 'datetime',
     ];
 
-    public function owner() {
+    public function owner()
+    {
         return $this->belongsTo(User::class, 'owner_id');
     }
 
-    public function posts() {
+    public function posts()
+    {
         return $this->hasMany(Post::class, 'forum_id', 'id');
     }
 
@@ -34,19 +35,20 @@ class Forum extends Model
         return $query->where('hidden', false);
     }
 
-    public function forum_picture_or_default_url() {
+    public function getForumPictureOrDefaultUrl()
+    {
         if (is_null($this->profile_picture)) {
             return mix('images/defaults/user.png');
         }
-        
+
         return str_starts_with($this->profile_picture, 'http') ? $this->profile_picture : asset('/storage/' . $this->profile_picture);
     }
 
-    public function banner_picture_url() {
+    public function getBannerPictureUrl()
+    {
         if (is_null($this->banner_picture)) {
             return mix('images/defaults/banner.jpg');
         }
-        return str_starts_with($this->banner_picture, 'http') ? $this->banner_picture : asset('/storage/' . $this->banner_picture); 
+        return str_starts_with($this->banner_picture, 'http') ? $this->banner_picture : asset('/storage/' . $this->banner_picture);
     }
-
 }

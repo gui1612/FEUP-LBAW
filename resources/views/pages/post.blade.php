@@ -1,79 +1,115 @@
-@extends('layouts.app')
+@extends ('layouts.app')
 
-@section('title', $post->title)
-@php($images = $post->images()->get())
+@section('title', $forum->name)
+
+@php($paginator_own = $forum->posts()->visible()->paginate(10))
+
 
 @section('content')
-    <article class="container w-75 my-4 bg-white px-4 py-3 mx-auto">
-        @if($images->isNotEmpty())
-            <div id="carouselExampleControls" class="mb-3 carousel slide d-flex justify-content-center bg-black mx-auto w-100" style="height:30rem;" data-bs-ride="carousel" data-bs-interval="9999999">
-                <div class="carousel-inner">
-                    @php($img = $images[0])
-                    <div class="carousel-item active h-100 bg-black">
-                        <img src="{{ $img->url() }}" alt= "{{ $img->caption }}" class="d-block mx-auto h-100 w-100" style="object-fit: contain;">
-                        <div class="carousel-caption d-none d-md-block bg-white text-black start-0 end-0 bottom-0 px-2 py-1 text-start" style="--bs-bg-opacity: 0.85">
-                            <span> {{ $img->caption }} </span>
+<div class="d-flex container m-3 px-0">
+
+    <div class="d-flex flex-column gap-3 mt-5">
+        <section style="background-color: #eee;">
+            <div class="container">
+                <div class="row d-flex justify-content-center">
+                    <div class="container rounded bg-white p-4" style="height: min-content">
+                        <div class="card-body text-center d-flex flex-column align-items-center" style="width: min-content">
+                            <div class="mt-3 mb-4 d-flex flex-column align-items-center position-relative" style="height: 16vh; width: auto">
+                                <img src=" {{ $forum->getBannerPictureUrl() }}" alt="{{ $forum->name . '\'s banner picture' }}" class="img-fluid" style="width: 100%; height: 75%; object-fit: cover;">
+                                <img src=" {{ $forum->getForumPictureOrDefaultUrl() }}" alt="{{ $forum->name . '\'s picture' }}" class="rounded-circle img-fluid position-absolute" style="border: solid white 2px; width: 100px; top: 27%;">
+                            </div>
+                            <h4 class="mb-2"> {{ $forum->name }} </h4>
+
+                            @auth
+
+                            @if($forumOwners->contains('owner_id', Auth::user()->id))
+                            <a href="{{ route('forum.management', ['forum'=>$forum->id]) }}" type="button" class="btn btn-primary d-flex gap-2">
+                                Manage Forum
+                            </a>
+                            @else
+                            <form method="POST" action="{{ route('follow', $forum->id) }}">
+                                @csrf
+                                @method('POST')
+                                <button type="button" class="btn btn-primary d-flex gap-2">
+                                    <i class="bi bi-person-add"></i>Follow
+                                </button>
+                            </form>
+                            @endif
+
+                            @endauth
+                            <div class="d-flex justify-content-between text-center mt-4 mb-2">
+                                <div class="px-3">
+                                    <p class="mb-2 h5"> {{ $paginator_own->total() }} </p>
+                                    <p class="text-muted mb-0">Posts</p>
+                                </div>
+                                <div>
+                                    <p class="mb-2 h5" data-wt-signal="forum.{{ $forum->id }}.followers" data-wt-value="{{ $forum->followers->count() }}">-</p>
+                                    <p class="text-muted mb-0">Followers</p>
+                                </div>
+                            </div>
+                            <p class="my-3"> {{ $forum->description }} </p>
                         </div>
                     </div>
-                    @for ($i = 1; $i < $images->count(); $i++)
-                    @php($img = $images[$i])
-                    <div class="carousel-item h-100 bg-black">
-                        <img src= "{{ $img->url() }}" alt= "{{ $img->caption }}" class="d-block mx-auto h-100 w-100" style="object-fit: contain;">
-                        <div class="carousel-caption d-none d-md-block bg-white text-black start-0 end-0 bottom-0 px-2 py-1 text-start" style="--bs-bg-opacity: 0.85">
-                            <span> {{ $img->caption }} </span>
-                        </div>
-                    </div>
-                    @endfor
                 </div>
-                <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleControls" data-bs-slide="prev">
-                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                    <span class="visually-hidden">Previous</span>
-                </button>
-                <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleControls" data-bs-slide="next">
-                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                    <span class="visually-hidden">Next</span>
-                </button>
             </div>
-        @endif
-        
-        @if(Auth::check() && ($post->owner_id == Auth::user()->id))
-            <div class="d-flex align-items-center justify-content-between">
-                @include('partials.post_title')
-                @include('partials.post_actions')
-            </div>
-        @else
-            @include('partials.post_title')
-        @endif
-
-        @include('partials.post_body')
-
-        <div class="d-flex gap-4">
-            <span class="mb-2">By 
-                <a href="{{ route('user.show', $post->owner) }}">{{ $post->owner->username }}</a> 
-                on {{ date_format($post->last_edited, 'Y-m-d') }}</span>
-        </div>
-
-        @include('partials.rating')
-
-        @auth
-            <form method="POST" action="{{ route('post.comments.create', ['post'=>$post]) }}" class="d-flex flex-column align-items-end gap-3 pt-4" style="align-items: start"> 
-                @csrf
-                @method('POST')
-                <div class="d-flex gap-3 pt-4 w-100">
-                    <img src="{{ Auth::user()->profile_picture_or_default_url() }}" alt="Your profile picture" width="30" height="30" class="rounded-circle" style="width: 3rem; height: 3rem;">
-                    <label for="body" class="visually-hidden">Comment</label>
-                    <textarea id="body" name="body" placeholder="Add a comment" class="form-control"></textarea>
-                </div>
-
-                <button type="submit" class="btn btn-primary mb-3">Submit</button>
-            </form>
-        @endauth
-
-        <section class="container" id="comment-section">
-            @foreach ($post->comments()->visible()->orderBy('last_edited', 'desc')->get() as $comment)
-                @include('partials.comment', ['comment' => $comment])
-            @endforeach
         </section>
-    </article>
-    
+
+        <section style="background-color: #eee;">
+            <div class="container">
+                <div class="row d-flex justify-content-center">
+                    <div class="container rounded bg-white p-4" style="height: min-content">
+                        <div class="card-body text-center" style="width: min-content">
+                            <h4 class="mb-2">Forums</h4>
+                            <div class="d-flex justify-content-between text-start mt-4 mb-2">
+                                <ul class="list-unstyled">
+                                    <li>Forum 1</li>
+                                    <li>Forum 2</li>
+                                    <li>Forum 3</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <div class="d-flex flex-column align-items-center mx-4">
+        <!-- Tabs navs -->
+        <ul class="nav nav-tabs nav-fill mb-3 flex justify-between" style="width: 100%;" role="tablist">
+            <li class="nav-item" role="presentation">
+                <a class="nav-link active" data-bs-toggle="tab" href="#personal_content" role="tab" aria-controls="personal_content_tab" aria-selected="true">
+                    <i class="bi bi-fire wt-icon-like"></i>
+                    Hot
+                </a>
+            </li>
+            <li class="nav-item" role="presentation">
+                <a class="nav-link" data-bs-toggle="tab" href="#interactions" role="tab" aria-controls="interactions_tab" aria-selected="false">
+                    <i class="bi bi-star-fill wt-icon-like"></i>
+                    Newest
+                </a>
+            </li>
+        </ul>
+        <!-- Tabs navs -->
+
+        <!-- Tabs content -->
+        <div class="tab-content" id="">
+            <div class="tab-pane show active" id="personal_content" role="tabpanel" aria-labelledby="personal_content_tab">
+                @if($paginator_own->items())
+                @foreach($paginator_own->items() as $post)
+                @include('partials.post_preview', ['on_profile'=>True])
+                @endforeach
+                {{ $paginator_own }}
+                @else
+                <p class="text-center">
+                    It is really empty in here...
+                    <i class="bi bi-heartbreak-fill wt-icon-like"></i>
+                </p>
+                @endif
+            </div>
+
+        </div>
+        <!-- Tabs content -->
+    </div>
+</div>
 @endsection

@@ -10,37 +10,31 @@ use Illuminate\Http\Request;
 class ForumController extends Controller
 {
 
-  /**
-   * Shows the card for a given id.
-   *
-   * @param  int  $id
-   * @return Response
-   */
+    /**
+     * Shows the card for a given id.
+     *
+     * @param  int  $id
+     * @return Response
+     */
   public function show(Forum $forum)
   {
     // $forum = Forum::findOrFail($post->id);
     //$this->authorize('view', $forum);
-    $forumOwners = ForumOwners::where('forum_id', $forum->id)->get();
-    return view('pages.forum', ['forum' => $forum, 'forumOwners' => $forumOwners]);
+    return view('pages.forum', ['forum' => $forum]);
   }
 
-  public function show_forum_management(Forum $forum)
-  {
-    $forumOwners = ForumOwners::where('forum_id', $forum->id)->get();
-    return view('pages.manage_forum', ['forum' => $forum, 'forumOwners' => $forumOwners]);
-  }
-  /*public function show_forum(Forum $forum, Request $request) {
-      $validated = $request->validate([
-        'order' => 'sometimes|in:popularity,chronological'
-      ]);
-      
+    public function showForum(Forum $forum, Request $request) {
+        $validated = $request->validate([
+            'order' => 'sometimes|in:popularity,chronological'
+        ]);
 
-      $order = $validated['order'] ?? 'popularity';
-      if ($order === 'chronological')
-        $posts = $forum->posts::visible()->orderBy('created_at', 'desc');
-      else 
-        $posts = $forum->posts::visible()->orderBy('rating', 'desc');
+        $order = $validated['order'] ?? 'popularity';
+        if ($order === 'chronological') {
+            $posts = $forum->posts()->visible()->orderBy('created_at', 'desc')->paginate(30);
+        } else {
+            $posts = $forum->posts()->visible()->orderBy('rating', 'desc')->paginate(30);
+        }
 
       return view('pages.forum', ['paginator' => $posts->paginate(30)]);
-    }*/
+    }
 }

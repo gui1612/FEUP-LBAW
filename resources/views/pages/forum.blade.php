@@ -15,8 +15,8 @@
                     <div class="container rounded bg-white p-4" style="height: min-content">
                         <div class="card-body text-center d-flex flex-column align-items-center" style="width: min-content">
                             <div class="mt-3 mb-4 d-flex flex-column align-items-center position-relative" style="height: 16vh; width: auto">
-                                <img src=" {{ $forum->banner_picture_url() }}" alt="{{ $forum->name . '\'s banner picture' }}" class="img-fluid" style="width: 100%; height: 75%; object-fit: cover;">
-                                <img src=" {{ $forum->forum_picture_or_default_url() }}" alt="{{ $forum->name . '\'s picture' }}" class="rounded-circle img-fluid position-absolute" style="border: solid white 2px; width: 100px; top: 27%;">
+                                <img src=" {{ $forum->getBannerPictureUrl() }}" alt="{{ $forum->name . '\'s banner picture' }}" class="img-fluid" style="width: 100%; height: 75%; object-fit: cover;">
+                                <img src=" {{ $forum->getForumPictureOrDefaultUrl() }}" alt="{{ $forum->name . '\'s picture' }}" class="rounded-circle img-fluid position-absolute" style="border: solid white 2px; width: 100px; top: 27%;">
                             </div>
                             <h4 class="mb-2"> {{ $forum->name }} </h4>
 
