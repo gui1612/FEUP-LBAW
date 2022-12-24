@@ -10,12 +10,12 @@
 <div class="d-flex flex-column justify-content-center bg-white container m-3 px-0">
   <div id="forum-info" class="position-relative" style="margin-bottom: clamp(1.5rem, 5vw, 4rem);">
     <div id="banner-picture" class="bg-primary" style="min-height: 12.5rem;">
-      @if($forum->banner_picture_url())
-      <img src="{{ $forum->banner_picture_url() }}" alt="{{ $forum->name }}'s banner picture" width="100" height="500" class="w-100" style="height: clamp(12.5rem, 25vw, 20rem); object-fit: cover">
+      @if($forum->getBannerPictureUrl())
+      <img src="{{ $forum->getBannerPictureUrl() }}" alt="{{ $forum->name }}'s banner picture" width="100" height="500" class="w-100" style="height: clamp(12.5rem, 25vw, 20rem); object-fit: cover">
       @endif
     </div>
     <div id="forum-picture" class="ratio ratio-1x1 border border-3 rounded-circle border-white position-absolute bottom-0" style="left: 50%; width: clamp(7.5rem, 15vw, 12.5rem); transform: translate(-50%, 50%)">
-      <img src="{{ $forum->forum_picture_or_default_url() }}" alt="{{ $forum->name }}'s profile picture" width="30" height="30" class="rounded-circle position-absolute">
+      <img src="{{ $forum->getForumPictureOrDefaultUrl() }}" alt="{{ $forum->name }}'s profile picture" width="30" height="30" class="rounded-circle position-absolute">
     </div>
   </div>
 
