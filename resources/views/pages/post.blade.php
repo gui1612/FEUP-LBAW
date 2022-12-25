@@ -50,7 +50,7 @@
         <div class="d-flex gap-4">
             <span class="mb-2">By 
                 <a href="{{ route('user.show', $post->owner) }}">{{ $post->owner->username }}</a> 
-                on {{ date_format($post->last_edited, 'Y-m-d') }}</span>
+                {{ displayDate($post->last_edited) }}</span>
         </div>
 
         @include('partials.rating')
