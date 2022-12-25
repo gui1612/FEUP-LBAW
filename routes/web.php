@@ -18,27 +18,35 @@ use Laravel\Socialite\Facades\Socialite;
 |
 */
 
-Route::get('/auth/github/redirect', function () {
-    return Socialite::driver('github')->redirect();
+Route::get('/auth/{provider}/redirect', function ($provider) {
+    return Socialite::driver($provider)->redirect();
 });
  
-Route::get('/auth/github/callback', function () {
+Route::get('/auth/{provider}/callback', function ($provider) {
     try {
-        $socialiteUser = Socialite::driver('github')->user();
+        $socialiteUser = Socialite::driver($provider)->user();
     } catch (\Exception $e) {
         return redirect()->route('login');
     }
  
     $user = User::where([
-        'provider' => 'github',
+        'provider' => $provider,
         'provider_id' => $socialiteUser->getId()
     ])->first();
 
     if (!$user) {
+
         $validator = Validator::make(
-            ['email' => $socialiteUser->getEmail()],
-            ['email' => ['unique:users,email']],
-            ['email.unique' => 'Couldn\'t log in. Maybe you used a different login method']
+            [
+                'email' => $socialiteUser->getEmail(), 
+                'username' => $socialiteUser->getName()],
+            [
+                'email' => ['unique:users,email'], 
+                'username' => ['unique:users,username']],
+            [
+                'email.unique' => 'Couldn\'t log in. Maybe you used a different login method', 
+                'username.unique' => 'Couldn\'t log in. Maybe you used a different login method'
+            ]
         );
 
         if ($validator->fails()) {
@@ -48,7 +56,7 @@ Route::get('/auth/github/callback', function () {
         $user = User::create([
             'username' => $socialiteUser->getName(),
             'email' => $socialiteUser->getEmail(),
-            'provider' => 'github',
+            'provider' => $provider,
             'provider_id' => $socialiteUser->getId(),
         ]);
     }
@@ -56,21 +64,7 @@ Route::get('/auth/github/callback', function () {
     Auth::login($user);
 
     return redirect()->route('feed.show');
-    // dd($user->getName(), $user->getEmail(), $user->getId());
-    // $user->token
 });
-
-// Route::get('/auth/google/redirect', function () {
-//     return Socialite::driver('google')->redirect();
-// });
- 
-// Route::get('/auth/google/callback', function () {
-//     $user = Socialite::driver('google')->user();
-
-
-//     dd($user->getName(), $user->getEmail(), $user->getId());
-//     // $user->token
-// });
 
 // Home
 Route::get('/', 'FeedController@show')->name('feed.show');
