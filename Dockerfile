@@ -65,6 +65,7 @@ RUN php artisan key:generate --force
 RUN php artisan config:clear
 RUN php artisan clear-compiled
 RUN php artisan optimize
+RUN php artisan migrate
 
 RUN chown -R www-data storage bootstrap/cache
 
