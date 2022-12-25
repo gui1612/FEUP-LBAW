@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -35,5 +36,9 @@ class Post extends Model
 
     public function scopeVisible($query) {
         return $query->where('hidden', false);
+    }
+
+    public function displayDate($date) {
+        return Carbon::parse($date)->diffForHumans();
     }
 }

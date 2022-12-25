@@ -7,7 +7,7 @@
         
     @include('partials.post_body', ['preview'=>True])
 
-    <span class="my-2" style="font-weight: 300">on {{ date_format($comment->created_at, 'Y-m-d') }}</span>
+    <span class="my-2" style="font-weight: 300">{{ displayDate($comment->created_at) }}</span>
 
     @include('partials.rating', $comment)
 </article>
