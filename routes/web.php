@@ -3,6 +3,8 @@
 use App\Http\Controllers\PostController;
 use Illuminate\Support\Facades\Route;
 use App\Models\User;
+use Illuminate\Support\Facades\Auth;
+use Laravel\Socialite\Facades\Socialite;
 
 /*
 |--------------------------------------------------------------------------
@@ -14,6 +16,46 @@ use App\Models\User;
 | contains the "web" middleware group. Now create something great!
 |
 */
+
+Route::get('/auth/github/redirect', function () {
+    return Socialite::driver('github')->redirect();
+});
+ 
+Route::get('/auth/github/callback', function () {
+    $socialiteUser = Socialite::driver('github')->user();
+ 
+    $user = User::where([
+        'provider' => 'github',
+        'provider_id' => $socialiteUser->getId()
+    ])->first();
+
+    if (!$user) {
+        $user = User::create([
+            'username' => $socialiteUser->getName(),
+            'email' => $socialiteUser->getEmail(),
+            'provider' => 'github',
+            'provider_id' => $socialiteUser->getId(),
+        ]);
+    }
+
+    Auth::login($user);
+
+    return redirect()->route('feed.show');
+    // dd($user->getName(), $user->getEmail(), $user->getId());
+    // $user->token
+});
+
+// Route::get('/auth/google/redirect', function () {
+//     return Socialite::driver('google')->redirect();
+// });
+ 
+// Route::get('/auth/google/callback', function () {
+//     $user = Socialite::driver('google')->user();
+
+
+//     dd($user->getName(), $user->getEmail(), $user->getId());
+//     // $user->token
+// });
 
 // Home
 Route::get('/', 'FeedController@show')->name('feed.show');
