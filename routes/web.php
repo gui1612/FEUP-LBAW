@@ -4,6 +4,7 @@ use App\Http\Controllers\PostController;
 use Illuminate\Support\Facades\Route;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Validator;
 use Laravel\Socialite\Facades\Socialite;
 
 /*
@@ -22,7 +23,11 @@ Route::get('/auth/github/redirect', function () {
 });
  
 Route::get('/auth/github/callback', function () {
-    $socialiteUser = Socialite::driver('github')->user();
+    try {
+        $socialiteUser = Socialite::driver('github')->user();
+    } catch (\Exception $e) {
+        return redirect()->route('login');
+    }
  
     $user = User::where([
         'provider' => 'github',
@@ -30,6 +35,16 @@ Route::get('/auth/github/callback', function () {
     ])->first();
 
     if (!$user) {
+        $validator = Validator::make(
+            ['email' => $socialiteUser->getEmail()],
+            ['email' => ['unique:users,email']],
+            ['email.unique' => 'Couldn\'t log in. Maybe you used a different login method']
+        );
+
+        if ($validator->fails()) {
+            return redirect()->route('login')->withErrors($validator);
+        }
+
         $user = User::create([
             'username' => $socialiteUser->getName(),
             'email' => $socialiteUser->getEmail(),
