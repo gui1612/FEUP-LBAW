@@ -68,32 +68,56 @@
     <button type="submit" class="btn btn-primary mt-5">Update Forum</button>
   </div>
 
-  <section class="container-fluid mt-5">
+  <section class="container-fluid mt-5 w-50">
     <div class="table-responsive">
-      <table class="table table-hover caption-top">
-        <caption>Administrators</caption>
+      <table class="table table-hover caption-top" style="table-layout: fixed;">
+        <caption>Forum Owners</caption>
         <thead>
           <tr>
-            <th scope="col">#</th>
             <th scope="col" class="d-none d-md-table-cell">Name</th>
-            <th scope="col">Username</th>
-            <th scope="col">Email</th>
             <th scope="col">Actions</th>
           </tr>
         </thead>
         <tbody>
-          @foreach ($paginator_own->items() as $forum)
+          @foreach ($forumOwners as $forumOwner)
           <tr>
-            <th scope="row">{{ $forum->id }}</th>
-            <td class="d-none d-md-table-cell">{{ $forum->name }}</td>
+            <td class="d-none pt-3 d-md-table-cell">@ {{ $forumOwner->getForumOwnerName($forumOwner->owner_id) }}</td>
 
-            <td>{{ $forum->description }}</td>
-            <td>{{ $forum->id }}</td>
             <td>
               <form method="POST" action="{{ route('admin.team.demote', $forum->id) }}">
                 @csrf
                 @method('DELETE')
                 <button type="submit" class="btn btn-danger d-flex gap-2"><i class="bi bi-arrow-down-circle"></i>Demote User</button>
+              </form>
+            </td>
+          </tr>
+          @endforeach
+        </tbody>
+      </table>
+    </div>
+    {{ $paginator_own}}
+  </section>
+
+  <section class="align-self-right container-fluid mt-5 w-50 my-5">
+    <div class="table-responsive">
+      <table class="table table-hover caption-top " style="table-layout: fixed;">
+        <caption>Users</caption>
+        <thead>
+          <tr>
+            <th scope="col" class="d-none d-md-table-cell">Name</th>
+            <th scope="col">Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          @foreach ($paginator_own->items() as $ola)
+          <tr>
+            <td class="d-none d-md-table-cell">{{ $forum->name }}</td>
+
+            <td>
+              <form method="POST" action="{{ route('admin.team.demote', $forum->id) }}">
+                @csrf
+                @method('DELETE')
+                <button type="submit" class="btn btn-secondary d-flex gap-2"><i class="bi bi-arrow-up-circle"></i>Promote User</button>
               </form>
             </td>
           </tr>

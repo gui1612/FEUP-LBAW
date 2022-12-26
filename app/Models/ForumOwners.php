@@ -20,4 +20,10 @@ class ForumOwners extends Model
     {
         return $this->belongsToMany(User::class, 'owner_id');
     }
+
+    public function getForumOwnerName(int $id)
+    {
+        $user = User::find($id);
+        return $user->username;
+    }
 }

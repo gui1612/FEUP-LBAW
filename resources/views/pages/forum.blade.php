@@ -23,7 +23,7 @@
                             @auth
 
                             @if($forumOwners->contains('owner_id', Auth::user()->id))
-                            <a href="{{ route('forum.management', ['forum'=>$forum->id]) }}" type="button" class="btn btn-primary d-flex gap-2">
+                            <a href="{{ route('forum.management', ['forum'=>$forum->id, 'forumOwners'=>$forumOwners]) }}" type="button" class="btn btn-primary d-flex gap-2">
                                 Manage Forum
                             </a>
                             @else
