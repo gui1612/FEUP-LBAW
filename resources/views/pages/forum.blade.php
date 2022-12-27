@@ -21,21 +21,21 @@
                             <h4 class="mb-2"> {{ $forum->name }} </h4>
 
                             @auth
-
                             @if($forumOwners->contains('owner_id', Auth::user()->id))
                             <a href="{{ route('forum.management', ['forum'=>$forum->id, 'forumOwners'=>$forumOwners]) }}" type="button" class="btn btn-primary d-flex gap-2">
                                 Manage Forum
                             </a>
+                            @elseif($forum->followers()->where('owner_id', Auth::user()->id)->first())
+                            <button class="btn btn-primary d-flex gap-2" data-wt-action="forum.unfollow" data-wt-user-id="{{ $forum->id }}">
+                                <i class="bi bi-person-check-fill"></i>
+                                <span>Unfollow</span>
+                            </button>
                             @else
-                            <form method="POST" action="{{ route('follow', $forum->id) }}">
-                                @csrf
-                                @method('POST')
-                                <button type="button" class="btn btn-primary d-flex gap-2">
-                                    <i class="bi bi-person-add"></i>Follow
-                                </button>
-                            </form>
+                            <button class="btn btn-primary d-flex gap-2" data-wt-action="forum.follow" data-wt-user-id="{{ $forum->id }}">
+                                <i class="bi bi-person-add"></i>
+                                <span>Follow</span>
+                            </button>
                             @endif
-
                             @endauth
                             <div class="d-flex justify-content-between text-center mt-4 mb-2">
                                 <div class="px-3">

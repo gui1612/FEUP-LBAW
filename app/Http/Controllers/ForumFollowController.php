@@ -7,7 +7,7 @@ use App\Models\Follow;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
-class ForumFollowController
+class ForumFollowController extends Controller
 {
   public function __construct()
   {
@@ -26,11 +26,11 @@ class ForumFollowController
   {
     $this->authorize('follow', $forum);
 
-    $user_id = id();
+    $user_id = Auth::id();
 
     $follow = Follow::create([
       'owner_id' => $user_id,
-      'followed_follow_id' => $forum->id,
+      'followed_forum_id' => $forum->id,
     ]);
 
     $forum->refresh();
