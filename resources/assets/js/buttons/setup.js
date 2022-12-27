@@ -1,6 +1,7 @@
 import { onPostLike, onPostDislike } from './ratings';
 import { onUserFollow, onUserUnfollow } from './users';
 import { onForumFollow, onForumUnfollow } from './forums';
+
 const actions = {
     'ratings.like': onPostLike,
     'ratings.dislike': onPostDislike,

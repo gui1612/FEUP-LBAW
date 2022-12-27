@@ -64,10 +64,10 @@ Route::get('contact', 'StaticPagesController@showContactPage')->name('contact');
 Route::get('features', 'StaticPagesController@showFeaturesPage')->name('features');
 
 // Follows
-Route::post('/users/{id}/follow', 'UserFollowController@follow')->name('follow');
-Route::delete('/users/{id}/unfollow', 'UserFollowController@unfollow')->name('unfollow');
-Route::post('/forums/{id}/follow', 'ForumFollowController@follow')->name('follow');
-Route::delete('/forums/{id}/unfollow', 'ForumFollowController@unfollow')->name('unfollow');
+Route::post('/users/{user}/follow', 'UserFollowController@follow')->name('follow');
+Route::delete('/users/{user}/unfollow', 'UserFollowController@unfollow')->name('unfollow');
+Route::post('/forums/{forum}/follow', 'ForumFollowController@follow')->name('follow');
+Route::delete('/forums/{forum}/unfollow', 'ForumFollowController@unfollow')->name('unfollow');
 
 
 //Forums

@@ -30,6 +30,7 @@ class ForumFollowController extends Controller
 
     $follow = Follow::create([
       'owner_id' => $user_id,
+      'followed_user_id' => null,
       'followed_forum_id' => $forum->id,
     ]);
 
