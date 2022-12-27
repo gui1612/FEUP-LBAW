@@ -4,8 +4,8 @@ const endpoints = {
     'rating.remove': (postId) => ['DELETE', `/api/posts/${postId}/rating`],
     'user.follow': (userId) => ['POST', `/users/${userId}/follow`],
     'user.unfollow': (userId) => ['DELETE', `/users/${userId}/unfollow`],
-    'forum.follow': (forumId) => ['POST', `/users/${forumId}/follow`],
-    'forum.unfollow': (forumId) => ['DELETE', `/users/${forumId}/unfollow`]
+    'forum.follow': (forumId) => ['POST', `/forums/${forumId}/follow`],
+    'forum.unfollow': (forumId) => ['DELETE', `/forums/${forumId}/unfollow`]
 }
 
 export function makeRequest([key, ...params], { data, ...rest }) {

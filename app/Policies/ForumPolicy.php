@@ -14,4 +14,9 @@ class ForumPolicy
     {
         return true;
     }
+
+    public function follow(User $user, Forum $target)
+    {
+        return true;
+    }
 }

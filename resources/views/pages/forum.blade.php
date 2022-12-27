@@ -26,13 +26,11 @@
                                 Manage Forum
                             </a>
                             @elseif($forum->followers()->where('owner_id', Auth::user()->id)->first())
-                            <button class="btn btn-primary d-flex gap-2" data-wt-action="forum.unfollow" data-wt-user-id="{{ $forum->id }}">
-                                <i class="bi bi-person-check-fill"></i>
+                            <button class="btn btn-primary d-flex gap-2" data-wt-action="forum.unfollow" data-wt-forum-id="{{ $forum->id }}">
                                 <span>Unfollow</span>
                             </button>
                             @else
-                            <button class="btn btn-primary d-flex gap-2" data-wt-action="forum.follow" data-wt-user-id="{{ $forum->id }}">
-                                <i class="bi bi-person-add"></i>
+                            <button class="btn btn-primary d-flex gap-2" data-wt-action="forum.follow" data-wt-forum-id="{{ $forum->id }}">
                                 <span>Follow</span>
                             </button>
                             @endif
