@@ -66,3 +66,7 @@ Route::get('features', 'StaticPagesController@showFeaturesPage')->name('features
 // Follows
 Route::post('/users/{user}/follow', 'UserFollowController@follow')->name('follow');
 Route::delete('/users/{user}/unfollow', 'UserFollowController@unfollow')->name('unfollow');
+
+// Notifications
+Route::get('/notifications', 'NotificationController@show_all')->name('notifications.show_all');
+Route::get('/notifications/{notification}', 'NotificationController@show_notification')->name('notifications.show_notification');

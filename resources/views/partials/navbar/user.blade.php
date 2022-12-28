@@ -25,7 +25,17 @@
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="" class="btn btn-lg"><i class="bi bi-bell-fill"></i></a>
+                    <div class="d-none d-md-flex dropdown mx-2 align-items-center">
+                        <button class="dropdown-toggle btn btn-lg p-0 border-0 d-flex align-items-center" href="#" data-bs-toggle="dropdown" aria-expanded="false">
+                            <i class="bi bi-bell-fill"></i>
+                        </button>
+                        <ul class="dropdown-menu dropdown-menu-end">
+                            <li><a class="dropdown-item" href="">This is a small notification title</a></li>
+                            <li><a class="dropdown-item" href="">This is a very very long notification title, damn, so much notification</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item" href="{{ route('notifications.show_all') }}">View all</a></li>
+                        </ul>
+                    </div>
                 </li>
                 <li class="d-md-none nav-item">
                     <a class="nav-link" href="{{ route('user.show', Auth::user()->id) }}">Profile</a>

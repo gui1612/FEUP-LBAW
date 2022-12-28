@@ -78,3 +78,8 @@ INSERT INTO Follows (owner_id, followed_user_id, followed_forum_id) VALUES (4, 3
 INSERT INTO Follows (owner_id, followed_user_id, followed_forum_id) VALUES (4, 10, NULL);
 INSERT INTO Follows (owner_id, followed_user_id, followed_forum_id) VALUES (5, 10, NULL);
 INSERT INTO Follows (owner_id, followed_user_id, followed_forum_id) VALUES (10, 5, NULL);
+
+INSERT INTO Notifications (created_at, read, type, receiver_id, follow_id, comment_id, report_id, rating_id) VALUES ('2022-07-26 12:52:26', false, 'follow_user', 10, 5, NULL, NULL, NULL);
+INSERT INTO Notifications (created_at, read, type, receiver_id, follow_id, comment_id, report_id, rating_id) VALUES ('2022-07-27 12:52:26', false, 'follow_user', 10, 8, NULL, NULL, NULL);
+INSERT INTO Notifications (created_at, read, type, receiver_id, follow_id, comment_id, report_id, rating_id) VALUES ('2022-07-28 12:52:26', false, 'follow_user', 10, 9, NULL, NULL, NULL);
+INSERT INTO Notifications (created_at, read, type, receiver_id, follow_id, comment_id, report_id, rating_id) VALUES ('2022-07-28 12:52:26', false, 'content_rated', 10, NULL, NULL, NULL, 2);
