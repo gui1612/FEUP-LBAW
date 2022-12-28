@@ -78,12 +78,12 @@
           </tr>
         </thead>
         <tbody>
-          @foreach ($forumOwners as $forumOwner)
+          @foreach ($paginator->items() as $forumOwner)
           <tr>
-            <td class="d-none pt-3 d-md-table-cell">@ {{ $forumOwner->getForumOwnerName($forumOwner->owner_id) }}</td>
+            <td class="d-none pt-3 d-md-table-cell">@ {{ $forumOwner->owners->username }}</td>
 
             <td>
-              <form method="POST" action="{{ route('admin.team.demote', $forum->id) }}">
+              <form method="POST" action="{{ route('forum.management.demote', $forum->id) }}">
                 @csrf
                 @method('DELETE')
                 <button type="submit" class="btn btn-danger d-flex gap-2"><i class="bi bi-arrow-down-circle"></i>Demote User</button>
@@ -108,14 +108,14 @@
           </tr>
         </thead>
         <tbody>
-          @foreach ($follows as $follow)
+          @foreach ($followers as $follower)
           <tr>
-            <td class="d-none d-md-table-cell">@ {{ $follow->getFollowerName($follow->owner_id) }}</td>
+            <td class="d-none d-md-table-cell">@ {{ $follower->owner->username }}</td>
 
             <td>
-              <form method="POST" action="{{ route('admin.team.demote', $forum->id) }}">
+              <form method="POST" action="{{ route('forum.management.promote') }}">
                 @csrf
-                @method('DELETE')
+                <input type="hidden" name="id" value="{{ $follower->owner_id }}">
                 <button type="submit" class="btn btn-secondary d-flex gap-2"><i class="bi bi-arrow-up-circle"></i>Promote User</button>
               </form>
             </td>

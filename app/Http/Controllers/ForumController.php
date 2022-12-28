@@ -19,18 +19,14 @@ class ForumController extends Controller
    */
   public function show(Forum $forum)
   {
-    // $forum = Forum::findOrFail($post->id);
+
     //$this->authorize('view', $forum);
     $forumOwners = ForumOwners::where('forum_id', $forum->id)->get();
+
     return view('pages.forum', ['forum' => $forum, 'forumOwners' => $forumOwners]);
   }
 
-  public function show_forum_management(Forum $forum)
-  {
-    $forumOwners = ForumOwners::where('forum_id', $forum->id)->get();
-    $follows = Follow::where('followed_forum_id', $forum->id)->get();
-    return view('pages.manage_forum', ['forum' => $forum, 'forumOwners' => $forumOwners, 'follows' => $follows]);
-  }
+
   /*public function show_forum(Forum $forum, Request $request) {
       $validated = $request->validate([
         'order' => 'sometimes|in:popularity,chronological'
