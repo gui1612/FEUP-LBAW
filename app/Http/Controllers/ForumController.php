@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\ForumOwners;
 use App\Models\Forum;
+use App\Models\Follow;
 use App\Models\User;
 use Illuminate\Http\Request;
 
@@ -27,7 +28,8 @@ class ForumController extends Controller
   public function show_forum_management(Forum $forum)
   {
     $forumOwners = ForumOwners::where('forum_id', $forum->id)->get();
-    return view('pages.manage_forum', ['forum' => $forum, 'forumOwners' => $forumOwners]);
+    $follows = Follow::where('followed_forum_id', $forum->id)->get();
+    return view('pages.manage_forum', ['forum' => $forum, 'forumOwners' => $forumOwners, 'follows' => $follows]);
   }
   /*public function show_forum(Forum $forum, Request $request) {
       $validated = $request->validate([
@@ -44,4 +46,3 @@ class ForumController extends Controller
       return view('pages.forum', ['paginator' => $posts->paginate(30)]);
     }*/
 }
-

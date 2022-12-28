@@ -31,6 +31,7 @@
                             </button>
                             @else
                             <button class="btn btn-primary d-flex gap-2" data-wt-action="forum.follow" data-wt-forum-id="{{ $forum->id }}">
+                                <i class="bi bi-person-add"></i>
                                 <span>Follow</span>
                             </button>
                             @endif

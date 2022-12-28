@@ -4,7 +4,6 @@
 
 @php($paginator_own = $forum->posts()->visible()->paginate(10))
 
-
 @section('content')
 
 <div class="d-flex flex-column justify-content-center bg-white container m-3 px-0">
@@ -109,9 +108,9 @@
           </tr>
         </thead>
         <tbody>
-          @foreach ($paginator_own->items() as $ola)
+          @foreach ($follows as $follow)
           <tr>
-            <td class="d-none d-md-table-cell">{{ $forum->name }}</td>
+            <td class="d-none d-md-table-cell">@ {{ $follow->getFollowerName($follow->owner_id) }}</td>
 
             <td>
               <form method="POST" action="{{ route('admin.team.demote', $forum->id) }}">

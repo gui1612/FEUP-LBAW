@@ -29,4 +29,10 @@ class Follow extends Model
     {
         return $this->belongsTo(Forum::class, 'followed_forum_id');
     }
+
+    public function getFollowerName(int $id)
+    {
+        $user = User::find($id);
+        return $user->username;
+    }
 }
