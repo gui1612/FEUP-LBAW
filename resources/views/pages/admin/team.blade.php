@@ -6,7 +6,7 @@
     <section class="container-fluid">
         <div class="table-responsive">
             <table class="table table-hover caption-top">
-                <caption>Administrators</caption>
+                <h3 class="py-3">Administrator Team</h3>
                 <thead>
                     <tr>
                         <th scope="col">#</th>
@@ -28,7 +28,10 @@
                                 <form method="POST" action="{{ route('admin.team.demote', $admin->id) }}">
                                     @csrf
                                     @method('DELETE')
-                                    <button type="submit" class="btn btn-danger d-flex gap-2"><i class="bi bi-arrow-down-circle"></i>Demote User</button>
+                                    <button type="submit" class="btn btn-danger d-flex gap-2 align-items-center">
+                                        <i class="bi bi-arrow-down-circle"></i>
+                                        <span class="d-none d-md-block">Demote Use</span>
+                                    </button>
                                 </form>
                             </td>
                         </tr>

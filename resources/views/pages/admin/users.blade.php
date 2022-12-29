@@ -28,13 +28,19 @@
                                     <form method="POST" action="{{ route('admin.team.demote', $user->id) }}">
                                         @csrf
                                         @method('DELETE')
-                                        <button type="submit" class="btn btn-danger d-flex gap-2"><i class="bi bi-arrow-down-circle"></i>Demote User</button>
+                                        <button type="submit" class="btn btn-danger d-flex gap-2">
+                                            <i class="bi bi-arrow-down-circle"></i>
+                                            <span class="d-none d-md-flex">Demote User</span>
+                                        </button>
                                     </form>
                                 @else
                                     <form method="POST" action="{{ route('admin.team.promote') }}">
                                         @csrf
                                         <input type="hidden" name="id" value="{{ $user->id }}">
-                                        <button type="submit" class="btn btn-secondary d-flex gap-2"><i class="bi bi-arrow-up-circle"></i>Promote User</button>
+                                        <button type="submit" class="btn btn-secondary d-flex gap-2">
+                                            <i class="bi bi-arrow-up-circle"></i>
+                                            <span class="d-none d-md-flex">Promote User</span>
+                                        </button>
                                     </form>
                                 @endif
                                 {{-- <form method="POST" action="{{ route('admin.user.delete', $user->id) }}">
