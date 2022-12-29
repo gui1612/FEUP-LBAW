@@ -45,7 +45,9 @@ CREATE TABLE Users (
   profile_picture TEXT,
   banner_picture TEXT,
   is_admin BOOLEAN DEFAULT FALSE CONSTRAINT user_is_admin_nn NOT NULL,
-  remember_token TEXT -- Laravel
+  remember_token TEXT, -- Laravel
+  provider TEXT, -- Laravel
+  provider_id TEXT -- Laravel
 );
 
 CREATE TABLE Forums (
