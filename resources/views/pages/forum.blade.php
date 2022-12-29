@@ -52,25 +52,6 @@
                 </div>
             </div>
         </section>
-
-        <section style="background-color: #eee;">
-            <div class="container">
-                <div class="row d-flex justify-content-center">
-                    <div class="container rounded bg-white p-4" style="height: min-content">
-                        <div class="card-body text-center" style="width: min-content">
-                            <h4 class="mb-2">Forums</h4>
-                            <div class="d-flex justify-content-between text-start mt-4 mb-2">
-                                <ul class="list-unstyled">
-                                    <li>Forum 1</li>
-                                    <li>Forum 2</li>
-                                    <li>Forum 3</li>
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
     </div>
 
     <div class="d-flex flex-column align-items-center mx-4">
