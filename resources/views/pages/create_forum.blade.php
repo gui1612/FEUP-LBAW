@@ -15,8 +15,8 @@
       <img src="{{ $forum->getForumPictureOrDefaultUrl() }}" alt="{{ $forum->name }}'s profile picture" width="30" height="30" class="rounded-circle position-absolute">
     </div>
   </div>
-
-  <div class="align-self-center px-5 gap-2">
+  <form method="POST" action="{{ route('forum.create_forum') }}" class="align-self-center px-5 gap-2">
+    @csrf
     <label for="username-input" class="form-label pt-4">Forum:</label>
     <div class="input-group">
       <div class="input-group-prepend">
@@ -42,16 +42,6 @@
       </div>
     </div>
 
-    <div id="edit-forum-picture">
-      <label for="forumInput" class="form-label pt-4">Forum Picture:</label>
-      <input id="forumInput" class="form-control @error('forum_picture') is-invalid @enderror" accept="image/*" type="file" name="forum_picture">
-      @error('forum_picture')
-      <div class="invalid-feedback">
-        {{ $message }}
-      </div>
-      @enderror
-    </div>
-
     <div id="edit-banner-picture">
       <label for="bannerInput" class="form-label pt-4">Banner Picture:</label>
       <input id="bannerInput" class="form-control @error('banner_picture') is-invalid @enderror" accept="image/*" type="file" name="banner_picture">
@@ -62,6 +52,15 @@
       @enderror
     </div>
 
+    <div id="edit-forum-picture">
+      <label for="forumInput" class="form-label pt-4">Forum Picture:</label>
+      <input id="forumInput" class="form-control @error('forum_picture') is-invalid @enderror" accept="image/*" type="file" name="forum_picture">
+      @error('forum_picture')
+      <div class="invalid-feedback">
+        {{ $message }}
+      </div>
+      @enderror
+    </div>
     <button type="submit" class="btn btn-primary mt-5 mb-3 mx-5 px-5 ">Create Forum</button>
-  </div>
+  </form>
   @endsection

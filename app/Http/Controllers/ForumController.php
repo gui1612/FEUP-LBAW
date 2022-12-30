@@ -32,7 +32,7 @@ class ForumController extends Controller
     $forum = new Forum();
     return view('pages.create_forum', ['forum' => $forum]);
   }
-  /*
+
   public function create_forum(Request $request)
   {
     $this->authorize('create', Forum::class);
@@ -44,61 +44,26 @@ class ForumController extends Controller
       'banner_images.*.file' => 'required|image|max:4096',
     ]);
 
-    if (!isset($data['profile_images'])) {
-      $data['profile_images'] = [];
-    }
-
-    if (!isset($data['banner_images'])) {
-      $data['banner_images'] = [];
-    }
-
-    if (count($data['profile_images']) > 0) {
-      $this->authorize('create_profile_image', ForumProfileImage::class);
-    }
-
-    if (count($data['banner_images']) > 0) {
-      $this->authorize('create_banner_image', ForumBannerImage::class);
-    }
-
     $forum = new Forum();
     $forum->name = $data['name'];
     $forum->description = $data['description'];
-    //tenso $forum->owners()->attach(Auth::user());
 
-    $profile_images = [];
-    foreach ($data['profile_images'] as $profile_image) {
-      $path = $profile_image['file']->store('images/forums/profile', 'public');
-
-      $forum_profile_image = new ForumProfileImage();
-      $forum_profile_image->path = $path;
-
-      $profile_images[] = $forum_profile_image;
+    if ($request->hasFile('profile_images')) {
+      $forum_picture = $request->file('profile_images');
+      $path = $forum_picture->store('public/forum_pictures');
+      $forum->forum_picture_path = $path;
     }
 
-    DB::transaction(function () use ($forum, $images) {
-      $post->save();
-      foreach ($images as $image) {
-        $image->post()->associate($post);
-        $image->save();
-      }
-    });
+    if ($request->hasFile('banner_images')) {
+      $banner_picture = $request->file('banner_images');
+      $path = $banner_picture->store('public/banner_pictures');
+      $forum->banner_picture_path = $path;
+    }
 
-    return redirect()->route('post', ['post' => $post]);
+    $forum->save();
+
+
+
+    return redirect()->route('forum.show', ['forum' => $forum]);
   }
-*/
-
-  /*public function show_forum(Forum $forum, Request $request) {
-      $validated = $request->validate([
-        'order' => 'sometimes|in:popularity,chronological'
-      ]);
-      
-
-      $order = $validated['order'] ?? 'popularity';
-      if ($order === 'chronological')
-        $posts = $forum->posts::visible()->orderBy('created_at', 'desc');
-      else 
-        $posts = $forum->posts::visible()->orderBy('rating', 'desc');
-
-      return view('pages.forum', ['paginator' => $posts->paginate(30)]);
-    }*/
 }
