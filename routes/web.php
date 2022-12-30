@@ -3,6 +3,9 @@
 use App\Http\Controllers\PostController;
 use Illuminate\Support\Facades\Route;
 use App\Models\User;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Validator;
+use Laravel\Socialite\Facades\Socialite;
 
 /*
 |--------------------------------------------------------------------------
@@ -14,6 +17,10 @@ use App\Models\User;
 | contains the "web" middleware group. Now create something great!
 |
 */
+
+// OAuth
+Route::get('/auth/{provider}/redirect', 'Auth\LoginController@redirectToProvider');
+Route::get('/auth/{provider}/callback', 'Auth\LoginController@handleProviderCallback');
 
 // Home
 Route::get('/', 'FeedController@show')->name('feed.show');

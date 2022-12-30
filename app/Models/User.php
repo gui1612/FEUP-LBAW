@@ -12,18 +12,24 @@ class User extends AuthUser {
     protected $table = 'users';
 
     protected $fillable = [
+        'first_name',
+        'last_name',
         'username',
         'email',
         'password',
         'bio',
         'profile_picture',
         'banner_picture',
+        'provider',
+        'provider_id',
     ];
 
     protected $hidden = [
         'is_admin',
         'password',
         'remember_token',
+        'provider',
+        'provider_id',
     ];
     
     public function profile_picture_or_default_url() {
