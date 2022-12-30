@@ -5,12 +5,13 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
+
 class Notification extends Model
 {
     use HasFactory;
 
     public $timestamps = false;
-    protected $table = 'posts';
+    protected $table = 'notifications';
 
     protected $casts = [
         'created_at' => 'datetime',

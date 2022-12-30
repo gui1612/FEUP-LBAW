@@ -62,6 +62,10 @@ class User extends AuthUser {
         return $this->hasMany(Follow::class, 'owner_id', 'id');
     }
 
+    public function notifications() {
+        return $this->hasMany(Notification::class, 'receiver_id', 'id');
+    }
+
     public function is_deleted() {
         return is_null($this->email);
     }
