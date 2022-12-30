@@ -16,9 +16,9 @@ class Forum extends Model
         'created_at' => 'datetime',
     ];
 
-    public function owner()
+    public function owners()
     {
-        return $this->belongsTo(User::class, 'owner_id');
+        return $this->belongsToMany(User::class, 'owner_id', 'id');
     }
 
     public function posts()

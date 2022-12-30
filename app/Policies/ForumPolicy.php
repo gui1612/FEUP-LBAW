@@ -19,4 +19,9 @@ class ForumPolicy
     {
         return true;
     }
+
+    public function create(User $user)
+    {
+        return true;
+    }
 }

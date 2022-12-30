@@ -75,4 +75,5 @@ Route::post('/forums/management', 'ForumOwnerController@promote')->name('forum.m
 Route::delete('/forums/management', 'ForumOwnerController@demote')->name('forum.management.demote');
 
 //Forums
+Route::get('/forums/new', 'ForumController@show_create_forum_form')->name('forum.create');
 Route::get('/forums/{forum}', 'ForumController@show')->name('forum.show');
