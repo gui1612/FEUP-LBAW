@@ -13,8 +13,12 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
+use Spatie\LaravelMarkdown\Markdown;
 
 class PostController extends Controller {
+  public function __construct() {
+  }
+
   public function show_create_post_form() {
     $this->authorize('create', Post::class);
     return view('pages.create_post', ['new_post' => true]);
