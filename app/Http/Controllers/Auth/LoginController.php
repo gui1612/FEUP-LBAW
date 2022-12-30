@@ -80,19 +80,19 @@ class LoginController extends Controller
         return [$firstName, $lastName];
     }
 
-    public function redirectToGoogle() {
-        return Socialite::driver('google')->redirect();
+    public function redirectToProvider($provider) {
+        return Socialite::driver($provider)->redirect();
     }
 
-    public function handleGoogleCallback() {
+    public function handleProviderCallback($provider) {
         try {
-            $socialiteUser = Socialite::driver('google')->user();
+            $socialiteUser = Socialite::driver($provider)->user();
         } catch (\Exception $e) {
             return redirect()->route('login');
         }
     
         $user = User::where([
-            'provider' => 'google',
+            'provider' => $provider,
             'provider_id' => $socialiteUser->getId()
         ])->first();
 
@@ -117,7 +117,7 @@ class LoginController extends Controller
 
             $userData = [
                 'email' => $socialiteUser->getEmail(),
-                'provider' => 'google',
+                'provider' => $provider,
                 'provider_id' => $socialiteUser->getId(),
             ];
 
@@ -131,80 +131,6 @@ class LoginController extends Controller
             } else {
                 $emailParts = explode('@', $socialiteUser->getEmail());
                 $userData['username'] = $this->sanitizeUsername($emailParts[0]);
-            }
-
-            // Set the first name if it is not null
-            if ($firstName !== null) {
-                $userData['first_name'] = $firstName;
-            }
-
-            // Set the last name if it is not null
-            if ($lastName !== null) {
-                $userData['last_name'] = $lastName;
-            }
-
-            // Set the profile picture if it is not null
-            if ($socialiteUser->getAvatar() !== null) {
-                $userData['profile_picture'] = $socialiteUser->getAvatar();
-            }
-
-            $user = User::create($userData);
-        }
-
-        Auth::login($user);
-
-        return redirect()->route('feed.show');
-    }
-
-
-    public function redirectToGithub() {
-        return Socialite::driver('github')->redirect();
-    }
-
-    public function handleGithubCallback() {
-        try {
-            $socialiteUser = Socialite::driver('github')->user();
-        } catch (\Exception $e) {
-            return redirect()->route('login');
-        }
-    
-        $user = User::where([
-            'provider' => 'github',
-            'provider_id' => $socialiteUser->getId()
-        ])->first();
-
-        if (!$user) {
-
-            $validator = Validator::make(
-                [
-                    'email' => $socialiteUser->getEmail(), 
-                    'username' => $socialiteUser->getNickname()],
-                [
-                    'email' => ['unique:users,email'], 
-                    'username' => ['unique:users,username']],
-                [
-                    'email.unique' => 'Couldn\'t log in. Maybe you used a different login method', 
-                    'username.unique' => 'Couldn\'t log in. Maybe you used a different login method'
-                ]
-            );
-
-            if ($validator->fails()) {
-                return redirect()->route('login')->withErrors($validator);
-            }
-
-            $userData = [
-                'email' => $socialiteUser->getEmail(),
-                'provider' => 'github',
-                'provider_id' => $socialiteUser->getId(),
-            ];
-
-            $nameComponents = $this->splitFullName($socialiteUser->getName());
-            $firstName = $nameComponents[0];
-            $lastName = $nameComponents[1];
-
-            // Set the username if it is not null
-            if ($socialiteUser->getNickname() !== null) {
-                $userData['username'] = $this->sanitizeUsername($socialiteUser->getNickname());
             }
 
             // Set the first name if it is not null

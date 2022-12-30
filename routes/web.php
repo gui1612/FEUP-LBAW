@@ -19,11 +19,8 @@ use Laravel\Socialite\Facades\Socialite;
 */
 
 // OAuth
-Route::get('/auth/google/redirect', 'Auth\LoginController@redirectToGoogle');
-Route::get('/auth/google/callback', 'Auth\LoginController@handleGoogleCallback');
-
-Route::get('/auth/github/redirect', 'Auth\LoginController@redirectToGithub');
-Route::get('/auth/github/callback', 'Auth\LoginController@handleGithubCallback');
+Route::get('/auth/{provider}/redirect', 'Auth\LoginController@redirectToProvider');
+Route::get('/auth/{provider}/callback', 'Auth\LoginController@handleProviderCallback');
 
 // Home
 Route::get('/', 'FeedController@show')->name('feed.show');
