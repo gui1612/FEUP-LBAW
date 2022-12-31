@@ -5,6 +5,7 @@
 @php($paginator_int_posts = $user->rated_posts()->visible()->paginate(10))
 @php($paginator_comments = $user->comments()->visible()->paginate(10))
 
+
 @section('content')
 <div class="d-flex container m-3 px-0">
 
@@ -67,9 +68,11 @@
                             <h4 class="mb-2">Forums</h4>
                             <div class="d-flex justify-content-between text-start mt-4 mb-2">
                                 <ul class="list-unstyled">
-                                    <li>Forum 1</li>
-                                    <li>Forum 2</li>
-                                    <li>Forum 3</li>
+                                    @foreach ($forums_own as $forum)
+                                    <a href="{{ route('forum.show', ['forum'=>$forum]) }}" class="text-decoration-none">
+                                        <li> {{ $forum->name }}</li>
+                                    </a>
+                                    @endforeach
                                 </ul>
                             </div>
                         </div>
@@ -79,7 +82,7 @@
         </section>
     </div>
 
-    <div class="d-flex flex-column align-items-center mx-4 w-100">
+    <div class=" d-flex flex-column align-items-center mx-4 w-100">
         <!-- Tabs navs -->
         <ul class="nav nav-tabs nav-fill mb-3 flex justify-between" style="width: 100%;" role="tablist">
             <li class="nav-item" role="presentation">

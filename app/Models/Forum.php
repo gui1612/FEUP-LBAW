@@ -18,7 +18,7 @@ class Forum extends Model
 
     public function owners()
     {
-        return $this->belongsToMany(User::class, 'owner_id', 'id');
+        return $this->belongsToMany(User::class, 'forumowners', 'forum_id', 'owner_id');
     }
 
     public function posts()

@@ -16,56 +16,32 @@ class ForumOwnerController extends Controller
 
   public function show_forum_management(Forum $forum)
   {
-    $owners = ForumOwners::where('forum_id', $forum->id)->with('owners')->orderBy('owner_id')->paginate(20);
-    $followers = Follow::where('followed_forum_id', $forum->id)->with('owner')->orderBy('owner_id')->paginate(20);
+    $this->authorize('edit', $forum);
 
-    return view('pages.forum_management', ['forum' => $forum, 'paginator' => $owners, 'followers' => $followers]);
+    $owners = $forum->owners()->orderBy('id')->paginate(20);
+    $followers = $forum->followers()->orderBy('id')->paginate(20);
+
+    return view('pages.forum_management', ['forum' => $forum, 'owners' => $owners, 'followers' => $followers]);
   }
 
 
-  public function promote(Request $request)
+  public function promote(Forum $forum, User $user)
   {
-    $validated = $request->validate([
-      'id' => 'required|exists:App\Models\User,id',
-      'forum_id' => 'required|exists:App\Models\Forum,id'
-    ]);
+    $this->authorize('promote', $forum);
 
-    $user = User::find($validated['id']);
-    $forum = Forum::find($validated['forum_id']);
-    $this->authorize('promote', $user);
+    $forum->owners()->attach($user);
+    $forum->save();
 
-    $forumOwners = ForumOwners::create([
-      'owner_id' => $user->id,
-      'forum_id' => $forum->id,
-    ]);
-
-    $forum->refresh();
-
-    return [
-      'followers' => $forum->followers->count(),
-      'current' => $forumOwners,
-    ];
+    return redirect()->route('forum.management', ['forum' => $forum]);
   }
 
-  public function demote(Request $request)
+  public function demote(Forum $forum, User $user)
   {
-    $validated = $request->validate([
-      'id' => 'required|exists:App\Models\User,id',
-      'forum_id' => 'required|exists:App\Models\Forum,id'
-    ]);
+    $this->authorize('demote', $forum);
 
-    $user = User::find($validated['id']);
-    $forum = Forum::find($validated['forum_id']);
-    $this->authorize('demote', $user);
+    $forum->owners()->detach($user);
+    $forum->save();
 
-    ForumOwners::where('owner_id', $user->id)
-      ->where('forum_id', $forum->id)
-      ->delete();
-
-    $forum->refresh();
-
-    return [
-      'followers' => $forum->followers->count(),
-    ];
+    return redirect()->route('forum.management', ['forum' => $forum]);
   }
 }

@@ -23,7 +23,7 @@ INSERT INTO Forums (created_at, name, description, forum_picture, banner_picture
 
 INSERT INTO ForumOwners (forum_id, owner_id) VALUES (1,5);
 INSERT INTO ForumOwners (forum_id, owner_id) VALUES (2,10);
-INSERT INTO ForumOwners (forum_id, owner_id) VALUES (3,9);
+INSERT INTO ForumOwners (forum_id, owner_id) VALUES (3,5);
 
 INSERT INTO Posts (created_at, last_edited, title, body, rating, owner_id, forum_id, hidden) VALUES ('2022-07-23 10:45:48', '2022-08-15 06:55:54', 'I love my cats', 'I just wanted to share how much I love my cats, I don''t know, they''re so cute. They just like purr purr meow purr I wish I was a cat', 0, 6, 1, false);
 INSERT INTO Posts (created_at, last_edited, title, body, rating, owner_id, forum_id, hidden) VALUES ('2021-01-03 07:00:39', '2021-10-22 03:48:34', 'Alerta vermelho em Lisboa: Proteção Civil pede à população que fique em casa. Há várias estradas cortadas', 'Cuidado com as cheias, proteção civil pede alerta e atenção com o caos em Lisboa. Podem ler mais aqui: https://sicnoticias.pt/meteorologia/2022-12-13-Distrito-de-Lisboa-em-aviso-vermelho--veja-aqui-as-estradas-cortadas--66bc53d5', 0, 1, 2, false);

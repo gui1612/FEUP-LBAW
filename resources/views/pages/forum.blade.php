@@ -21,7 +21,7 @@
                             <h4 class="mb-2"> {{ $forum->name }} </h4>
 
                             @auth
-                            @if($forumOwners->contains('owner_id', Auth::user()->id))
+                            @can("edit", $forum)
                             <a href="{{ route('forum.management', ['forum'=>$forum->id]) }}" type="button" class="btn btn-primary d-flex gap-2">
                                 Manage Forum
                             </a>

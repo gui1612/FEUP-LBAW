@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\ForumOwners;
 use App\Models\Forum;
+use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 
@@ -18,9 +19,8 @@ class ForumController extends Controller
    */
   public function show(Forum $forum)
   {
-
-    //$this->authorize('view', $forum);
-    $forumOwners = ForumOwners::where('forum_id', $forum->id)->get();
+    $this->authorize('view', $forum);
+    $forumOwners = $forum->owners;
 
     return view('pages.forum', ['forum' => $forum, 'forumOwners' => $forumOwners]);
   }
@@ -30,6 +30,7 @@ class ForumController extends Controller
     $this->authorize('create', Forum::class);
 
     $forum = new Forum();
+
     return view('pages.create_forum', ['forum' => $forum]);
   }
 
@@ -40,29 +41,30 @@ class ForumController extends Controller
     $data = $request->validate([
       'name' => 'required|string|max:255',
       'description' => 'required|string',
-      'profile_images.*.file' => 'required|image|max:4096',
-      'banner_images.*.file' => 'required|image|max:4096',
+      'forum_picture' => 'sometimes|image|max:4096',
+      'banner_picture' => 'sometimes|image|max:4096',
     ]);
 
     $forum = new Forum();
-    $forum->name = $data['name'];
-    $forum->description = $data['description'];
 
-    if ($request->hasFile('profile_images')) {
-      $forum_picture = $request->file('profile_images');
-      $path = $forum_picture->store('public/forum_pictures');
-      $forum->forum_picture_path = $path;
+    if (isset($data['name'])) $forum->name = $data['name'];
+    if (isset($data['description'])) $forum->description = $data['description'];
+
+    if (isset($data['banner_picture'])) {
+      $banner_picture = $request->file('banner_picture');
+      $path = $banner_picture->store('images/forums/banners', 'public');
+      $forum->banner_picture = $path;
     }
 
-    if ($request->hasFile('banner_images')) {
-      $banner_picture = $request->file('banner_images');
-      $path = $banner_picture->store('public/banner_pictures');
-      $forum->banner_picture_path = $path;
+    if (isset($data['forum_picture'])) {
+      $forum_picture = $request->file('forum_picture');
+      $path = $forum_picture->store('images/forums', 'public');
+      $forum->forum_picture = $path;
     }
 
     $forum->save();
 
-
+    $forum->owners()->attach(Auth::user());
 
     return redirect()->route('forum.show', ['forum' => $forum]);
   }

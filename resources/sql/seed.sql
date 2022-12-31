@@ -242,7 +242,7 @@ EXECUTE PROCEDURE update_last_edited();
 CREATE OR REPLACE FUNCTION at_least_one_forum_owner() RETURNS TRIGGER AS
 $BODY$
 BEGIN
-  IF (SELECT count(*) AS num_owners FROM ForumOwners WHERE ForumOwners.forum_id = OLD.forum_id) > 1 THEN
+  IF NOT EXISTS (SELECT * FROM ForumOwners WHERE ForumOwners.forum_id = OLD.forum_id AND ForumOwners.owner_id <> OLD.owner_id) THEN
     RAISE EXCEPTION 'A forum must have at least one owner.';
   END IF;
   RETURN OLD;

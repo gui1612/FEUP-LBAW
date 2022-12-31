@@ -24,4 +24,19 @@ class ForumPolicy
     {
         return true;
     }
+
+    public function edit(User $user, Forum $target)
+    {
+        return $target->owners()->find($user->id);
+    }
+
+    public function promote(User $user, Forum $target)
+    {
+        return $target->owners()->find($user->id);
+    }
+
+    public function demote(User $user, Forum $target)
+    {
+        return $target->owners()->find($user->id);
+    }
 }

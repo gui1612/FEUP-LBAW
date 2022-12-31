@@ -15,7 +15,7 @@
       <img src="{{ $forum->getForumPictureOrDefaultUrl() }}" alt="{{ $forum->name }}'s profile picture" width="30" height="30" class="rounded-circle position-absolute">
     </div>
   </div>
-  <form method="POST" action="{{ route('forum.create_forum') }}" class="align-self-center px-5 gap-2">
+  <form method="POST" enctype="multipart/form-data" action="{{ route('forum.create_forum') }}" class="align-self-center px-5 gap-2">
     @csrf
     <label for="username-input" class="form-label pt-4">Forum:</label>
     <div class="input-group">

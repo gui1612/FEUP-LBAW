@@ -71,10 +71,13 @@ Route::delete('/forums/{forum}/unfollow', 'ForumFollowController@unfollow')->nam
 
 //Forum Management
 Route::get('/forums/{forum}/management', 'ForumOwnerController@show_forum_management')->name('forum.management');
-Route::post('/forums/management', 'ForumOwnerController@promote')->name('forum.management.promote');
-Route::delete('/forums/management', 'ForumOwnerController@demote')->name('forum.management.demote');
 
 //Forums
 Route::post('forums/', 'ForumController@create_forum')->name('forum.create_forum');
 Route::get('/forums/new', 'ForumController@show_create_forum_form')->name('forum.create');
 Route::get('/forums/{forum}', 'ForumController@show')->name('forum.show');
+
+Route::middleware([])->group(function () {
+  Route::post('/forums/{forum}/promote/{user}', 'ForumOwnerController@promote')->name('forum.management.promote');
+  Route::delete('/forums/{forum}/demote/{user}', 'ForumOwnerController@demote')->name('forum.management.demote');
+});
