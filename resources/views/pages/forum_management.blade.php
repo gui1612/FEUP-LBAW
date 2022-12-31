@@ -18,7 +18,9 @@
     </div>
   </div>
 
-  <div class="align-self-center px-5 gap-2">
+  <form method="POST" enctype="multipart/form-data" action="{{ route('forum.update', ['forum' => $forum]) }}" class="align-self-center px-5 gap-2">
+    @method('PUT')
+    @csrf
     <label for="username-input" class="form-label pt-4">Forum:</label>
     <div class="input-group">
       <div class="input-group-prepend">
@@ -45,8 +47,8 @@
     </div>
 
     <div id="edit-forum-picture">
-      <label for="forumInput" class="form-label pt-4">Forum Picture:</label>
-      <input id="forumInput" class="form-control @error('forum_picture') is-invalid @enderror" accept="image/*" type="file" name="forum_picture">
+      <label for="profileInput" class="form-label pt-4">Forum Picture:</label>
+      <input id="profileInput" class="form-control @error('forum_picture') is-invalid @enderror" accept="image/*" type="file" name="forum_picture">
       @error('forum_picture')
       <div class="invalid-feedback">
         {{ $message }}
@@ -65,7 +67,7 @@
     </div>
 
     <button type="submit" class="btn btn-primary mt-5">Update Forum</button>
-  </div>
+  </form>
 
   <section class="container-fluid mt-5 w-50">
     <div class="table-responsive">

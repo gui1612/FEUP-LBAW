@@ -24,7 +24,6 @@ class ForumOwnerController extends Controller
     return view('pages.forum_management', ['forum' => $forum, 'owners' => $owners, 'followers' => $followers]);
   }
 
-
   public function promote(Forum $forum, User $user)
   {
     $this->authorize('promote', $forum);

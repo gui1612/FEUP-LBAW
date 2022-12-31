@@ -3,21 +3,21 @@
 namespace App\Policies;
 
 use App\Models\User;
-use App\Models\ForumOwners;
+use App\Models\Forum;
 use Illuminate\Auth\Access\HandlesAuthorization;
 
 class ForumOwnersPolicy
 {
   use HandlesAuthorization;
 
-  public function before(User $user, $ability)
+  public function before(User $user)
   {
     if ($user->is_deleted()) {
       return false;
     }
   }
 
-  public function view(User $user, User $target)
+  public function view(Forum $forum)
   {
     return true;
   }

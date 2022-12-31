@@ -71,6 +71,7 @@ Route::delete('/forums/{forum}/unfollow', 'ForumFollowController@unfollow')->nam
 
 //Forum Management
 Route::get('/forums/{forum}/management', 'ForumOwnerController@show_forum_management')->name('forum.management');
+Route::put('forums/{forum}/update', 'ForumController@update')->name('forum.update');
 
 //Forums
 Route::post('forums/', 'ForumController@create_forum')->name('forum.create_forum');

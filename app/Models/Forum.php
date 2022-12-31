@@ -38,11 +38,11 @@ class Forum extends Model
 
     public function getForumPictureOrDefaultUrl()
     {
-        if (is_null($this->profile_picture)) {
+        if (is_null($this->forum_picture)) {
             return mix('images/defaults/user.png');
         }
 
-        return str_starts_with($this->profile_picture, 'http') ? $this->profile_picture : asset('/storage/' . $this->profile_picture);
+        return str_starts_with($this->forum_picture, 'http') ? $this->forum_picture : asset('/storage/' . $this->forum_picture);
     }
 
     public function getBannerPictureUrl()
