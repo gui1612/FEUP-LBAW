@@ -83,3 +83,6 @@ INSERT INTO Notifications (created_at, read, type, receiver_id, follow_id, comme
 INSERT INTO Notifications (created_at, read, type, receiver_id, follow_id, comment_id, report_id, rating_id) VALUES ('2022-07-27 12:52:26', false, 'follow_user', 10, 8, NULL, NULL, NULL);
 INSERT INTO Notifications (created_at, read, type, receiver_id, follow_id, comment_id, report_id, rating_id) VALUES ('2022-07-28 12:52:26', false, 'follow_user', 10, 9, NULL, NULL, NULL);
 INSERT INTO Notifications (created_at, read, type, receiver_id, follow_id, comment_id, report_id, rating_id) VALUES ('2022-07-28 12:52:26', false, 'content_rated', 10, NULL, NULL, NULL, 2);
+
+INSERT INTO Reports(created_at, reason, type, reporter_id, forum_id, post_id, comment_id) VALUES ('2022-07-26 12:52:26', 'This post has explicit content', 'post', 1, NULL, 3, NULL);
+INSERT INTO Reports(created_at, reason, type, reporter_id, forum_id, post_id, comment_id) VALUES ('2022-12-26 12:52:26', 'This post showed on my homepage, honestly I don''t like this kind of content, it''s slightly disturbing to me and I''d rather it was moderated. If you don''t delete this, at least add a NSFW tag with a blurry picture', 'post', 6, NULL, 5, NULL);

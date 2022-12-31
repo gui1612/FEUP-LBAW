@@ -303,7 +303,7 @@ DECLARE
   receivers VARCHAR;
   receiver RECORD;
 BEGIN
-  IF OLD.status <> 'approved' AND NEW.status = 'approved' THEN
+  IF OLD.state <> 'approved' AND NEW.state = 'approved' THEN
     IF NEW.type = 'post' THEN
       receivers := "SELECT owner_id FROM Posts WHERE id = NEW.post_id";
     ELSIF NEW.type = 'comment' THEN
@@ -331,13 +331,13 @@ CREATE TRIGGER notify_reported_content_owners
 CREATE OR REPLACE FUNCTION archive_reported_content_reports() RETURNS TRIGGER AS
 $BODY$
 BEGIN
-  IF OLD.status <> 'approved' AND NEW.status = 'approved' THEN
+  IF OLD.state <> 'approved' AND NEW.state = 'approved' THEN
     IF NEW.type = 'post' THEN
-      UPDATE Reports SET status = 'archived' WHERE post_id = NEW.post_id;
+      UPDATE Reports SET state = 'archived' WHERE post_id = NEW.post_id;
     ELSIF NEW.type = 'comment' THEN
-      UPDATE Reports SET status = 'archived' WHERE comment_id = NEW.comment_id;
+      UPDATE Reports SET state = 'archived' WHERE comment_id = NEW.comment_id;
     ELSIF NEW.type = 'forum' THEN
-      UPDATE Reports SET status = 'archived' WHERE forum_id = NEW.forum_id;
+      UPDATE Reports SET state = 'archived' WHERE forum_id = NEW.forum_id;
     END IF;
   END IF;
   RETURN NEW;
@@ -355,7 +355,7 @@ CREATE TRIGGER archive_reported_content_reports
 CREATE OR REPLACE FUNCTION hide_reported_content() RETURNS TRIGGER AS
 $BODY$
 BEGIN
-  IF OLD.status <> 'approved' AND NEW.status = 'approved' THEN
+  IF OLD.state <> 'approved' AND NEW.state = 'approved' THEN
     IF NEW.type = 'post' THEN
       UPDATE Posts SET hidden = TRUE WHERE id = NEW.post_id;
     ELSIF NEW.type = 'comment' THEN

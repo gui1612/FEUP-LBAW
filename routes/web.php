@@ -33,6 +33,8 @@ Route::put('user/{user}/edit', 'UserController@update')->name('editProfile')->wh
 // Administrationposts/
 Route::get('admin/users', 'AdminController@show_users')->name('admin.users');
 Route::get('admin/team', 'AdminController@show_team')->name('admin.team');
+Route::get('admin/reports', 'AdminController@show_reports')->name('admin.reports');
+Route::get('admin/reports/{report}', 'AdminController@show_report')->name('admin.reports.report');
 Route::post('admin/team', 'AdminController@promote')->name('admin.team.promote');
 Route::delete('admin/team/{admin}', 'AdminController@demote')->name('admin.team.demote');
 

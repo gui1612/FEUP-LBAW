@@ -26,7 +26,7 @@
                     @admin
                     <li class="nav-item"><a class="nav-link text-primary" href="{{ route('admin.team') }}">Manage Team</a></li>
                     <li class="nav-item"><a class="nav-link text-primary" href="{{ route('admin.users') }}">Manage Users</a></li>
-                    <li class="nav-item"><a class="nav-link text-primary" href="{{ route('admin.users') }}">Manage Reports</a></li>
+                    <li class="nav-item"><a class="nav-link text-primary" href="{{ route('admin.reports') }}">Manage Reports</a></li>
                     @endadmin
                     <li class="nav-item">
                         <a class="nav-link d-flex align-items-center" href="">
@@ -68,7 +68,7 @@
                         @admin
                         <li><a class="dropdown-item" href="{{ route('admin.team') }}">Manage Team</a></li>
                         <li><a class="dropdown-item" href="{{ route('admin.users') }}">Manage Users</a></li>
-                        <li><a class="dropdown-item" href="{{ route('admin.users') }}">Manage Reports</a></li>
+                        <li><a class="dropdown-item" href="{{ route('admin.reports') }}">Manage Reports</a></li>
                         @endadmin
                         <li><hr class="dropdown-divider"></li>
                         <li><a class="dropdown-item" href="{{ route('logout') }}">Logout</a></li>

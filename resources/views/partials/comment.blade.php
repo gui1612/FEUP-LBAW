@@ -1,7 +1,7 @@
 <section class="container d-flex flex-column">
     <div class="d-flex align-items-center justify-content-between">
         <div class="d-flex align-items-center gap-2">
-            @include('partials.user_info', ['user' => $comment->owner, 'clickable'=>True])
+            @include('partials.user_info', ['user' => $comment->owner])
             <span class="mt-1" style="font-weight: 300; font-size: 0.7em">{{ displayDate($comment->last_edited) }}</span>
         </div>
         @if(Auth::check() && ((Auth::user()->id == $comment->owner_id) || Auth::user()->is_admin))
