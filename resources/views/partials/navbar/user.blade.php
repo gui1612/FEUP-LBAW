@@ -14,26 +14,28 @@
             </div>
             <div class="offcanvas-body">
                 <ul class="navbar-nav justify-content-end flex-grow-1 pe-3 align-items-center">
-                <li class="nav-item">
-                    <a class="nav-link d-flex align-items-center" href="">
-                    <i class="d-none d-md-inline-block bi bi-plus me-1"></i>New Forum
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link d-flex align-items-center" href=" {{ route('post.create') }} ">
-                    <i class="d-none d-md-inline-block bi bi-plus me-1"></i>New Post
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a href="" class="btn btn-lg"><i class="bi bi-bell-fill"></i></a>
-                </li>
-                <li class="d-md-none nav-item">
-                    <a class="nav-link" href="{{ route('user.show', Auth::user()->id) }}">Profile</a>
-                </li>
-                <li><hr class="offcanvas-divider"></li>
-                <li class="d-md-none nav-item">
-                    <a class="nav-link" href="{{ route('logout') }}">Logout</a>
-                </li>
+                    <li class="nav-item">
+                        <a class="nav-link d-flex align-items-center" href="{{ route('forum.create') }}">
+                            <i class="d-none d-md-inline-block bi bi-plus me-1"></i>New Forum
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link d-flex align-items-center" href=" {{ route('post.create') }} ">
+                            <i class="d-none d-md-inline-block bi bi-plus me-1"></i>New Post
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="" class="btn btn-lg"><i class="bi bi-bell-fill"></i></a>
+                    </li>
+                    <li class="d-md-none nav-item">
+                        <a class="nav-link" href="{{ route('user.show', Auth::user()->id) }}">Profile</a>
+                    </li>
+                    <li>
+                        <hr class="offcanvas-divider">
+                    </li>
+                    <li class="d-md-none nav-item">
+                        <a class="nav-link" href="{{ route('logout') }}">Logout</a>
+                    </li>
                 </ul>
                 <div class="d-none d-md-flex dropdown mx-2 align-items-center">
                     <button class="dropdown-toggle btn p-0 border-0 d-flex align-items-center" href="#" data-bs-toggle="dropdown" aria-expanded="false">
@@ -41,7 +43,9 @@
                     </button>
                     <ul class="dropdown-menu dropdown-menu-end">
                         <li><a class="dropdown-item" href="{{ route('user.show', Auth::user()->id) }}">Your Profile</a></li>
-                        <li><hr class="dropdown-divider"></li>
+                        <li>
+                            <hr class="dropdown-divider">
+                        </li>
                         <li><a class="dropdown-item" href="{{ route('logout') }}">Logout</a></li>
                     </ul>
                 </div>

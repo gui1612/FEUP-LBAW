@@ -1,11 +1,14 @@
 import { onPostLike, onPostDislike } from './ratings';
 import { onUserFollow, onUserUnfollow } from './users';
+import { onForumFollow, onForumUnfollow } from './forums';
 
 const actions = {
     'ratings.like': onPostLike,
     'ratings.dislike': onPostDislike,
     'user.follow': onUserFollow,
     'user.unfollow': onUserUnfollow,
+    'forum.follow': onForumFollow,
+    'forum.unfollow': onForumUnfollow,    
 };
 
 const csrf = document.head.querySelector('meta[name="csrf-token"]')?.content;

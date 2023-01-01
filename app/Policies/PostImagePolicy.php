@@ -11,7 +11,8 @@ class PostImagePolicy
 {
     use HandlesAuthorization;
 
-    public function before(User $user, $ability) {
+    public function before(User $user, $ability)
+    {
         if ($user->is_deleted()) {
             return false;
         }
@@ -21,11 +22,13 @@ class PostImagePolicy
         }
     }
 
-    public function create(User $user) {
+    public function create(User $user)
+    {
         return true;
     }
 
-    public function delete(User $user, PostImage $image) {
+    public function delete(User $user, PostImage $image)
+    {
         if ($image->post->hidden) {
             return Response::denyAsNotFound();
         }
