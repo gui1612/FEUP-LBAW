@@ -1,3 +1,5 @@
+@php($notifications = Auth::user()->notifications()->orderBy('created_at', 'desc')->take(5)->get())
+
 <nav class="navbar navbar-expand-md bg-light">
     <div class="container-fluid">
         <a class="navbar-brand d-flex align-items-center" href="{{ route('feed.show') }}">
@@ -44,8 +46,9 @@
                                 <i class="bi bi-bell-fill"></i>
                             </button>
                             <ul class="dropdown-menu dropdown-menu-end">
-                                <li><a class="dropdown-item" href="">This is a small notification title</a></li>
-                                <li><a class="dropdown-item" href="">This is a very very long notification title, damn, so much notification</a></li>
+                                @foreach($notifications as $notif)
+                                    <li><a class="dropdown-item" href="{{ $notif->link() }}">{{ $notif->body() }}</a></li>
+                                @endforeach
                                 <li><hr class="dropdown-divider"></li>
                                 <li><a class="dropdown-item" href="{{ route('notifications.show_all') }}">View all</a></li>
                             </ul>
@@ -65,11 +68,6 @@
                     </button>
                     <ul class="dropdown-menu dropdown-menu-end">
                         <li><a class="dropdown-item" href="{{ route('user.show', Auth::user()->id) }}">Your Profile</a></li>
-                        @admin
-                        <li><a class="dropdown-item" href="{{ route('admin.team') }}">Manage Team</a></li>
-                        <li><a class="dropdown-item" href="{{ route('admin.users') }}">Manage Users</a></li>
-                        <li><a class="dropdown-item" href="{{ route('admin.reports') }}">Manage Reports</a></li>
-                        @endadmin
                         <li><hr class="dropdown-divider"></li>
                         <li><a class="dropdown-item" href="{{ route('logout') }}">Logout</a></li>
                     </ul>

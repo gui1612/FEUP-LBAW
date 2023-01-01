@@ -53,7 +53,10 @@
                 {{ displayDate($post->last_edited) }}</span>
         </div>
 
-        @include('partials.rating')
+        <div class="d-flex align-items-center gap-2 mt-2">
+            @include('partials.rating')
+            @include('partials.report', ['content'=>'post', 'post'=>$post])
+        </div>
 
         @auth
             <form method="POST" action="{{ route('post.comments.create', ['post'=>$post]) }}" class="d-flex flex-column align-items-end gap-3 pt-4" style="align-items: start"> 

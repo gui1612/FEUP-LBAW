@@ -22,7 +22,7 @@
                             <th scope="row">{{ $admin->id }}</th>
                             <td class="d-none d-md-table-cell">{{ $admin->first_name . ' ' . $admin->last_name }}</td>
                             
-                            <td>{{ $admin->username }}</td>
+                            <td><a href="{{ route('user.show', ['user'=>$admin]) }}" class="wt-hoverable">{{ $admin->username }}</a></td>
                             <td>{{ $admin->email }}</td>
                             <td>
                                 <form method="POST" action="{{ route('admin.team.demote', $admin->id) }}">

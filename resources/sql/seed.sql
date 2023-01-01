@@ -300,19 +300,23 @@ CREATE TRIGGER self_content_report
 CREATE OR REPLACE FUNCTION notify_reported_content_owners() RETURNS TRIGGER AS
 $BODY$
 DECLARE
-  receivers VARCHAR;
-  receiver RECORD;
+  receivers TEXT;
+  receiver INTEGER;
+  id INTEGER;
 BEGIN
   IF OLD.state <> 'approved' AND NEW.state = 'approved' THEN
     IF NEW.type = 'post' THEN
-      receivers := "SELECT owner_id FROM Posts WHERE id = NEW.post_id";
+      receivers := 'SELECT posts.owner_id FROM lbaw2264.posts WHERE posts.id = $1';
+      id := NEW.post_id;
     ELSIF NEW.type = 'comment' THEN
-      receivers := "SELECT owner_id FROM Comments WHERE id = NEW.comment_id";
+      receivers := 'SELECT comments.owner_id FROM lbaw2264.comments WHERE comments.id = $1';
+      id := NEW.comment_id;
     ELSIF NEW.type = 'forum' THEN
-      receivers := "SELECT ForumOwners.owner_id FROM ForumOwners WHERE ForumOwners.forum_id = NEW.forum_id";
+      receivers := 'SELECT forumowners.owner_id FROM lbaw2264.forumowners WHERE forumowners.forum_id = $1';
+      id := NEW.forum_id;
     END IF;
 
-    FOR receiver IN EXECUTE receivers LOOP
+    FOR receiver IN EXECUTE receivers USING id LOOP
       INSERT INTO Notifications(type, receiver_id, report_id) VALUES ('content_reported', receiver, NEW.id);
     END LOOP;
   END IF;

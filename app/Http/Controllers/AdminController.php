@@ -7,6 +7,7 @@ use App\Models\Report;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\Facades\Auth;
 
 class AdminController extends Controller
 {
@@ -60,12 +61,4 @@ class AdminController extends Controller
         return redirect()->back();
     }
 
-    public function show_reports() {
-        $reports = Report::where('archived', false)->orderBy('created_at')->paginate(20);
-        return view('pages.admin.reports', ['paginator'=>$reports]);
-    }
-
-    public function show_report(Report $report) {
-        return view('pages.admin.report', ['report'=>$report]);
-    }
 }

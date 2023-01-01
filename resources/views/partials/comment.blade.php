@@ -30,4 +30,11 @@
         </div>
     </form>
     <p id="comment-body" style="padding-left: 3rem">{{ $comment->body }}</p>
+    
+    <div class="d-flex align-items-center gap-2" style="padding-left: 3rem">
+        @include('partials.comment_rating')
+        @if($comment->owner != Auth::user())
+            @include('partials.report', ['content'=>'comment', 'comment'=>$comment])
+        @endif
+    </div>
 </section>

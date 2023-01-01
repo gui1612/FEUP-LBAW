@@ -17,5 +17,7 @@
 
     <span class="my-2" style="font-weight: 300">{{ displayDate($post->created_at) }}</span>
 
-    @include('partials.rating', $post)
+    <div class="d-flex mt-2">
+        @include('partials.rating', $post)
+    </div>
 </article>

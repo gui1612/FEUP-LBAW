@@ -37,4 +37,52 @@ class Notification extends Model
     public function rating() {
         return $this->belongsTo(Rating::class, 'rating_id');
     }
+
+    public function body() {
+        //'follow_user', 'post_comment', 'content_reported', 'content_rated'
+        if ($this->type == 'follow_user') {
+            return $this->follow->owner->username . ' started following you!';
+        } else if ($this->type == 'content_reported') {
+            return 'Someone just reported your content';
+        } else if ($this->type == 'post_comment') {
+            return $this->comment->owner->username . ' commented on your post';
+        } else if ($this->type == 'content_rated') {
+            if ($this->rating->type == 'like') {
+                if ($this->rating->post != NULL) {
+                    return $this->rating->owner->username . ' just liked your post';
+                } else {
+                    return $this->rating->owner->username . ' just liked your comment';
+                }
+            } else {
+                if ($this->rating->post != NULL) {
+                    return $this->rating->owner->username . ' just disliked your post';
+                } else {
+                    return $this->rating->owner->username . ' just disliked your comment';
+                }
+            }
+        }
+    }
+
+    public function link() {
+        if ($this->type == 'follow_user') {
+            return route('user.show', ['user'=>$this->follow->owner]);
+
+        } else if ($this->type == 'content_reported') {
+            if ($this->report->post != NULL) {
+                return route('post', ['post'=>$this->report->post]);
+            } else {
+                return route('post', ['post'=>$this->report->comment->post]);
+            }
+
+        } else if ($this->type == 'post_comment') {
+            return route('post', ['post'=>$this->comment->post]);
+
+        } else if ($this->type == 'content_rated') {
+            if ($this->rating->post != NULL) {
+                return route('post', ['post'=>$this->rating->post]);
+            } else {
+                return route('post', ['post'=>$this->rating->comment->post]);
+            }
+        }
+    }
 }
