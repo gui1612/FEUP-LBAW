@@ -7,6 +7,7 @@ use App\Models\User;
 use App\Models\Follow;
 use App\Models\Forum;
 use App\Models\ForumOwners;
+use GuzzleHttp\Psr7\Response;
 use Illuminate\Http\Request;
 
 
@@ -19,7 +20,18 @@ class ForumOwnerController extends Controller
     $this->authorize('edit', $forum);
 
     $owners = $forum->owners()->orderBy('id')->paginate(20);
-    $followers = $forum->followers()->orderBy('id')->paginate(20);
+    // $followers = $forum->followers()->getQuery()->orderBy('id')->paginate(20);
+
+    // Get the IDs of all forum owners
+    $ownerIds = $forum->owners()->pluck('id');
+
+    // Get the followers who are not forum owners
+    $followers = $forum->followers()
+                    ->whereNotIn('users.id', $ownerIds)
+                    ->orderBy('id')
+                    ->paginate(20);
+
+    // return response($followers);
 
     return view('pages.forum_management', ['forum' => $forum, 'owners' => $owners, 'followers' => $followers]);
   }

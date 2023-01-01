@@ -111,16 +111,16 @@
         </thead>
         <tbody>
           @foreach ($followers->items() as $follower)
-          <tr>
-            <td class="d-none d-md-table-cell">@ {{ $follower->owner->username }}</td>
+            <tr>
+                <td class="d-none d-md-table-cell">@ {{ $follower->username }}</td>
 
-            <td>
-              <form method="POST" action="{{ route('forum.management.promote', ['forum' => $forum, 'user' => $follower->owner]) }}">
-                @csrf
-                <button type="submit" class="btn btn-secondary d-flex gap-2"><i class="bi bi-arrow-up-circle"></i>Promote User</button>
-              </form>
-            </td>
-          </tr>
+                <td>
+                <form method="POST" action="{{ route('forum.management.promote', ['forum' => $forum, 'user' => $follower]) }}">
+                    @csrf
+                    <button type="submit" class="btn btn-secondary d-flex gap-2"><i class="bi bi-arrow-up-circle"></i>Promote User</button>
+                </form>
+                </td>
+            </tr>
           @endforeach
         </tbody>
       </table>

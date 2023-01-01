@@ -65,6 +65,8 @@ class ForumController extends Controller
 
     $forum->save();
 
+    $forum->followers()->attach(Auth::user());
+
     $forum->owners()->attach(Auth::user());
 
     return redirect()->route('forum.show', ['forum' => $forum]);

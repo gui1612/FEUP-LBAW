@@ -28,7 +28,8 @@ class Forum extends Model
 
     public function followers()
     {
-        return $this->hasMany(Follow::class, 'followed_forum_id', 'id');
+        // return $this->hasManyThrough(User::class, Follow::class, 'followed_forum_id', 'id', 'owner_id');
+        return $this->belongsToMany(User::class, 'follows', 'followed_forum_id', 'owner_id');
     }
 
     public function scopeVisible($query)
