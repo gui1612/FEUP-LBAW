@@ -13,7 +13,9 @@
         "fideloper/proxy": "^4.4",
         "fruitcake/laravel-cors": "^3.0",
         "laravel/framework": "^9.0",
-        "laravel/ui": "^4.0"
+        "laravel/socialite": "^5.5",
+        "laravel/ui": "^4.0",
+        "spatie/laravel-markdown": "^2.2"
     },
     "require-dev": {
         "spatie/laravel-ignition": "^1.0",
@@ -35,7 +37,8 @@
             "App\\": "app/",
             "Database\\Factories\\": "database/factories/",
             "Database\\Seeders\\": "database/seeders/"
-        }
+        },
+        "files": ["app/Helpers/date_helper.php"]
     },
     "autoload-dev": {
         "psr-4": {
