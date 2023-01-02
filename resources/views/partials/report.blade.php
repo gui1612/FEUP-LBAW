@@ -15,7 +15,7 @@
             <form method="POST" action="{{ route('post.report.new', ['post' => $post]) }}">
             @elseif($content == 'comment')
             <form method="POST" action="{{ route('comment.report.new', ['post' => $comment->post, 'comment' => $comment]) }}">
-            @elseif($content= 'forum')
+            @elseif($content == 'forum')
             <form method="POST" action="{{ route('forum.report.new', ['forum' => $forum]) }}">
             @endif
                 <div class="modal-body">

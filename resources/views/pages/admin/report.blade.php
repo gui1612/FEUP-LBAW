@@ -36,7 +36,7 @@
                 <i class="bi bi-arrow-right-circle"></i>
                 </a>
                 @elseif($report->forum != NULL)
-                <a href="{{ route('post', ['post'=>$report->forum]) }}" class="btn btn- d-flex align-items-center gap-2">View forum
+                <a href="{{ route('forum.show', ['forum'=>$report->forum]) }}" class="btn btn-primary d-flex align-items-center gap-2">View forum
                 <i class="bi bi-arrow-right-circle"></i>
                 </a>
                 @endif
