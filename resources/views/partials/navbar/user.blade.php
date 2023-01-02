@@ -25,6 +25,9 @@
             </div>
             <div class="offcanvas-body">
                 <ul class="navbar-nav justify-content-end flex-grow-1 pe-3 align-items-center">
+                    <li class="d-md-none nav-item">
+                        <a class="nav-link" href="{{ route('user.show', Auth::user()->id) }}">Profile</a>
+                    </li>
                     @admin
                     <li class="nav-item"><a class="nav-link text-primary" href="{{ route('admin.team') }}">Manage Team</a></li>
                     <li class="nav-item"><a class="nav-link text-primary" href="{{ route('admin.users') }}">Manage Users</a></li>
@@ -54,9 +57,7 @@
                             </ul>
                         </div>
                     </li>
-                    <li class="d-md-none nav-item">
-                        <a class="nav-link" href="{{ route('user.show', Auth::user()->id) }}">Profile</a>
-                    </li>
+
                     <li><hr class="offcanvas-divider"></li>
                     <li class="d-md-none nav-item">
                         <a class="nav-link" href="{{ route('logout') }}">Logout</a>

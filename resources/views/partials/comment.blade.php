@@ -1,11 +1,8 @@
 <section class="container d-flex flex-column">
     <div class="d-flex align-items-center justify-content-between">
-        <div class="d-flex align-items-center gap-2">
-            @include('partials.user_info', ['user' => $comment->owner])
-            <span class="mt-1" style="font-weight: 300; font-size: 0.7em">{{ displayDate($comment->last_edited) }}</span>
-        </div>
+        @include('partials.user_info', ['user' => $comment->owner])
         @if(Auth::check() && ((Auth::user()->id == $comment->owner_id) || Auth::user()->is_admin))
-            <div class="d-flex gap-1">
+            <div class="d-flex">
                 <button id="edit-comment-button" class="btn" action="onPencilClick()">
                     <i class="bi bi-pencil-fill"></i>
                 </button>
@@ -29,12 +26,16 @@
             <button type="button" id="edit-cancel-button" class="btn btn-danger">Cancel</button>
         </div>
     </form>
-    <p id="comment-body" style="padding-left: 3rem">{{ $comment->body }}</p>
-    
-    <div class="d-flex align-items-center gap-2" style="padding-left: 3rem">
-        @include('partials.comment_rating')
-        @if($comment->owner != Auth::user())
-            @include('partials.report', ['content'=>'comment', 'comment'=>$comment])
-        @endif
+    <div style="padding-left: 3rem">
+        <p id="comment-body">{{ $comment->body }}</p>
+        <span style="font-weight: 300">{{ displayDate($comment->last_edited) }}</span>
+
+        <div class="d-flex align-items-center gap-2 mt-2">
+            @include('partials.comment_rating')
+            @if($comment->owner != Auth::user())
+                @include('partials.report', ['content'=>'comment', 'comment'=>$comment])
+            @endif
+        </div>
     </div>
+    <hr>
 </section>

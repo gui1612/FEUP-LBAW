@@ -6,9 +6,9 @@
 @php($paginator_comments = $user->comments()->visible()->paginate(10))
 
 @section('content')
-    <div class="d-flex container m-3 px-0">
+    <div class="d-flex flex-column flex-md-row container m-3 px-0">
 
-        <div class="d-flex flex-column gap-3 mt-5">
+        <div class="d-flex flex-md-column gap-3 mt-5">
             <section style="background-color: #eee;">
                 <div class="container">
                     <div class="row d-flex justify-content-center">
@@ -81,7 +81,7 @@
             </section>
         </div>
 
-        <div class="d-flex flex-column align-items-center mx-4 w-100">
+        <div class="d-flex flex-column align-items-center mx-md-4 mt-3 mt-md-1 w-100">
            <!-- Tabs navs -->
             <ul class="nav nav-tabs nav-fill mb-3 flex justify-between" style="width: 100%;" role="tablist">
                 <li class="nav-item" role="presentation">
@@ -119,7 +119,11 @@
                     @foreach($paginator_int_posts->items() as $post)
                         @include('partials.post_preview', ['post' => $post, 'on_profile'=>false, 'clickable'=>true])
                     @endforeach
+                    @foreach($paginator_comments->items() as $comment)
+                        @include('partials.comment_preview', ['comment'=>$comment])
+                    @endforeach
                     {{ $paginator_int_posts }}
+                    {{ $paginator_comments }}
                 </div>
             </div>
             <!-- Tabs content -->

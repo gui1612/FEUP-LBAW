@@ -33,11 +33,11 @@
     <div class="d-flex flex-column gap-2 bg-white p-3 my-1">
         <div class="d-flex gap-2 align-items-center">
             <img src="{{ $notification->comment->owner->profile_picture_or_default_url() }}" width="30" height="30" class="rounded-circle">
-            <span style="font-weight: 600">{{ $notification->comment->owner->username }} commented on your post</span>
+            <span style="font-weight: 600">New comment</span>
             <span style="font-weight: 300">{{ date_format($notification->created_at, 'm-d') }}</span>
         </div>
         <div class="d-flex align-items-center">
-            <span>{{ $notification->body() }}</span>
+            <span>{{ $notification->comment->owner->username }} commented on your post: {{ Str::limit($notification->comment->body, 120) }}</span>
         </div>
     </div>
 </a>
@@ -48,7 +48,11 @@
         <div class="d-flex flex-column gap-2 bg-white p-3 my-1">
             <div class="d-flex gap-2 align-items-center">
                 <img src="{{ $notification->rating->owner->profile_picture_or_default_url() }}" width="30" height="30" class="rounded-circle">
-                <span style="font-weight: 600">{{ $notification->body() }}</span>
+                @if($notification->rating->type == 'like')
+                <span style="font-weight: 600">New like</span>
+                @else
+                <span style="font-weight: 600">New dislike</span>
+                @endif
                 <span style="font-weight: 300">{{ date_format($notification->created_at, 'm-d') }}</span>
             </div>
             <div class="d-flex align-items-center">

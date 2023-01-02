@@ -41,23 +41,23 @@ class Notification extends Model
     public function body() {
         //'follow_user', 'post_comment', 'content_reported', 'content_rated'
         if ($this->type == 'follow_user') {
-            return $this->follow->owner->username . ' started following you!';
+            return '@' . $this->follow->owner->username . ' started following you!';
         } else if ($this->type == 'content_reported') {
             return 'Someone just reported your content';
         } else if ($this->type == 'post_comment') {
-            return $this->comment->owner->username . ' commented on your post';
+            return '@' . $this->comment->owner->username . ' commented on your post';
         } else if ($this->type == 'content_rated') {
             if ($this->rating->type == 'like') {
                 if ($this->rating->post != NULL) {
-                    return $this->rating->owner->username . ' just liked your post';
+                    return '@' . $this->rating->owner->username . ' just liked your post';
                 } else {
-                    return $this->rating->owner->username . ' just liked your comment';
+                    return '@' . $this->rating->owner->username . ' just liked your comment';
                 }
             } else {
                 if ($this->rating->post != NULL) {
-                    return $this->rating->owner->username . ' just disliked your post';
+                    return '@' . $this->rating->owner->username . ' just disliked your post';
                 } else {
-                    return $this->rating->owner->username . ' just disliked your comment';
+                    return '@' . $this->rating->owner->username . ' just disliked your comment';
                 }
             }
         }
