@@ -19,9 +19,6 @@
     @csrf
     <label for="username-input" class="form-label pt-4">Forum:</label>
     <div class="input-group">
-      <div class="input-group-prepend">
-        <span class="input-group-text" id="basic-addon1">@</span>
-      </div>
       <input id="forum-input" type="text" name="name" class="form-control @error('name') is-invalid @enderror" placeholder="Name" value="{{ old('name') ?? $forum->name }}" aria-label="Name" aria-describedby="basic-addon1">
       @error('name')
       <div class="invalid-feedback">
