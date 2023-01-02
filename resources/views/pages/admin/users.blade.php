@@ -49,11 +49,29 @@
                                         </div>
                                     </div>
                                 @else
-                                    <form method="POST" action="{{ route('admin.team.promote') }}">
-                                        @csrf
-                                        <input type="hidden" name="id" value="{{ $user->id }}">
-                                        <button type="submit" class="btn btn-secondary d-flex gap-2"><i class="bi bi-arrow-up-circle"></i>Promote User</button>
-                                    </form>
+                                    <button type="button" class="btn btn-secondary d-flex gap-2" data-bs-toggle="modal" data-bs-target="#promotionWarningModal" data-wt-action="modals.admin.users.promote.open" data-wt-url="{{ route('admin.team.promote', $user) }}" data-wt-username="{{$user->username}}"><i class="bi bi-arrow-up-circle"></i>Promote User</button>
+                                    <!-- Modal -->
+                                    <div class="modal fade" id="promotionWarningModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                        <div class="modal-dialog">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h5 class="modal-title">Promote <span data-wt-signal="modals.admin.users.promote.username"></span></h5>
+                                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                </div>
+                                                <div class="modal-body">
+                                                    Are you sure you want to promote this user?
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">No</button>
+                                                    <form method="POST" data-wt-signal="modals.admin.users.promote.url:action">
+                                                        @csrf
+                                                        <input type="hidden" name="id" value="{{ $user->id }}">
+                                                        <button class="btn btn-danger" type="submit">Yes</button>
+                                                    </form>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
                                 @endif
                                 {{-- <form method="POST" action="{{ route('admin.user.delete', $user->id) }}">
                                     @csrf
