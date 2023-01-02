@@ -14,13 +14,28 @@ use Illuminate\Validation\Rule;
 class UserController extends Controller
 {
 
-  public function show_user(User $user)
+  public function show_user(Request $request, User $user)
   {
     $this->authorize('view', $user);
 
+    $validated = $request->validate([
+      'order' => 'sometimes|in:popularity,chronological'
+    ]);
+    
+    $order = $validated['order'] ?? 'popularity';
+    if ($order === 'chronological') {
+      $paginator_own = $user->posts()->visible()->orderBy('created_at', 'desc')->paginate(10);
+      $paginator_int_posts = $user->rated_posts()->orderBy('created_at', 'desc')->visible()->paginate(10);
+      $paginator_comments = $user->comments()->orderBy('created_at', 'desc')->visible()->paginate(10);
+    } else { 
+      $paginator_own = $user->posts()->visible()->orderBy('rating', 'desc')->paginate(10);
+      $paginator_int_posts = $user->rated_posts()->orderBy('rating', 'desc')->visible()->paginate(10);
+      $paginator_comments = $user->comments()->orderBy('rating', 'desc')->visible()->paginate(10);
+    }
+
     $forums_own = $user->getForumsOwn($user->id);
 
-    return view('pages.user', ['user' => $user, 'forums_own' => $forums_own]);
+    return view('pages.user', ['user' => $user, 'forums_own' => $forums_own, 'paginator_own' => $paginator_own, 'paginator_int_posts' => $paginator_int_posts, 'paginator_comments' => $paginator_comments]);
   }
 
   public function showEditForm(User $user)

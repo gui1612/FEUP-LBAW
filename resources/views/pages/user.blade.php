@@ -1,11 +1,6 @@
 @extends('layouts.app')
 @section('title', $user->username)
 
-@php($paginator_own = $user->posts()->visible()->paginate(10))
-@php($paginator_int_posts = $user->rated_posts()->visible()->paginate(10))
-@php($paginator_comments = $user->comments()->visible()->paginate(10))
-
-
 @section('content')
 <div class="d-flex container m-3 px-0">
 
@@ -100,23 +95,18 @@
 
         <!-- Tabs content -->
         <div class="tab-content w-100 d-flex flex-column">
+            <button class="dropdown-toggle btn d-flex gap-2 align-items-center bg-white ms-auto mb-3" data-bs-toggle="dropdown" aria-expanded="false">Sort By</button>
+            <ul class="dropdown-menu dropdown-menu-end">
+                <li><a class="dropdown-item" href="{{ route('user.show', [ 'user' => $user, 'order' => 'chronological' ]) }}">Chronological</a></li>
+                <li><a class="dropdown-item" href="{{ route('user.show', [ 'user' => $user, 'order' => 'popularity' ]) }}">Popularity</a></li>
+            </ul>
             <div class="tab-pane show active" id="personal_content" role="tabpanel" aria-labelledby="personal_content_tab">
-                <button class="dropdown-toggle btn d-flex gap-2 align-items-center bg-white ms-auto mb-3" data-bs-toggle="dropdown" aria-expanded="false">Sort By</button>
-                <ul class="dropdown-menu dropdown-menu-end">
-                    <li><a class="dropdown-item" href="{{ route('feed.show', [ 'order' => 'chronological' ]) }}">Chronological</a></li>
-                    <li><a class="dropdown-item" href="{{ route('feed.show', [ 'order' => 'popularity' ]) }}">Popularity</a></li>
-                </ul>
                 @foreach($paginator_own->items() as $post)
                 @include('partials.post_preview', ['on_profile'=>True])
                 @endforeach
                 {{ $paginator_own }}
             </div>
             <div class="tab-pane" id="interactions" role="tabpanel" aria-labelledby="interactions_tab">
-                <button class="dropdown-toggle btn d-flex gap-2 align-items-center bg-white ms-auto mb-3" data-bs-toggle="dropdown" aria-expanded="false">Sort By</button>
-                <ul class="dropdown-menu dropdown-menu-end">
-                    <li><a class="dropdown-item" href="{{ route('feed.show', [ 'order' => 'chronological' ]) }}">Chronological</a></li>
-                    <li><a class="dropdown-item" href="{{ route('feed.show', [ 'order' => 'popularity' ]) }}">Popularity</a></li>
-                </ul>
                 @foreach($paginator_int_posts->items() as $post)
                 @include('partials.post_preview', ['post' => $post, 'on_profile'=>false, 'clickable'=>true])
                 @endforeach
