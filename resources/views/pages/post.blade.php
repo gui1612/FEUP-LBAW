@@ -25,6 +25,7 @@
                     </div>
                     @endfor
                 </div>
+                @if($images->count() > 1)
                 <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleControls" data-bs-slide="prev">
                     <span class="carousel-control-prev-icon" aria-hidden="true"></span>
                     <span class="visually-hidden">Previous</span>
@@ -33,6 +34,7 @@
                     <span class="carousel-control-next-icon" aria-hidden="true"></span>
                     <span class="visually-hidden">Next</span>
                 </button>
+                @endif
             </div>
         @endif
         
@@ -50,10 +52,13 @@
         <div class="d-flex gap-4">
             <span class="mb-2">By 
                 <a href="{{ route('user.show', $post->owner) }}">{{ $post->owner->username }}</a> 
-                {{ displayDate($post->last_edited) }}</span>
+                <span style="font-weight: 300">{{ displayDate($post->last_edited) }}</span></span>
         </div>
 
-        @include('partials.rating')
+        <div class="d-flex align-items-center gap-2 mt-2">
+            @include('partials.rating')
+            @include('partials.report', ['content'=>'post', 'post'=>$post])
+        </div>
 
         @auth
             <form method="POST" action="{{ route('post.comments.create', ['post'=>$post]) }}" class="d-flex flex-column align-items-end gap-3 pt-4" style="align-items: start"> 

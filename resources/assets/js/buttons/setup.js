@@ -1,4 +1,5 @@
 import { onPostLike, onPostDislike } from './ratings';
+import { onCommentLike, onCommentDislike } from './ratings/comment';
 import { onUserFollow, onUserUnfollow } from './users';
 import { onForumFollow, onForumUnfollow } from './forums';
 import { onForumDemoteOpen, onForumPromoteOpen } from './forums/management';
@@ -9,6 +10,8 @@ const actions = {
     'ratings.dislike': onPostDislike,
     'user.follow': onUserFollow,
     'user.unfollow': onUserUnfollow,
+    'comment.like': onCommentLike,
+    'comment.dislike': onCommentDislike,
     'forum.follow': onForumFollow,
     'forum.unfollow': onForumUnfollow,    
     'modals.forum.demote.open': onForumDemoteOpen,    

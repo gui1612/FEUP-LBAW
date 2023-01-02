@@ -6,7 +6,7 @@
     <section class="container-fluid">
         <div class="table-responsive">
             <table class="table table-hover caption-top">
-                <caption>Administrators</caption>
+                <h3 class="py-3">Administrator Team</h3>
                 <thead>
                     <tr>
                         <th scope="col">#</th>
@@ -22,10 +22,13 @@
                             <th scope="row">{{ $admin->id }}</th>
                             <td class="d-none d-md-table-cell">{{ $admin->first_name . ' ' . $admin->last_name }}</td>
                             
-                            <td>{{ $admin->username }}</td>
+                            <td><a href="{{ route('user.show', ['user'=>$admin]) }}" class="wt-hoverable">{{ $admin->username }}</a></td>
                             <td>{{ $admin->email }}</td>
                             <td>
-                                <button type="button" class="btn btn-danger d-flex gap-2 demote-button" data-bs-toggle="modal" data-bs-target="#demotionWarningModal" data-wt-action="modals.admin.team.demote.open" data-wt-url="{{ route('admin.team.demote', $admin->id) }}" data-wt-username="{{$admin->username}}"><i class="bi bi-arrow-down-circle"></i>Demote User</button>
+                                <button type="button" class="btn btn-danger d-flex gap-2 demote-button align-items-center" data-bs-toggle="modal" data-bs-target="#demotionWarningModal" data-wt-action="modals.admin.team.demote.open" data-wt-url="{{ route('admin.team.demote', $admin->id) }}" data-wt-username="{{$admin->username}}">
+                                    <i class="bi bi-arrow-down-circle"></i>
+                                    <span class="d-none d-md-block">Demote Use</span>
+                                </button>
                                 <!-- Modal -->
                                 <div class="modal fade" id="demotionWarningModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
                                     <div class="modal-dialog">

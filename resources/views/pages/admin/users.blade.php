@@ -49,7 +49,10 @@
                             </div>
                         </div>
                         @else
-                        <button type="button" class="btn btn-secondary d-flex gap-2" data-bs-toggle="modal" data-bs-target="#promotionWarningModal" data-wt-action="modals.admin.users.promote.open" data-wt-url="{{ route('admin.team.promote', $user) }}" data-wt-username="{{$user->username}}"><i class="bi bi-arrow-up-circle"></i>Promote User</button>
+                        <button type="button" class="btn btn-secondary d-flex gap-2" data-bs-toggle="modal" data-bs-target="#promotionWarningModal" data-wt-action="modals.admin.users.promote.open" data-wt-url="{{ route('admin.team.promote', $user) }}" data-wt-username="{{$user->username}}">
+                            <i class="bi bi-arrow-up-circle"></i>
+                            <span class="d-none d-md-flex">Promote User</span>
+                        </button>
                         <!-- Modal -->
                         <div class="modal fade" id="promotionWarningModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
                             <div class="modal-dialog">

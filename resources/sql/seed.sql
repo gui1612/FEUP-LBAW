@@ -302,19 +302,23 @@ CREATE TRIGGER self_content_report
 CREATE OR REPLACE FUNCTION notify_reported_content_owners() RETURNS TRIGGER AS
 $BODY$
 DECLARE
-  receivers VARCHAR;
-  receiver RECORD;
+  receivers TEXT;
+  receiver INTEGER;
+  id INTEGER;
 BEGIN
-  IF OLD.status <> 'approved' AND NEW.status = 'approved' THEN
+  IF OLD.state <> 'approved' AND NEW.state = 'approved' THEN
     IF NEW.type = 'post' THEN
-      receivers := "SELECT owner_id FROM Posts WHERE id = NEW.post_id";
+      receivers := 'SELECT posts.owner_id FROM lbaw2264.posts WHERE posts.id = $1';
+      id := NEW.post_id;
     ELSIF NEW.type = 'comment' THEN
-      receivers := "SELECT owner_id FROM Comments WHERE id = NEW.comment_id";
+      receivers := 'SELECT comments.owner_id FROM lbaw2264.comments WHERE comments.id = $1';
+      id := NEW.comment_id;
     ELSIF NEW.type = 'forum' THEN
-      receivers := "SELECT ForumOwners.owner_id FROM ForumOwners WHERE ForumOwners.forum_id = NEW.forum_id";
+      receivers := 'SELECT forumowners.owner_id FROM lbaw2264.forumowners WHERE forumowners.forum_id = $1';
+      id := NEW.forum_id;
     END IF;
 
-    FOR receiver IN EXECUTE receivers LOOP
+    FOR receiver IN EXECUTE receivers USING id LOOP
       INSERT INTO Notifications(type, receiver_id, report_id) VALUES ('content_reported', receiver, NEW.id);
     END LOOP;
   END IF;
@@ -333,13 +337,13 @@ CREATE TRIGGER notify_reported_content_owners
 CREATE OR REPLACE FUNCTION archive_reported_content_reports() RETURNS TRIGGER AS
 $BODY$
 BEGIN
-  IF OLD.status <> 'approved' AND NEW.status = 'approved' THEN
+  IF OLD.state <> 'approved' AND NEW.state = 'approved' THEN
     IF NEW.type = 'post' THEN
-      UPDATE Reports SET status = 'archived' WHERE post_id = NEW.post_id;
+      UPDATE Reports SET state = 'archived' WHERE post_id = NEW.post_id;
     ELSIF NEW.type = 'comment' THEN
-      UPDATE Reports SET status = 'archived' WHERE comment_id = NEW.comment_id;
+      UPDATE Reports SET state = 'archived' WHERE comment_id = NEW.comment_id;
     ELSIF NEW.type = 'forum' THEN
-      UPDATE Reports SET status = 'archived' WHERE forum_id = NEW.forum_id;
+      UPDATE Reports SET state = 'archived' WHERE forum_id = NEW.forum_id;
     END IF;
   END IF;
   RETURN NEW;
@@ -357,7 +361,7 @@ CREATE TRIGGER archive_reported_content_reports
 CREATE OR REPLACE FUNCTION hide_reported_content() RETURNS TRIGGER AS
 $BODY$
 BEGIN
-  IF OLD.status <> 'approved' AND NEW.status = 'approved' THEN
+  IF OLD.state <> 'approved' AND NEW.state = 'approved' THEN
     IF NEW.type = 'post' THEN
       UPDATE Posts SET hidden = TRUE WHERE id = NEW.post_id;
     ELSIF NEW.type = 'comment' THEN
@@ -495,7 +499,9 @@ CREATE TRIGGER notify_liked_content_owner
 CREATE OR REPLACE FUNCTION update_user_rating() RETURNS TRIGGER AS
 $BODY$
 DECLARE
-  ratings RECORD; -- (post, user, post_rating, user_rep)
+  table_name TEXT;
+  content_id INTEGER;
+  user_id INTEGER;
   rating_diff INTEGER;
 BEGIN
 
@@ -516,11 +522,16 @@ BEGIN
         END IF;
       END IF;
 
-      SELECT NEW.rated_post_id AS post_id, Posts.owner_id AS user_id, Posts.rating AS post_rating, Users.reputation AS user_rep INTO ratings
-        FROM Posts JOIN Users
-        ON Posts.owner_id = Users.id
-        WHERE Posts.id = NEW.rated_post_id;
 
+      IF NEW.rated_post_id IS NOT NULL THEN
+        table_name := 'posts';
+        content_id := NEW.rated_post_id;
+        user_id := NEW.owner_id;
+      ELSE
+        table_name := 'comments';
+        content_id := NEW.rated_comment_id;
+        user_id := NEW.owner_id;
+      END IF;
     END IF;
       
     IF TG_OP = 'DELETE' THEN
@@ -530,19 +541,24 @@ BEGIN
         rating_diff := 1;
       END IF;
 
-      SELECT OLD.rated_post_id AS post_id, Posts.owner_id AS user_id, Posts.rating AS post_rating, Users.reputation AS user_rep INTO ratings
-        FROM Posts JOIN Users
-        ON Posts.owner_id = Users.id
-        WHERE Posts.id = OLD.rated_post_id;
+      IF OLD.rated_post_id IS NOT NULL THEN
+        table_name := 'posts';
+        content_id := OLD.rated_post_id;
+        user_id := OLD.owner_id;
+      ELSE
+        table_name := 'comments';
+        content_id := OLD.rated_comment_id;
+        user_id := OLD.owner_id;
+      END IF;
     END IF;
 
-  UPDATE Posts
-    SET rating = ratings.post_rating + rating_diff
-    WHERE id = ratings.post_id;
+  EXECUTE 'UPDATE ' || quote_ident(table_name) ||
+    ' SET rating = rating + $1
+    WHERE id = $2' USING rating_diff, content_id;
 
   UPDATE Users
-    SET reputation = ratings.user_rep + rating_diff
-    WHERE id = ratings.user_id;
+    SET reputation = reputation + rating_diff
+    WHERE id = user_id;
 
   -- FIXME: faltam comments
 

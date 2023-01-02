@@ -2,9 +2,9 @@
 @section('title', $user->username)
 
 @section('content')
-<div class="d-flex container m-3 px-0">
+<div class="d-flex flex-column flex-md-row container m-3 px-0">
 
-    <div class="d-flex flex-column gap-3 mt-5">
+    <div class="d-flex flex-md-column gap-3 mt-5">
         <section style="background-color: #eee;">
             <div class="container">
                 <div class="row d-flex justify-content-center">
@@ -77,40 +77,47 @@
         </section>
     </div>
 
-    <div class=" d-flex flex-column align-items-center mx-4 w-100">
-        <!-- Tabs navs -->
-        <ul class="nav nav-tabs nav-fill mb-3 flex justify-between" style="width: 100%;" role="tablist">
-            <li class="nav-item" role="presentation">
-                <a class="nav-link active" data-bs-toggle="tab" href="#personal_content" role="tab" aria-controls="personal_content_tab" aria-selected="true">
-                    Personal Content
-                </a>
-            </li>
-            <li class="nav-item" role="presentation">
-                <a class="nav-link" data-bs-toggle="tab" href="#interactions" role="tab" aria-controls="interactions_tab" aria-selected="false">
-                    Interactions
-                </a>
-            </li>
-        </ul>
-        <!-- Tabs navs -->
-
-        <!-- Tabs content -->
-        <div class="tab-content w-100 d-flex flex-column">
-            <button class="dropdown-toggle btn d-flex gap-2 align-items-center bg-white ms-auto mb-3" data-bs-toggle="dropdown" aria-expanded="false">Sort By</button>
-            <ul class="dropdown-menu dropdown-menu-end">
-                <li><a class="dropdown-item" href="{{ route('user.show', [ 'user' => $user, 'order' => 'chronological' ]) }}">Chronological</a></li>
-                <li><a class="dropdown-item" href="{{ route('user.show', [ 'user' => $user, 'order' => 'popularity' ]) }}">Popularity</a></li>
+        <div class="d-flex flex-column align-items-center mx-md-4 mt-3 mt-md-1 w-100">
+           <!-- Tabs navs -->
+            <ul class="nav nav-tabs nav-fill mb-3 flex justify-between" style="width: 100%;" role="tablist">
+                <li class="nav-item" role="presentation">
+                    <a class="nav-link active" data-bs-toggle="tab" href="#personal_content" role="tab" aria-controls="personal_content_tab" aria-selected="true">
+                        Personal Content
+                        </a>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <a class="nav-link" data-bs-toggle="tab" href="#interactions" role="tab" aria-controls="interactions_tab" aria-selected="false">
+                        Interactions
+                    </a>
+                </li>
             </ul>
-            <div class="tab-pane show active" id="personal_content" role="tabpanel" aria-labelledby="personal_content_tab">
-                @foreach($paginator_own->items() as $post)
-                @include('partials.post_preview', ['on_profile'=>True])
-                @endforeach
-                {{ $paginator_own }}
-            </div>
-            <div class="tab-pane" id="interactions" role="tabpanel" aria-labelledby="interactions_tab">
-                @foreach($paginator_int_posts->items() as $post)
-                @include('partials.post_preview', ['post' => $post, 'on_profile'=>false, 'clickable'=>true])
-                @endforeach
-                {{ $paginator_int_posts }}
+            <!-- Tabs navs -->
+            
+            <!-- Tabs content -->
+            <div class="tab-content w-100 d-flex flex-column">
+                <button class="dropdown-toggle btn d-flex gap-2 align-items-center bg-white ms-auto mb-3" data-bs-toggle="dropdown" aria-expanded="false">Sort By</button>
+                <ul class="dropdown-menu dropdown-menu-end">
+                    <li><a class="dropdown-item" href="{{ route('user.show', [ 'user' => $user, 'order' => 'chronological' ]) }}">Chronological</a></li>
+                    <li><a class="dropdown-item" href="{{ route('user.show', [ 'user' => $user, 'order' => 'popularity' ]) }}">Popularity</a></li>
+                </ul>
+                <div class="tab-pane show active" id="personal_content" role="tabpanel" aria-labelledby="personal_content_tab">
+
+                    @foreach($paginator_own->items() as $post)
+                        @include('partials.post_preview', ['on_profile'=>True])
+                    @endforeach
+                    {{ $paginator_own }}
+                </div>
+                <div class="tab-pane" id="interactions" role="tabpanel" aria-labelledby="interactions_tab">
+
+                    @foreach($paginator_int_posts->items() as $post)
+                        @include('partials.post_preview', ['post' => $post, 'on_profile'=>false, 'clickable'=>true])
+                    @endforeach
+                    @foreach($paginator_comments->items() as $comment)
+                        @include('partials.comment_preview', ['comment'=>$comment])
+                    @endforeach
+                    {{ $paginator_int_posts }}
+                    {{ $paginator_comments }}
+                </div>
             </div>
         </div>
         <!-- Tabs content -->

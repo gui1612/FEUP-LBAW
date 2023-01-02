@@ -19,4 +19,11 @@ class AdminPolicy
     public function demote(User $user, Admin $target) {
         return true;
     }
+
+    public function change_report_state(User $user) {
+        if ($user->is_admin) {
+            return true;
+        }
+        return false;
+    }
 }
