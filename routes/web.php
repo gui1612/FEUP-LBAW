@@ -92,6 +92,7 @@ Route::post('/notifications/{notification}', 'NotificationController@mark_as_rea
 // Reports
 Route::post('posts/{post}/report', 'ReportsController@post_report')->name('post.report.new');
 Route::post('posts/{post}/comment/{comment}/report', 'ReportsController@comment_report')->name('comment.report.new');
+Route::post('posts/{forum}/report', 'ReportsController@forum_report')->name('forum.report.new');
 Route::post('/forums/{forum}/follow', 'ForumFollowController@follow')->name('follow');
 Route::delete('/forums/{forum}/unfollow', 'ForumFollowController@unfollow')->name('unfollow');
 

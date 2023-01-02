@@ -18,8 +18,10 @@
                                 <img src=" {{ $forum->getBannerPictureUrl() }}" alt="{{ $forum->name . '\'s banner picture' }}" class="w-auto h-75" style="aspect-ratio: 16 / 9; object-fit: cover;">
                                 <img src=" {{ $forum->getForumPictureOrDefaultUrl() }}" alt="{{ $forum->name . '\'s picture' }}" class="rounded-circle img-fluid position-absolute" style="border: solid white 2px; width: 100px; top: 27%;">
                             </div>
-                            <h4 class="mb-2"> {{ $forum->name }} </h4>
-
+                            <div class="d-flex">
+                                <h4 class="mb-2"> {{ $forum->name }} </h4>
+                                @include('partials.report', ['content'=>'forum', 'post'=>$forum])
+                            </div>
                             @auth
                             @can("edit", $forum)
                             <a href="{{ route('forum.management', ['forum'=>$forum->id]) }}" type="button" class="btn btn-primary d-flex gap-2">
@@ -51,13 +53,13 @@
                     </div>
                 </div>
             </div>
-        </section>    
+        </section>
     </div>
 
     <div class="d-flex flex-column align-items-center mx-md-4 mt-3 mt-md-1 w-100">
         @if($paginator_own->items())
-            @foreach($paginator_own->items() as $post)
-            @include('partials.post_preview', ['on_profile'=>False])
+        @foreach($paginator_own->items() as $post)
+        @include('partials.post_preview', ['on_profile'=>False])
         @endforeach
         {{ $paginator_own }}
         @else

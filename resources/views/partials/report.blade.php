@@ -1,6 +1,6 @@
 @if(Auth::check())
 <button class="btn" title="Report this content" data-bs-toggle="modal" data-bs-target="#reportModal">
-    <i class="bi bi-flag text"></i>
+    <i class="bi bi-flag text mb-3"></i>
 </button>
 @endif
 
@@ -15,8 +15,9 @@
             <form method="POST" action="{{ route('post.report.new', ['post' => $post]) }}">
             @elseif($content == 'comment')
             <form method="POST" action="{{ route('comment.report.new', ['post' => $comment->post, 'comment' => $comment]) }}">
-            @endif 
-            {{-- TODO --}}
+            @elseif($content= 'forum')
+            <form method="POST" action="{{ route('forum.report.new', ['forum' => $forum]) }}">
+            @endif
                 <div class="modal-body">
                     Please state the reason for your report:
                     <textarea class="w-100" name="reason"></textarea>

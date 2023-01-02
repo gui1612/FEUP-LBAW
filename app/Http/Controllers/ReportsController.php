@@ -86,4 +86,23 @@ class ReportsController extends Controller {
         return $report;
         return redirect()->back();
     }
+
+    public function forum_report(Request $request, Forum $forum)
+    {
+        $this->authorize('view', $forum);
+        $this->authorize('create', Report::class);
+
+        $data = $request->validate([
+            'reason' => 'required|string|max:1000',
+        ]);
+
+        $report = new Report();
+        $report->reason = $data['reason'];
+        $report->type = 'forum';
+        $report->forum()->associate($forum);
+        $report->owner()->associate(Auth::user());
+        $report->save();
+
+        return redirect()->back();
+    }
 }
