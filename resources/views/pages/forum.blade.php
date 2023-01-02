@@ -6,16 +6,16 @@
 
 
 @section('content')
-<div class="d-flex container m-3 px-0">
+<div class="d-flex flex-column flex-md-row container m-3 px-0">
 
-    <div class="d-flex flex-column gap-3 mt-5">
+    <div class="d-flex flex-column gap-3 mt-md-5 mx-auto">
         <section style="background-color: #eee;">
             <div class="container">
                 <div class="row d-flex justify-content-center">
                     <div class="container rounded bg-white p-4" style="height: min-content">
                         <div class="card-body text-center d-flex flex-column align-items-center" style="width: min-content">
                             <div class="mt-3 mb-4 d-flex flex-column align-items-center position-relative" style="height: 16vh; width: auto">
-                                <img src=" {{ $forum->getBannerPictureUrl() }}" alt="{{ $forum->name . '\'s banner picture' }}" class="img-fluid" style="width: 100%; height: 75%; object-fit: cover;">
+                                <img src=" {{ $forum->getBannerPictureUrl() }}" alt="{{ $forum->name . '\'s banner picture' }}" class="w-auto h-75" style="aspect-ratio: 16 / 9; object-fit: cover;">
                                 <img src=" {{ $forum->getForumPictureOrDefaultUrl() }}" alt="{{ $forum->name . '\'s picture' }}" class="rounded-circle img-fluid position-absolute" style="border: solid white 2px; width: 100px; top: 27%;">
                             </div>
                             <h4 class="mb-2"> {{ $forum->name }} </h4>
@@ -51,45 +51,21 @@
                     </div>
                 </div>
             </div>
-        </section>
+        </section>    
     </div>
 
-    <div class="d-flex flex-column align-items-center mx-4">
-        <!-- Tabs navs -->
-        <ul class="nav nav-tabs nav-fill mb-3 flex justify-between" style="width: 100%;" role="tablist">
-            <li class="nav-item" role="presentation">
-                <a class="nav-link active" data-bs-toggle="tab" href="#personal_content" role="tab" aria-controls="personal_content_tab" aria-selected="true">
-                    <i class="bi bi-fire wt-icon-like"></i>
-                    Hot
-                </a>
-            </li>
-            <li class="nav-item" role="presentation">
-                <a class="nav-link" data-bs-toggle="tab" href="#interactions" role="tab" aria-controls="interactions_tab" aria-selected="false">
-                    <i class="bi bi-star-fill wt-icon-like"></i>
-                    Newest
-                </a>
-            </li>
-        </ul>
-        <!-- Tabs navs -->
-
-        <!-- Tabs content -->
-        <div class="tab-content" id="">
-            <div class="tab-pane show active" id="personal_content" role="tabpanel" aria-labelledby="personal_content_tab">
-                @if($paginator_own->items())
-                @foreach($paginator_own->items() as $post)
-                @include('partials.post_preview', ['on_profile'=>True])
-                @endforeach
-                {{ $paginator_own }}
-                @else
-                <p class="text-center">
-                    It is really empty in here...
-                    <i class="bi bi-heartbreak-fill wt-icon-like"></i>
-                </p>
-                @endif
-            </div>
-
-        </div>
-        <!-- Tabs content -->
+    <div class="d-flex flex-column align-items-center mx-md-4 mt-3 mt-md-1 w-100">
+        @if($paginator_own->items())
+            @foreach($paginator_own->items() as $post)
+            @include('partials.post_preview', ['on_profile'=>False])
+        @endforeach
+        {{ $paginator_own }}
+        @else
+        <p class="text-center">
+            It is really empty in here...
+            <i class="bi bi-heartbreak-fill wt-icon-like"></i>
+        </p>
+        @endif
     </div>
 </div>
 @endsection

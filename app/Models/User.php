@@ -104,4 +104,8 @@ class User extends AuthUser
 
         return $forums_own;
     }
+
+    public function forums() {
+        return $this->belongsToMany(Forum::class, 'forumowners', 'owner_id', 'forum_id');
+    }
 }

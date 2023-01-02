@@ -1,4 +1,4 @@
-@php($notifications = Auth::user()->notifications()->orderBy('created_at', 'desc')->take(5)->get())
+@php($notifications = Auth::user()->notifications()->where('read', 'false')->orderBy('created_at', 'desc')->take(5)->get())
 
 <nav class="navbar navbar-expand-md bg-light">
     <div class="container-fluid">
@@ -34,7 +34,7 @@
                     <li class="nav-item"><a class="nav-link text-primary" href="{{ route('admin.reports') }}">Manage Reports</a></li>
                     @endadmin
                     <li class="nav-item">
-                        <a class="nav-link d-flex align-items-center" href="">
+                        <a class="nav-link d-flex align-items-center" href="{{ route('forum.create') }}">
                         <i class="d-none d-md-inline-block bi bi-plus me-1"></i>New Forum
                         </a>
                     </li>
@@ -49,9 +49,13 @@
                                 <i class="bi bi-bell-fill"></i>
                             </button>
                             <ul class="dropdown-menu dropdown-menu-end">
+                                @if($notifications->count() > 0)
                                 @foreach($notifications as $notif)
                                     <li><a class="dropdown-item" href="{{ $notif->link() }}">{{ $notif->body() }}</a></li>
                                 @endforeach
+                                @else
+                                <span class="dropdown-item">No notifications pending</span>
+                                @endif
                                 <li><hr class="dropdown-divider"></li>
                                 <li><a class="dropdown-item" href="{{ route('notifications.show_all') }}">View all</a></li>
                             </ul>

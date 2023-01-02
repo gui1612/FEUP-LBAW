@@ -4,7 +4,7 @@
 
 @section('content')
     <section class="container-fluid">
-        <div class="container bg-white my-3 p-3">
+        <div class="container bg-white my-3 p-3 pb-4">
             <h3>Report</h3>
             <p>
                 Reported by: <a href="{{ route('user.show', ['user'=>$report->owner]) }}" class="wt-hoverable">{{ $report->owner->username }}</a>
@@ -26,13 +26,13 @@
             <p>{{ $report->reason }}</p>
 
             <h5>Actions</h5>
-            <div class="d-flex gap-3">
+            <div class="d-flex flex-md-row flex-column gap-3">
                 @if($report->post != NULL)
                 <a href="{{ route('post', ['post'=>$report->post]) }}" class="btn btn-primary d-flex align-items-center gap-2">View post
                 <i class="bi bi-arrow-right-circle"></i>
                 </a>
                 @elseif($report->comment != NULL)
-                <a href="{{ route('post', ['post'=>$report->comment->post]) }}" class="btn btn-primary d-flex align-items-center gap-2">View comment
+                <a href="{{ route('post', ['post'=>$report->comment->post]) }}" class="btn btn-primary d-flex align-items-center gap-2" style="width: max-content">View comment
                 <i class="bi bi-arrow-right-circle"></i>
                 </a>
                 @elseif($report->forum != NULL)
@@ -45,7 +45,7 @@
                 <form method="POST" action="{{ route('admin.reports.ongoing', ['report'=>$report]) }}">
                     @csrf
                     @method('PUT')
-                    <button class="d-flex gap-2 align-items-center btn btn-warning" type="submit" class="btn btn-primary">
+                    <button class="d-flex gap-2 align-items-center btn btn-warning" type="submit">
                         <i class="bi bi-exclamation-circle"></i>
                         Mark as Ongoing
                     </button>

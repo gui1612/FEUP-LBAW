@@ -22,7 +22,7 @@
                             <th scope="row">{{ $admin->id }}</th>
                             <td class="d-none d-md-table-cell">{{ $admin->first_name . ' ' . $admin->last_name }}</td>
                             
-                            <td><a href="{{ route('user.show', ['user'=>$admin]) }}" class="wt-hoverable">{{ $admin->username }}</a></td>
+                            <td><a href="{{ route('user.show', ['user'=>$admin]) }}" class="wt-hoverable text-decoration-none" style="color: var(--bs-gray-700)">{{ $admin->username }}</a></td>
                             <td>{{ $admin->email }}</td>
                             <td>
                                 <button type="button" class="btn btn-danger d-flex gap-2 demote-button align-items-center" data-bs-toggle="modal" data-bs-target="#demotionWarningModal" data-wt-action="modals.admin.team.demote.open" data-wt-url="{{ route('admin.team.demote', $admin->id) }}" data-wt-username="{{$admin->username}}">

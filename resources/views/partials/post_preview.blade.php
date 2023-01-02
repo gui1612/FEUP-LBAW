@@ -17,7 +17,15 @@
     @endif
     @include('partials.post_body', ['preview'=>True])
 
-    <span class="my-2" style="font-weight: 300">{{ displayDate($post->created_at) }}</span>
+    <div class="d-flex align-items-center gap-1">
+        <span class="my-2" style="font-weight: 300">{{ displayDate($post->created_at) }}</span>
+        @if($on_profile)
+        <i class="bi bi-dot"></i>
+        <span>on
+            <a class="text-decoration-none wt-hoverable" href="{{ route('forum.show', ['forum'=>$post->forum]) }}">{{ $post->forum->name }}</a>
+        </span>
+        @endif
+    </div>
 
     <div class="d-flex mt-2">
         @include('partials.rating', $post)

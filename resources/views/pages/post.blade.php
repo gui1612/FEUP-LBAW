@@ -50,9 +50,10 @@
         @include('partials.post_body')
 
         <div class="d-flex gap-4">
-            <span class="mb-2">By 
+            <span class="mb-2 d-flex gap-2">By 
                 <a href="{{ route('user.show', $post->owner) }}">{{ $post->owner->username }}</a> 
-                <span style="font-weight: 300">{{ displayDate($post->last_edited) }}</span></span>
+                <span style="font-weight: 300">{{ displayDate($post->last_edited) }}</span>
+            </span>
         </div>
 
         <div class="d-flex align-items-center gap-2 mt-2">

@@ -1,5 +1,5 @@
 @if(Auth::check() && ($post->owner_id == Auth::user()->id))
-    <button class="btn d-flex align-items-center gap-2 bg-white m-2 me-4" style="width: min-content" data-bs-toggle="dropdown" aria-expanded="false">
+    <button class="ms-auto btn d-flex align-items-center gap-2 bg-white m-2 me-4" style="width: min-content" data-bs-toggle="dropdown" aria-expanded="false">
         <i class="bi bi-three-dots-vertical"></i>
         <span class="visually-hidden">Options</span>
     </button>

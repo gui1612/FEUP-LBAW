@@ -4,15 +4,15 @@
 @section('content')
 <div class="d-flex flex-column flex-md-row container m-3 px-0">
 
-    <div class="d-flex flex-md-column gap-3 mt-5">
+    <div class="d-flex flex-column gap-3 mt-md-5 mx-auto">
         <section style="background-color: #eee;">
             <div class="container">
                 <div class="row d-flex justify-content-center">
                     <div class="container rounded bg-white p-4" style="height: min-content">
                         <div class="card-body text-center d-flex flex-column align-items-center" style="width: min-content">
                             <div class="mt-3 mb-4 d-flex flex-column align-items-center position-relative" style="height: 16vh; width: 100%">
-                                <img src=" {{ $user->banner_picture_url() }}" alt="{{ $user->username . '\'s banner picture' }}" class="img-fluid" style="width: 100%; height: 75%; object-fit: cover;">
-                                <img src=" {{ $user->profile_picture_or_default_url() }}" alt="{{ $user->username . '\'s banner picture' }}" class="rounded-circle img-fluid position-absolute" style="border: solid white 2px; width: 100px; top: 27%;">
+                                <img src=" {{ $user->banner_picture_url() }}" alt="{{ $user->username . '\'s banner picture' }}" class="w-auto h-75" style="aspect-ratio: 16 / 9; object-fit: cover;">
+                                <img src=" {{ $user->profile_picture_or_default_url() }}" alt="{{ $user->username . '\'s picture' }}" class="rounded-circle img-fluid position-absolute" style="border: solid white 2px; width: 100px; top: 27%;">
                             </div>
                             <h4 class="mb-2"> {{ $user->username }} </h4>
                             <p class="text-muted mb-4"> {{ '@' . $user->username }} <span class="mx-2"></span> </p>
@@ -48,25 +48,29 @@
                                     <p class="text-muted mb-0">Followers</p>
                                 </div>
                             </div>
-                            <p class="my-3"> {{ $user->bio }} </p>
+                            <p class="mt-3"> {{ $user->bio }} </p>
                         </div>
                     </div>
                 </div>
             </div>
         </section>
 
+        @if($user->forums->count() > 0)
         <section style="background-color: #eee;">
-            <div class="container">
+            <div class="container mb-2 mb-md-0">
                 <div class="row d-flex justify-content-center">
-                    <div class="container rounded bg-white p-4" style="height: min-content">
-                        <div class="card-body text-center" style="width: min-content">
-                            <h4 class="mb-2">Forums</h4>
+                    <div class="container rounded bg-white pt-4" style="height: min-content">
+                        <div class="card-body" style="width: min-content">
+                            <h4 class="mb-2 ms-2">Forums</h4>
                             <div class="d-flex justify-content-between text-start mt-4 mb-2">
                                 <ul class="list-unstyled">
-                                    @foreach ($forums_own as $forum)
-                                    <a href="{{ route('forum.show', ['forum'=>$forum]) }}" class="text-decoration-none">
-                                        <li> {{ $forum->name }}</li>
-                                    </a>
+                                    @foreach ($user->owned_forums as $forum)
+                                    <li class="ms-2 mb-3">
+                                        <a href="{{ route('forum.show', ['forum'=>$forum]) }}" class="d-flex align-items-center gap-2 text-decoration-none wt-hoverable" style="color: var(--bs-gray-700)">
+                                            <img src="{{ $forum->getForumPictureOrDefaultUrl() }}" width="35" height="35" class="rounded-circle">
+                                            {{ $forum->name }}
+                                        </a>
+                                    </li>
                                     @endforeach
                                 </ul>
                             </div>
@@ -75,52 +79,65 @@
                 </div>
             </div>
         </section>
+        @endif
     </div>
 
-        <div class="d-flex flex-column align-items-center mx-md-4 mt-3 mt-md-1 w-100">
-           <!-- Tabs navs -->
-            <ul class="nav nav-tabs nav-fill mb-3 flex justify-between" style="width: 100%;" role="tablist">
-                <li class="nav-item" role="presentation">
-                    <a class="nav-link active" data-bs-toggle="tab" href="#personal_content" role="tab" aria-controls="personal_content_tab" aria-selected="true">
-                        Personal Content
-                        </a>
-                </li>
-                <li class="nav-item" role="presentation">
-                    <a class="nav-link" data-bs-toggle="tab" href="#interactions" role="tab" aria-controls="interactions_tab" aria-selected="false">
-                        Interactions
-                    </a>
-                </li>
+    <div class="d-flex flex-column align-items-center mx-md-4 mt-3 mt-md-1 w-100">
+        <!-- Tabs navs -->
+        <ul class="nav nav-tabs nav-fill mb-3 flex justify-between" style="width: 100%;" role="tablist">
+            <li class="nav-item" role="presentation">
+                <a class="nav-link active" data-bs-toggle="tab" href="#personal_content" role="tab" aria-controls="personal_content_tab" aria-selected="true">
+                    Personal Content
+                </a>
+            </li>
+            <li class="nav-item" role="presentation">
+                <a class="nav-link" data-bs-toggle="tab" href="#interactions" role="tab" aria-controls="interactions_tab" aria-selected="false">
+                    Interactions
+                </a>
+            </li>
+        </ul>
+        <!-- Tabs navs -->
+        
+        <!-- Tabs content -->
+        <div class="tab-content w-100 d-flex flex-column">
+            <button class="dropdown-toggle btn d-flex gap-2 align-items-center bg-white ms-auto mb-3" data-bs-toggle="dropdown" aria-expanded="false">Sort By</button>
+            <ul class="dropdown-menu dropdown-menu-end">
+                <li><a class="dropdown-item" href="{{ route('user.show', [ 'user' => $user, 'order' => 'chronological' ]) }}">Chronological</a></li>
+                <li><a class="dropdown-item" href="{{ route('user.show', [ 'user' => $user, 'order' => 'popularity' ]) }}">Popularity</a></li>
             </ul>
-            <!-- Tabs navs -->
-            
-            <!-- Tabs content -->
-            <div class="tab-content w-100 d-flex flex-column">
-                <button class="dropdown-toggle btn d-flex gap-2 align-items-center bg-white ms-auto mb-3" data-bs-toggle="dropdown" aria-expanded="false">Sort By</button>
-                <ul class="dropdown-menu dropdown-menu-end">
-                    <li><a class="dropdown-item" href="{{ route('user.show', [ 'user' => $user, 'order' => 'chronological' ]) }}">Chronological</a></li>
-                    <li><a class="dropdown-item" href="{{ route('user.show', [ 'user' => $user, 'order' => 'popularity' ]) }}">Popularity</a></li>
-                </ul>
-                <div class="tab-pane show active" id="personal_content" role="tabpanel" aria-labelledby="personal_content_tab">
+            <div class="tab-pane show active" id="personal_content" role="tabpanel" aria-labelledby="personal_content_tab">
 
-                    @foreach($paginator_own->items() as $post)
-                        @include('partials.post_preview', ['on_profile'=>True])
-                    @endforeach
-                    {{ $paginator_own }}
+                @if($paginator_own->total() > 0)
+                @foreach($paginator_own->items() as $post)
+                    @include('partials.post_preview', ['on_profile'=>True])
+                @endforeach
+                @else
+                <div class="w-100 text-center">
+                    <span>This user has no posts</span>
                 </div>
-                <div class="tab-pane" id="interactions" role="tabpanel" aria-labelledby="interactions_tab">
+                @endif
 
-                    @foreach($paginator_int_posts->items() as $post)
-                        @include('partials.post_preview', ['post' => $post, 'on_profile'=>false, 'clickable'=>true])
-                    @endforeach
-                    @foreach($paginator_comments->items() as $comment)
-                        @include('partials.comment_preview', ['comment'=>$comment])
-                    @endforeach
-                    {{ $paginator_int_posts }}
-                    {{ $paginator_comments }}
+                {{ $paginator_own }}
+            </div>
+            <div class="tab-pane" id="interactions" role="tabpanel" aria-labelledby="interactions_tab">
+
+                @if($paginator_int_posts->total() > 0 || $paginator_comments > 0)
+                @foreach($paginator_int_posts->items() as $post)
+                    @include('partials.post_preview', ['post' => $post, 'on_profile'=>false, 'clickable'=>true])
+                @endforeach
+                @foreach($paginator_comments->items() as $comment)
+                    @include('partials.comment_preview', ['comment'=>$comment])
+                @endforeach
+                @else
+                <div class="w-100 text-center">
+                    <span>This user has not interacted with any content</span>
                 </div>
+                @endif
+
+                {{ $paginator_int_posts }}
+                {{ $paginator_comments }}
             </div>
         </div>
-        <!-- Tabs content -->
     </div>
 </div>
 @endsection

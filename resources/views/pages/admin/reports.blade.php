@@ -37,7 +37,7 @@
                             </td>
                             <td class="d-none d-md-table-cell">{{ Str::limit($report->reason, 120) }}</td>
                             <td>
-                                <a href="{{ route('admin.reports.report', ['report'=>$report]) }}" class="btn btn-primary d-flex align-items-center gap-2">
+                                <a href="{{ route('admin.reports.report', ['report'=>$report]) }}" class="btn btn-primary d-flex align-items-center gap-2" style="width: max-content">
                                     <span class="d-none d-md-block">See details</span>
                                     <i class="bi bi-arrow-right-circle"></i>
                                 </a>

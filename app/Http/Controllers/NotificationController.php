@@ -20,20 +20,23 @@ class NotificationController extends Controller {
 
   public function show_all() {
     $user = Auth::user();
-    $notifications = $user->notifications()->orderBy('created_at', 'desc');
+    $notifications = $user->notifications()->where('read', 'false')->orderBy('created_at', 'desc');
     return view('pages.notifications', ['paginator' => $notifications->paginate(20)]);
   }
 
   public function mark_as_read(Notification $notification) {
     $user = Auth::user();
     $this->authorize('update', $notification);
-    $notification->update(['read' => true]);
+    $notification->read = 'true';
+    $notification->save();
     return redirect()->back();
   }
 
-  public function mark_all_as_read(User $user) {
-    $this->authorize('update', $user);
-    $user->notifications()->update(['read' => true]);
+  public function mark_as_unread(Notification $notification) {
+    $user = Auth::user();
+    $this->authorize('update', $notification);
+    $notification->read = 'false';
+    $notification->save();
     return redirect()->back();
   }
 

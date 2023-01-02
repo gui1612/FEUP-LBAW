@@ -14,4 +14,8 @@ class NotificationPolicy
     public function view(User $user, Notification $notification) {
         return true;
     }
+
+    public function update(User $user, Notification $notification) {
+        return true;
+    }
 }
