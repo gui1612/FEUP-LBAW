@@ -165,9 +165,9 @@
     {{ $followers }}
   </section>
 
-    <button type="button" class="btn btn-danger  d-flex gap-2 align-self-center mb-2" data-bs-toggle="modal" data-bs-target="#promotionWarningModal" data-wt-action="modals.forum.delete.open" data-wt-url="{{ route('forum.delete', ['forum' => $forum]) }}" data-wt-forum_name="{{$forum->name}}"><i class="bi bi-trash"></i>Delete Forum</button>
+    <button type="button" class="btn btn-danger  d-flex gap-2 align-self-center mb-2" data-bs-toggle="modal" data-bs-target="#deletionWarningModal" data-wt-action="modals.forum.delete.open" data-wt-forum_name="{{$forum->name}}"><i class="bi bi-trash"></i>Delete Forum</button>
     <!-- Modal -->
-    <div class="modal fade" id="promotionWarningModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal fade" id="deletionWarningModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
         <div class="modal-header">
@@ -179,11 +179,11 @@
         </div>
         <div class="modal-footer">
             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">No</button>
-            <form method="POST" data-wt-signal="modals.forum.delete.open:action">
-            @csrf
-            @method('DELETE')
-            <input type="hidden" name="hidden" value="true">
-            <button class="btn btn-danger" type="submit" data-bs-toggle="modal" data-bs-target="#deletionWarningModal">Yes</button>
+            <form method="POST" action="{{ route('forum.delete', ['forum' => $forum]) }}">
+                @csrf
+                @method('DELETE')
+                <input type="hidden" name="hidden" value="true">
+                <button class="btn btn-danger" type="submit">Yes</button>
             </form>
         </div>
         </div>
