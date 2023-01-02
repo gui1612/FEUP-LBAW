@@ -25,7 +25,7 @@
                             <a href="{{ route('forum.management', ['forum'=>$forum->id]) }}" type="button" class="btn btn-primary d-flex gap-2">
                                 Manage Forum
                             </a>
-                            @elseif($forum->followers()->where('owner_id', Auth::user()->id)->first())
+                            @elsecan("unfollow", $forum)
                             <button class="btn btn-primary d-flex gap-2" data-wt-action="forum.unfollow" data-wt-forum-id="{{ $forum->id }}">
                                 <span>Unfollow</span>
                             </button>

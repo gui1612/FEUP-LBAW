@@ -26,30 +26,22 @@ class ForumFollowController extends Controller
   {
     $this->authorize('follow', $forum);
 
-    $user_id = Auth::id();
-
-    $follow = Follow::create([
-      'owner_id' => $user_id,
-      'followed_forum_id' => $forum->id,
-    ]);
-
-    $forum->refresh();
+    $forum->followers()->attach(Auth::id());
 
     return [
       'followers' => $forum->followers->count(),
-      'current' => $follow,
+      'current' => [
+        'owner_id' => Auth::id(),
+        'followed_forum_id' => $forum->id,
+      ],
     ];
   }
 
-  public function unfollow(Follow $follow, Forum $forum)
+  public function unfollow(Forum $forum)
   {
-    $this->authorize('follow', $forum);
+    $this->authorize('unfollow', $forum);
 
-    $user_id = Auth::id();
-    $follow = $forum->followers->where('owner_id', $user_id)->toQuery()->limit(1);
-    $follow->delete();
-
-    $forum->refresh();
+    $forum->followers()->detach(Auth::id());
 
     return [
       'followers' => $forum->followers->count(),

@@ -37,11 +37,11 @@ class Handler extends ExceptionHandler
      */
     public function register()
     {
-        $this->renderable(function (AccessDeniedHttpException $e, Request $request) {
-            if ($request->method() !== 'GET') {
-                Toasts::danger($e->getMessage(), Response::$statusTexts[$e->getStatusCode()]);
-                return redirect()->back(Response::HTTP_SEE_OTHER);
-            }
-        });
+        // $this->renderable(function (AccessDeniedHttpException $e, Request $request) {
+        //     if ($request->method() !== 'GET') {
+        //         Toasts::danger($e->getMessage(), Response::$statusTexts[$e->getStatusCode()]);
+        //         return redirect()->back(Response::HTTP_SEE_OTHER);
+        //     }
+        // });
     }
 }

@@ -38,19 +38,23 @@ function onClick({ type }) {
             });
         }
             
-        const data = await res.json();
-        if (res.ok) {
-            syncButton({
-                isFollowing: !!data.current,
-                button,
-            });
+        try {
+            const data = await res.json();
+            if (res.ok) {
+                syncButton({
+                    isFollowing: !!data.current,
+                    button,
+                });
 
-            signal(`forum.${forumId}.followers`).set(data.followers);
-        } else {
+                signal(`forum.${forumId}.followers`).set(data.followers);
+            } else {
+                throw new Error(data.message);
+            }
+        } catch (e) {
             createEphemeralToast({
                 level: 'danger',
                 title: 'Unexpected Error',
-                message: data.message,
+                message: e.message,
             });
 
             showEphemeralToasts();
