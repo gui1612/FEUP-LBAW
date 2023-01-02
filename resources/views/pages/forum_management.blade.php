@@ -85,11 +85,29 @@
             <td class="d-none pt-3 d-md-table-cell">@ {{ $owner->username }}</td>
 
             <td>
-              <form method="POST" action="{{ route('forum.management.demote', ['forum' => $forum, 'user' => $owner]) }}">
-                @csrf
-                @method('DELETE')
-                <button type="submit" class="btn btn-danger d-flex gap-2"><i class="bi bi-arrow-down-circle"></i>Demote User</button>
-              </form>
+                <button type="button" class="btn btn-danger d-flex gap-2" data-bs-toggle="modal" data-bs-target="#demotionWarningModal"><i class="bi bi-arrow-down-circle"></i>Demote User</button>
+                <!-- Modal -->
+                <div class="modal fade" id="demotionWarningModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="exampleModalLabel">Demote</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                Are you sure you want to demote this user?
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">No</button>
+                                <form method="POST" action="{{ route('admin.team.demote', $forum->id) }}">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button class="btn btn-danger" type="submit">Yes</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </td>
           </tr>
           @endforeach
