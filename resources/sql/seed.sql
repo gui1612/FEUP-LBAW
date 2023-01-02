@@ -380,41 +380,41 @@ CREATE TRIGGER hide_reported_content
   FOR EACH ROW
   EXECUTE PROCEDURE hide_reported_content();
 
----
+-- ---
 
-CREATE OR REPLACE FUNCTION hide_hidden_forum_posts() RETURNS TRIGGER AS
-$BODY$
-BEGIN
-  IF NOT OLD.hidden AND NEW.hidden THEN
-    UPDATE Posts SET hidden = TRUE WHERE forum_id = NEW.id;
-  END IF;
-  RETURN NEW;
-END
-$BODY$
-LANGUAGE plpgsql;
+-- CREATE OR REPLACE FUNCTION hide_hidden_forum_posts() RETURNS TRIGGER AS
+-- $BODY$
+-- BEGIN
+--   IF NOT OLD.hidden AND NEW.hidden THEN
+--     UPDATE Posts SET hidden = TRUE WHERE forum_id = NEW.id;
+--   END IF;
+--   RETURN NEW;
+-- END
+-- $BODY$
+-- LANGUAGE plpgsql;
 
-CREATE TRIGGER hide_hidden_forum_posts
-  BEFORE UPDATE ON Forums
-  FOR EACH ROW
-  EXECUTE PROCEDURE hide_hidden_forum_posts();
+-- CREATE TRIGGER hide_hidden_forum_posts
+--   BEFORE UPDATE ON Forums
+--   FOR EACH ROW
+--   EXECUTE PROCEDURE hide_hidden_forum_posts();
 
----
+-- ---
 
-CREATE OR REPLACE FUNCTION hide_hidden_post_comments() RETURNS TRIGGER AS
-$BODY$
-BEGIN
-  IF NOT OLD.hidden AND NEW.hidden THEN
-    UPDATE Comments SET hidden = TRUE WHERE post_id = NEW.id;
-  END IF;
-  RETURN NEW;
-END
-$BODY$
-LANGUAGE plpgsql;
+-- CREATE OR REPLACE FUNCTION hide_hidden_post_comments() RETURNS TRIGGER AS
+-- $BODY$
+-- BEGIN
+--   IF NOT OLD.hidden AND NEW.hidden THEN
+--     UPDATE Comments SET hidden = TRUE WHERE post_id = NEW.id;
+--   END IF;
+--   RETURN NEW;
+-- END
+-- $BODY$
+-- LANGUAGE plpgsql;
 
-CREATE TRIGGER hide_hidden_post_comments
-  BEFORE UPDATE ON Posts
-  FOR EACH ROW
-  EXECUTE PROCEDURE hide_hidden_post_comments();
+-- CREATE TRIGGER hide_hidden_post_comments
+--   BEFORE UPDATE ON Posts
+--   FOR EACH ROW
+--   EXECUTE PROCEDURE hide_hidden_post_comments();
 
 ---
 
