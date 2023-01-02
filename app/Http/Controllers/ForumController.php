@@ -118,4 +118,14 @@ class ForumController extends Controller
 
     return redirect()->route('forum.show', ['forum' => $forum]);
   }
+
+  public function delete(Forum $forum)
+  {
+    $this->authorize('delete', $forum);
+
+    $forum->hidden = true;
+    $forum->save();
+
+    return redirect()->route('feed.show')->with('success', 'Forum deleted successfully');
+  }
 }

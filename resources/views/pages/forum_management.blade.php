@@ -86,29 +86,29 @@
             <td class="d-none pt-3 d-md-table-cell">@ {{ $owner->username }}</td>
 
             <td>
-                <button type="button" class="btn btn-danger d-flex gap-2 demote-button" data-bs-toggle="modal" data-bs-target="#demotionWarningModal" data-wt-action="modals.forum.demote.open" data-wt-url="{{ route('forum.management.demote', ['forum' => $forum, 'user' => $owner]) }}" data-wt-username="{{$owner->username}}"><i class="bi bi-arrow-down-circle"></i>Demote User</button>
-                <!-- Modal -->
-                <div class="modal fade" id="demotionWarningModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                    <div class="modal-dialog">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <h5 class="modal-title">Demote <span data-wt-signal="modals.forum.demote.username"></span></h5>
-                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                            </div>
-                            <div class="modal-body">
-                                Are you sure you want to demote this user?
-                            </div>
-                            <div class="modal-footer">
-                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">No</button>
-                                <form method="POST" data-wt-signal="modals.forum.demote.url:action">
-                                    @csrf
-                                    @method('DELETE')
-                                    <button class="btn btn-danger" type="submit">Yes</button>
-                                </form>
-                            </div>
-                        </div>
+              <button type="button" class="btn btn-danger d-flex gap-2 demote-button" data-bs-toggle="modal" data-bs-target="#demotionWarningModal" data-wt-action="modals.forum.demote.open" data-wt-url="{{ route('forum.management.demote', ['forum' => $forum, 'user' => $owner]) }}" data-wt-username="{{$owner->username}}"><i class="bi bi-arrow-down-circle"></i>Demote User</button>
+              <!-- Modal -->
+              <div class="modal fade" id="demotionWarningModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                  <div class="modal-content">
+                    <div class="modal-header">
+                      <h5 class="modal-title">Demote <span data-wt-signal="modals.forum.demote.username"></span></h5>
+                      <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
+                    <div class="modal-body">
+                      Are you sure you want to demote this user?
+                    </div>
+                    <div class="modal-footer">
+                      <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">No</button>
+                      <form method="POST" data-wt-signal="modals.forum.demote.url:action">
+                        @csrf
+                        @method('DELETE')
+                        <button class="btn btn-danger" type="submit">Yes</button>
+                      </form>
+                    </div>
+                  </div>
                 </div>
+              </div>
             </td>
           </tr>
           @endforeach
@@ -130,39 +130,46 @@
         </thead>
         <tbody>
           @foreach ($followers->items() as $follower)
-            <tr>
-                <td class="d-none d-md-table-cell">@ {{ $follower->username }}</td>
+          <tr>
+            <td class="d-none d-md-table-cell">@ {{ $follower->username }}</td>
 
-                <td>
-                <button type="button" class="btn btn-secondary d-flex gap-2" data-bs-toggle="modal" data-bs-target="#promotionWarningModal" data-wt-action="modals.forum.promote.open" data-wt-url="{{ route('forum.management.promote', ['forum' => $forum, 'user' => $follower]) }}" data-wt-username="{{$follower->username}}"><i class="bi bi-arrow-up-circle"></i>Promote User</button>
-                <!-- Modal -->
-                <div class="modal fade" id="promotionWarningModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                    <div class="modal-dialog">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <h5 class="modal-title">Promote <span data-wt-signal="modals.forum.promote.username"></span></h5>
-                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                            </div>
-                            <div class="modal-body">
-                                Are you sure you want to promote this user?
-                            </div>
-                            <div class="modal-footer">
-                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">No</button>
-                                <form method="POST" data-wt-signal="modals.forum.promote.url:action">
-                                    @csrf
-                                    <button class="btn btn-danger" type="submit">Yes</button>
-                                </form>
-                            </div>
-                        </div>
+            <td>
+              <button type="button" class="btn btn-secondary d-flex gap-2" data-bs-toggle="modal" data-bs-target="#promotionWarningModal" data-wt-action="modals.forum.promote.open" data-wt-url="{{ route('forum.management.promote', ['forum' => $forum, 'user' => $follower]) }}" data-wt-username="{{$follower->username}}"><i class="bi bi-arrow-up-circle"></i>Promote User</button>
+              <!-- Modal -->
+              <div class="modal fade" id="promotionWarningModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                  <div class="modal-content">
+                    <div class="modal-header">
+                      <h5 class="modal-title">Promote <span data-wt-signal="modals.forum.promote.username"></span></h5>
+                      <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
+                    <div class="modal-body">
+                      Are you sure you want to promote this user?
+                    </div>
+                    <div class="modal-footer">
+                      <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">No</button>
+                      <form method="POST" data-wt-signal="modals.forum.promote.url:action">
+                        @csrf
+                        <button class="btn btn-danger" type="submit" data-bs-toggle="modal" data-bs-target="#demotionWarningModal">Yes</button>
+                      </form>
+                    </div>
+                  </div>
                 </div>
-                </td>
-            </tr>
+              </div>
+            </td>
+          </tr>
           @endforeach
         </tbody>
       </table>
     </div>
     {{ $followers }}
   </section>
+
+  <form method="POST" enctype="multipart/form-data" action="{{ route('forum.delete', ['forum' => $forum]) }}" class="align-self-center px-5">
+    @csrf
+    @method('DELETE')
+    <input type="hidden" name="hidden" value="true">
+    <button type="submit" class="btn btn-danger mt-0 mb-3" data-bs-toggle="modal" data-bs-target="#promotionWarningModal" data-wt-action="modals.forum.delete.open" data-wt-url="{{ route('forum.management.promote', ['forum' => $forum, 'user' => $follower]) }}" data-wt-username="{{$follower->username}}">Delete Forum</button>
+  </form>
 </div>
 @endsection
