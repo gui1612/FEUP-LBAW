@@ -6,7 +6,7 @@
         </div>
         @if(Auth::check() && ((Auth::user()->id == $comment->owner_id) || Auth::user()->is_admin))
             <div class="d-flex gap-1">
-                <button id="edit-comment-button" class="btn" action=onPencilClick()>
+                <button id="edit-comment-button" class="btn" action="onPencilClick()">
                     <i class="bi bi-pencil-fill"></i>
                 </button>
                 <form method="POST" action="{{ route('post.comments.delete', ['post'=>$post, 'comment'=>$comment]) }}">

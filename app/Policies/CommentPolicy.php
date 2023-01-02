@@ -117,4 +117,16 @@ class CommentPolicy
     {
         //
     }
+
+    public function rate(User $user, Comment $comment) {
+        if ($comment->hidden) {
+            return Response::denyAsNotFound();
+        }
+        
+        if ($comment->owner_id === $user->id) {
+            return Response::denyWithStatus(403, 'You cannot rate your own comment.');
+        }
+        
+        return true;
+    }
 }

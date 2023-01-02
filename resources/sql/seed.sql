@@ -497,7 +497,9 @@ CREATE TRIGGER notify_liked_content_owner
 CREATE OR REPLACE FUNCTION update_user_rating() RETURNS TRIGGER AS
 $BODY$
 DECLARE
-  ratings RECORD; -- (post, user, post_rating, user_rep)
+  table_name TEXT;
+  content_id INTEGER;
+  user_id INTEGER;
   rating_diff INTEGER;
 BEGIN
 
@@ -518,11 +520,16 @@ BEGIN
         END IF;
       END IF;
 
-      SELECT NEW.rated_post_id AS post_id, Posts.owner_id AS user_id, Posts.rating AS post_rating, Users.reputation AS user_rep INTO ratings
-        FROM Posts JOIN Users
-        ON Posts.owner_id = Users.id
-        WHERE Posts.id = NEW.rated_post_id;
 
+      IF NEW.rated_post_id IS NOT NULL THEN
+        table_name := 'posts';
+        content_id := NEW.rated_post_id;
+        user_id := NEW.owner_id;
+      ELSE
+        table_name := 'comments';
+        content_id := NEW.rated_comment_id;
+        user_id := NEW.owner_id;
+      END IF;
     END IF;
       
     IF TG_OP = 'DELETE' THEN
@@ -532,19 +539,24 @@ BEGIN
         rating_diff := 1;
       END IF;
 
-      SELECT OLD.rated_post_id AS post_id, Posts.owner_id AS user_id, Posts.rating AS post_rating, Users.reputation AS user_rep INTO ratings
-        FROM Posts JOIN Users
-        ON Posts.owner_id = Users.id
-        WHERE Posts.id = OLD.rated_post_id;
+      IF OLD.rated_post_id IS NOT NULL THEN
+        table_name := 'posts';
+        content_id := OLD.rated_post_id;
+        user_id := OLD.owner_id;
+      ELSE
+        table_name := 'comments';
+        content_id := OLD.rated_comment_id;
+        user_id := OLD.owner_id;
+      END IF;
     END IF;
 
-  UPDATE Posts
-    SET rating = ratings.post_rating + rating_diff
-    WHERE id = ratings.post_id;
+  EXECUTE 'UPDATE ' || quote_ident(table_name) ||
+    ' SET rating = rating + $1
+    WHERE id = $2' USING rating_diff, content_id;
 
   UPDATE Users
-    SET reputation = ratings.user_rep + rating_diff
-    WHERE id = ratings.user_id;
+    SET reputation = reputation + rating_diff
+    WHERE id = user_id;
 
   -- FIXME: faltam comments
 

@@ -53,6 +53,8 @@ Route::get('posts/{post}/edit', 'PostController@show_edit_post_form')->name('pos
 Route::post('posts/{post}/comments', 'PostCommentsController@create_comment')->name('post.comments.create');
 Route::put('posts/{post}/comments/{comment}', 'PostCommentsController@edit_comment')->name('post.comments.edit');
 Route::delete('posts/{post}/comments/{comment}', 'PostCommentsController@delete_comment')->name('post.comments.delete');
+Route::post('api/comments/{comment}/rating', 'CommentRatingController@save')->name('comment.like');
+Route::delete('api/comments/{comment}/rating', 'CommentRatingController@destroy')->name('comment.dislike');
 
 // Post Images
 Route::post('posts/{post}/images', 'PostImagesController@add_image')->name('post.images.add');
