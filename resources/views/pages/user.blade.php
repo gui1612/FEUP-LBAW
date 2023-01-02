@@ -121,7 +121,7 @@
             </div>
             <div class="tab-pane" id="interactions" role="tabpanel" aria-labelledby="interactions_tab">
 
-                @if($paginator_int_posts->total() > 0 || $paginator_comments > 0)
+                @if($paginator_int_posts->total() > 0 || $paginator_comments->total() > 0)
                 @foreach($paginator_int_posts->items() as $post)
                     @include('partials.post_preview', ['post' => $post, 'on_profile'=>false, 'clickable'=>true])
                 @endforeach

@@ -10,7 +10,11 @@
             <li class="nav-item">
                 <div class="dropdown mx-2 align-items-center">
                     <a class="btn btn-lg p-0 border-0 d-flex align-items-center" href="{{ route('notifications.show_all') }}">
+                        @if($notifications->count() > 0)
                         <i class="bi bi-bell-fill"></i>
+                        @else
+                        <i class="bi bi-bell"></i>
+                        @endif
                     </a>
                 </div>
             </li>
@@ -47,7 +51,11 @@
                     <li class="nav-item d-none d-md-block">
                         <div class="dropdown mx-2 align-items-center">
                             <button class="dropdown-toggle btn btn-lg p-0 border-0 d-flex align-items-center" href="#" data-bs-toggle="dropdown" aria-expanded="false">
+                                @if($notifications->count() > 0)
                                 <i class="bi bi-bell-fill"></i>
+                                @else
+                                <i class="bi bi-bell"></i>
+                                @endif
                             </button>
                             <ul class="dropdown-menu dropdown-menu-end">
                                 @if($notifications->count() > 0)

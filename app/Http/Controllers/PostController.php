@@ -100,7 +100,7 @@ class PostController extends Controller {
 
   public function delete_post(Request $request, Post $post)
   {
-    $this->authorize('delete', $post);
+    $this->authorize('delete_post', $post);
 
     $post->hidden = True;
     $post->save();
