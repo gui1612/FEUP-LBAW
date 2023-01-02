@@ -89,3 +89,5 @@ Route::middleware([])->group(function () {
   Route::post('/forums/{forum}/promote/{user}', 'ForumOwnerController@promote')->name('forum.management.promote');
   Route::delete('/forums/{forum}/demote/{user}', 'ForumOwnerController@demote')->name('forum.management.demote');
 });
+
+Route::get('/search', 'SearchController@search')->name('search');
