@@ -21,7 +21,12 @@ export function setupState() {
 
         const { subscribe } = signal(name, defaultValue);
         subscribe((v) => {
-            let value = v['toString'] ? v.toString() : '';
+            let value;
+            try {
+                value = v.toString();
+            } catch(e) {
+                value = '';
+            }
 
             if (attribute) {
                 container.setAttribute(attribute, value);
