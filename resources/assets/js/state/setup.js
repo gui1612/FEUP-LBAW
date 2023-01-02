@@ -21,10 +21,12 @@ export function setupState() {
 
         const { subscribe } = signal(signalName, value);
         subscribe((v) => {
+            let value = v.toString() || '';
+
             if (attribute) {
-                container.setAttribute(attribute, v.toString());
+                container.setAttribute(attribute, value);
             } else {
-                container.textContent = v.toString();
+                container.textContent = value;
             }
         });
     });
