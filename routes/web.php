@@ -102,6 +102,7 @@ Route::put('forums/{forum}/update', 'ForumController@update')->name('forum.updat
 Route::post('forums/', 'ForumController@create_forum')->name('forum.create_forum');
 Route::get('/forums/new', 'ForumController@show_create_forum_form')->name('forum.create');
 Route::get('/forums/{forum}', 'ForumController@show')->name('forum.show');
+Route::delete('/forums/{forum}/delete', 'ForumController@delete')->name('forum.delete');
 
 Route::middleware([])->group(function () {
   Route::post('/forums/{forum}/promote/{user}', 'ForumOwnerController@promote')->name('forum.management.promote');

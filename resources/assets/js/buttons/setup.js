@@ -2,7 +2,7 @@ import { onPostLike, onPostDislike } from './ratings';
 import { onCommentLike, onCommentDislike } from './ratings/comment';
 import { onUserFollow, onUserUnfollow } from './users';
 import { onForumFollow, onForumUnfollow } from './forums';
-import { onForumDemoteOpen, onForumPromoteOpen } from './forums/management';
+import { onForumDemoteOpen, onForumPromoteOpen, onForumDeleteOpen } from './forums/management';
 import { onAdminTeamDemoteOpen, onAdminUsersDemoteOpen, onAdminUsersPromoteOpen, onAdminUsersDeleteOpen } from './admin/management';
 
 const actions = {
@@ -15,7 +15,8 @@ const actions = {
     'forum.follow': onForumFollow,
     'forum.unfollow': onForumUnfollow,    
     'modals.forum.demote.open': onForumDemoteOpen,    
-    'modals.forum.promote.open': onForumPromoteOpen,    
+    'modals.forum.promote.open': onForumPromoteOpen, 
+    'modals.forum.delete.open': onForumDeleteOpen,
     'modals.admin.team.demote.open': onAdminTeamDemoteOpen,
     'modals.admin.users.demote.open': onAdminUsersDemoteOpen,
     'modals.admin.users.promote.open': onAdminUsersPromoteOpen,

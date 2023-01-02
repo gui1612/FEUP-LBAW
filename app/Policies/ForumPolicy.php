@@ -17,7 +17,8 @@ class ForumPolicy
         return true;
     }
 
-    public function follow(User $user, Forum $target) {
+    public function follow(User $user, Forum $target)
+    {
         return !$target->followers()->where('users.id', $user->id)->count();
     }
 
@@ -51,6 +52,6 @@ class ForumPolicy
 
     public function delete(User $user, Forum $target)
     {
-        return $target->owners()->find($user->id);
+        return !$target->owners->where('users.id', $user->id)->count();
     }
 }
