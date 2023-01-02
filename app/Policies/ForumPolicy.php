@@ -39,4 +39,9 @@ class ForumPolicy
     {
         return $target->owners()->find($user->id);
     }
+
+    public function delete(User $user, Forum $target)
+    {
+        return $target->owners()->find($user->id);
+    }
 }

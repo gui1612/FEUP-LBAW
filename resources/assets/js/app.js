@@ -20,6 +20,7 @@ const edit_form = document.getElementById('edit-comment-form');
 const cancel_edit_btn = document.getElementById('edit-cancel-button');
 const comment_body = document.getElementById('comment-body');
 
+
 if (edit_btn) {
     edit_btn.addEventListener('click', function() {
         edit_form.style.display = 'flex';
@@ -34,4 +35,18 @@ if (cancel_edit_btn) {
         edit_btn.style.display = 'block';
         comment_body.style.display = 'block';
     });
+}
+
+// Demote buttons
+const demote_btns = document.querySelectorAll('.demote-button');
+
+if (demote_btns) {
+    if (demote_btns.length > 0) {
+        demote_btns.forEach(function(btn, idx) {
+            btn.addEventListener('click', function(event) {
+                let username = event.target.dataset.wtUsername;
+                document.getElementById('demotion-modal-title').textContent = `Demote ${username}`;
+            })
+        })
+    }
 }
