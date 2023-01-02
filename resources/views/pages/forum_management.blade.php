@@ -150,7 +150,7 @@
                       <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">No</button>
                       <form method="POST" data-wt-signal="modals.forum.promote.url:action">
                         @csrf
-                        <button class="btn btn-danger" type="submit" data-bs-toggle="modal" data-bs-target="#demotionWarningModal">Yes</button>
+                        <button class="btn btn-danger" type="submit" data-bs-toggle="modal" data-bs-target="#promotionWarningModal">Yes</button>
                       </form>
                     </div>
                   </div>
@@ -165,11 +165,28 @@
     {{ $followers }}
   </section>
 
-  <form method="POST" enctype="multipart/form-data" action="{{ route('forum.delete', ['forum' => $forum]) }}" class="align-self-center px-5">
-    @csrf
-    @method('DELETE')
-    <input type="hidden" name="hidden" value="true">
-    <button type="submit" class="btn btn-danger mt-0 mb-3" data-bs-toggle="modal" data-bs-target="#promotionWarningModal" data-wt-action="modals.forum.delete.open" data-wt-url="{{ route('forum.management.promote', ['forum' => $forum, 'user' => $follower]) }}" data-wt-username="{{$follower->username}}">Delete Forum</button>
-  </form>
+    <button type="button" class="btn btn-danger  d-flex gap-2 align-self-center mb-2" data-bs-toggle="modal" data-bs-target="#promotionWarningModal" data-wt-action="modals.forum.delete.open" data-wt-url="{{ route('forum.delete', ['forum' => $forum]) }}" data-wt-username="{{$forum->name}}"><i class="bi bi-trash"></i>Delete Forum</button>
+    <!-- Modal -->
+    <div class="modal fade" id="promotionWarningModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+        <div class="modal-header">
+            <h5 class="modal-title">Delete <span data-wt-signal="modals.forum.delete.username"></span></h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+            Are you sure you want to delete this forum?
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">No</button>
+            <form method="POST" data-wt-signal="modals.forum.delete.open:action">
+            @csrf
+            @method('DELETE')
+            <input type="hidden" name="hidden" value="true">
+            <button class="btn btn-danger" type="submit" data-bs-toggle="modal" data-bs-target="#deletionWarningModal">Yes</button>
+            </form>
+        </div>
+        </div>
+    </div>
 </div>
 @endsection
