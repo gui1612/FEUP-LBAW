@@ -1,11 +1,9 @@
 <article class="container p-4 shadow mb-5 bg-white rounded">
 
     @if(!$on_profile)
-    <div class="d-flex flex-row">
+    <div class="d-flex flex-row align-items-center">
         @include('partials.user_info', ['user'=>$post->owner])
-        <p class="d-flex align-items center px-3 mt-2" style="font-size:1.5em;">
-            .
-        </p>
+        <i class="bi bi-dot"></i>
         @include('partials.forum_info', ['forum'=>$post->forum] )
         @include('partials.post_actions', ['id' => $post->id])
     </div>

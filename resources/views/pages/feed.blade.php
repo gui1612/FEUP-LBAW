@@ -1,20 +1,25 @@
 @extends('layouts.app')
 
+@section('title', 'Homepage')
+
 @section('content')
+<div class="d-flex container m-3 px-0">
+    <div class="d-flex flex-column align-items-center mx-4 w-100">
+        <div class="w-100 d-flex flex-column flex-sm-row align-items-center justify-content-between">
+            @include('partials.searchbar')
+            <button class="dropdown-toggle btn d-flex align-items-center gap-2 bg-white m-4" style="width: min-content" data-bs-toggle="dropdown" aria-expanded="false">Sort By</button>
+            <ul class="dropdown-menu dropdown-menu-end">
+                <li><a class="dropdown-item" href="{{ route('feed.show', [ 'order' => 'chronological' ]) }}">Chronological</a></li>
+                <li><a class="dropdown-item" href="{{ route('feed.show', [ 'order' => 'popularity' ]) }}">Popularity</a></li>
+            </ul>   
+        </div>
 
-<body>
-    <div class="d-flex flex-column align-items-end">
-        <button class="dropdown-toggle btn d-flex align-items-center gap-2 bg-white my-4 ms-auto" style="width: min-content" data-bs-toggle="dropdown" aria-expanded="false">Sort By</button>
-        <ul class="dropdown-menu dropdown-menu-end">
-            <li><a class="dropdown-item" href="{{ route('feed.show', [ 'order' => 'chronological' ]) }}">Chronological</a></li>
-            <li><a class="dropdown-item" href="{{ route('feed.show', [ 'order' => 'popularity' ]) }}">Popularity</a></li>
-        </ul>
-
-        {{-- @each('partials.post.preview', $paginator->items(), 'post') --}}
-        @foreach($paginator->items() as $post)
-        @include('partials.post_preview', ['post'=>$post, 'preview'=>True, 'on_profile'=>False, 'user'=>$post->owner, 'forum'=>$post->forum_id])
-        @endforeach
-        {{ $paginator }}
+        <div class="mx-2 mx-md-0">
+            @foreach($paginator->items() as $post)
+                @include('partials.post_preview', ['post'=>$post, 'preview'=>True, 'on_profile'=>False, 'user'=>$post->owner, 'forum'=>$post->forum_id])
+            @endforeach
+            {{ $paginator }}
+        </div>
     </div>
-</body>
+</div>
 @endsection
