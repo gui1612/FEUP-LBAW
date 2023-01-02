@@ -73,11 +73,30 @@
                                         </div>
                                     </div>
                                 @endif
-                                {{-- <form method="POST" action="{{ route('admin.user.delete', $user->id) }}">
-                                    @csrf
-                                    @method('DELETE')
-                                    <button type="submit" class="btn btn-danger d-flex gap-2"><i class="bi bi-trash"></i>Delete User</button>
-                                </form> --}}
+                                <button type="button" class="btn btn-danger d-flex gap-2" data-bs-toggle="modal" data-bs-target="#deletionWarningModal" data-wt-action="modals.admin.users.delete.open" data-wt-url="{{ route('user.delete', $user->id) }}" data-wt-username="{{$user->username}}"><i class="bi bi-trash"></i>Delete User</button>
+                                <!-- Modal -->
+                                <div class="modal fade" id="deletionWarningModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                    <div class="modal-dialog">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title">Delete <span data-wt-signal="modals.admin.users.delete.username"></span></h5>
+                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                            </div>
+                                            <div class="modal-body">
+                                                Are you sure you want to delete this user?
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">No</button>
+                                                <form method="POST" data-wt-signal="modals.admin.users.delete.url:action">
+                                                    @csrf
+                                                    @method('DELETE')
+                                                    <!-- <input type="hidden" name="id" value="{{ $user->id }}"> -->
+                                                    <button class="btn btn-danger" type="submit">Yes</button>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
                             </td>
                         </tr>
                     @endforeach

@@ -34,3 +34,14 @@ export const onAdminUsersPromoteOpen = {
         signal("modals.admin.users.promote.url").set(url);
     }
 }
+
+export const onAdminUsersDeleteOpen = {
+    params: ({el}) => ({
+        url: el.getAttribute("data-wt-url"),
+        username: el.getAttribute("data-wt-username")
+    }),
+    onClick: ({url, username}) => {
+        signal("modals.admin.users.delete.username").set(username);
+        signal("modals.admin.users.delete.url").set(url);
+    }
+}

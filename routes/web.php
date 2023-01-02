@@ -35,13 +35,14 @@ Route::post('register', 'Auth\RegisterController@register')->name('register.subm
 // Users
 Route::get('users/{user}', 'UserController@show_user')->name('user.show');
 Route::get('users/{user}/edit', 'UserController@showEditForm')->name('user.edit');
+Route::delete('users/{user}', 'UserController@delete')->name('user.delete');
 Route::put('user/{user}/edit', 'UserController@update')->name('editProfile')->where(['id' => '[0-9]+']);
 
 // Administrationposts/
 Route::get('admin/users', 'AdminController@show_users')->name('admin.users');
 Route::get('admin/team', 'AdminController@show_team')->name('admin.team');
 Route::post('admin/team/{user}', 'AdminController@promote')->name('admin.team.promote');
-Route::delete('admin/team/{admin}', 'AdminController@demote')->name('admin.team.demote');
+Route::delete('admin/team/{user}', 'AdminController@demote')->name('admin.team.demote');
 
 // Post
 Route::post('posts/', 'PostController@create_post')->name('post.create_post');

@@ -7,6 +7,7 @@ use App\Models\Follow;
 use App\Models\ForumOwners;
 use Illuminate\Http\Request;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\Rule;
@@ -105,5 +106,18 @@ class UserController extends Controller
     $user->save();
 
     return redirect()->route('user.show', ['user' => $user]);
+  }
+
+  public function delete(User $user) {
+    $this->authorize('delete', $user);
+
+    try {
+        $user->delete();
+    } catch (\Exception $e) {
+        Log::error($e->getMessage());
+        return redirect()->back()->withErrors(['Error deleting user']);
+    }
+
+    return redirect()->back();
   }
 }

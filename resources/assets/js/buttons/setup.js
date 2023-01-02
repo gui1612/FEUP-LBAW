@@ -2,7 +2,7 @@ import { onPostLike, onPostDislike } from './ratings';
 import { onUserFollow, onUserUnfollow } from './users';
 import { onForumFollow, onForumUnfollow } from './forums';
 import { onForumDemoteOpen, onForumPromoteOpen } from './forums/management';
-import { onAdminTeamDemoteOpen, onAdminUsersDemoteOpen, onAdminUsersPromoteOpen } from './admin/management';
+import { onAdminTeamDemoteOpen, onAdminUsersDemoteOpen, onAdminUsersPromoteOpen, onAdminUsersDeleteOpen } from './admin/management';
 
 const actions = {
     'ratings.like': onPostLike,
@@ -16,6 +16,7 @@ const actions = {
     'modals.admin.team.demote.open': onAdminTeamDemoteOpen,
     'modals.admin.users.demote.open': onAdminUsersDemoteOpen,
     'modals.admin.users.promote.open': onAdminUsersPromoteOpen,
+    'modals.admin.users.delete.open': onAdminUsersDeleteOpen,
 };
 
 const csrf = document.head.querySelector('meta[name="csrf-token"]')?.content;
