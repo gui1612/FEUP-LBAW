@@ -40,7 +40,7 @@ Route::put('user/{user}/edit', 'UserController@update')->name('editProfile')->wh
 // Administrationposts/
 Route::get('admin/users', 'AdminController@show_users')->name('admin.users');
 Route::get('admin/team', 'AdminController@show_team')->name('admin.team');
-Route::post('admin/team', 'AdminController@promote')->name('admin.team.promote');
+Route::post('admin/team/{user}', 'AdminController@promote')->name('admin.team.promote');
 Route::delete('admin/team/{admin}', 'AdminController@demote')->name('admin.team.demote');
 
 // Post
