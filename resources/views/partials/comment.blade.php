@@ -3,9 +3,11 @@
         @include('partials.user_info', ['user' => $comment->owner])
         @if(Auth::check() && ((Auth::user()->id === $comment->owner_id) || Auth::user()->is_admin || ($comment->post->forum->owners->contains(Auth::user()))))
             <div class="d-flex">
-                <button id="edit-comment-button" class="btn" action="onPencilClick()">
-                    <i class="bi bi-pencil-fill"></i>
-                </button>
+                @if (Auth::user()->id === $comment->owner_id)
+                    <button id="edit-comment-button" class="btn" action="onPencilClick()">
+                        <i class="bi bi-pencil-fill"></i>
+                    </button>
+                @endif
                 <button type="button" class="btn" data-bs-toggle="modal" data-bs-target="#commentDeletionModal">
                     <i class="bi bi-trash-fill"></i>
                 </button>
