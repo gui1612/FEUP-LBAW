@@ -6,13 +6,31 @@
                 <button id="edit-comment-button" class="btn" action="onPencilClick()">
                     <i class="bi bi-pencil-fill"></i>
                 </button>
-                <form method="POST" action="{{ route('post.comments.delete', ['post'=>$post, 'comment'=>$comment]) }}">
-                    @csrf
-                    @method('DELETE')
-                    <button type="submit" class="btn">
-                        <i class="bi bi-trash-fill"></i>
-                    </button>
-                </form>
+                <button type="button" class="btn" data-bs-toggle="modal" data-bs-target="#commentDeletionModal">
+                    <i class="bi bi-trash-fill"></i>
+                </button>
+            </div>
+            <!-- Modal -->
+            <div class="modal fade" id="commentDeletionModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalLabel">Delete</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            Are you sure you want to delete this comment?
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">No</button>
+                            <form method="POST" action="{{ route('post.comments.delete', ['post'=>$post, 'comment'=>$comment]) }}">
+                                @csrf
+                                @method('DELETE')
+                                <button class="btn btn-danger" type="submit">Yes</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
             </div>
         @endif
     </div>

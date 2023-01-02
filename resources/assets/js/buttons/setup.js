@@ -1,6 +1,9 @@
 import { onPostLike, onPostDislike } from './ratings';
 import { onCommentLike, onCommentDislike } from './ratings/comment';
 import { onUserFollow, onUserUnfollow } from './users';
+import { onForumFollow, onForumUnfollow } from './forums';
+import { onForumDemoteOpen, onForumPromoteOpen } from './forums/management';
+import { onAdminTeamDemoteOpen, onAdminUsersDemoteOpen, onAdminUsersPromoteOpen, onAdminUsersDeleteOpen } from './admin/management';
 
 const actions = {
     'ratings.like': onPostLike,
@@ -9,6 +12,14 @@ const actions = {
     'user.unfollow': onUserUnfollow,
     'comment.like': onCommentLike,
     'comment.dislike': onCommentDislike,
+    'forum.follow': onForumFollow,
+    'forum.unfollow': onForumUnfollow,    
+    'modals.forum.demote.open': onForumDemoteOpen,    
+    'modals.forum.promote.open': onForumPromoteOpen,    
+    'modals.admin.team.demote.open': onAdminTeamDemoteOpen,
+    'modals.admin.users.demote.open': onAdminUsersDemoteOpen,
+    'modals.admin.users.promote.open': onAdminUsersPromoteOpen,
+    'modals.admin.users.delete.open': onAdminUsersDeleteOpen,
 };
 
 const csrf = document.head.querySelector('meta[name="csrf-token"]')?.content;

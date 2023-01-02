@@ -1,4 +1,4 @@
-<a class="text-reset text-decoration-none d-flex align-items-center wt-hoverable" href="{{ route('user.show', ['user'=>$user]) }}"> 
+<a class="text-reset text-decoration-none d-flex align-items-center wt-hoverable px-1" href="{{ route('user.show', ['user'=>$user]) }}"> 
     <img src="{{ $user->profile_picture_or_default_url() }}" alt="{{ $user->username }}" width="30" height="30" class="rounded-circle m-3">
-    {{ $user->username }} 
+    <span class="text-break">{{ $user->username }}</span> 
 </a>

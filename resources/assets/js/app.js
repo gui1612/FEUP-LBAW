@@ -20,6 +20,7 @@ const edit_form = document.getElementById('edit-comment-form');
 const cancel_edit_btn = document.getElementById('edit-cancel-button');
 const comment_body = document.getElementById('comment-body');
 
+
 if (edit_btn) {
     edit_btn.addEventListener('click', function() {
         edit_form.style.display = 'flex';

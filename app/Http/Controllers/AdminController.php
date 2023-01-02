@@ -28,13 +28,7 @@ class AdminController extends Controller
         ]);
     }
 
-    public function promote(Request $request) {
-        $validated = $request->validate([
-            'id' => 'required|exists:App\Models\User,id'
-        ]);
-
-        $user = User::find($validated['id']);
-
+    public function promote(Request $request, User $user) {
         $this->authorize('promote', $user);
 
         $user->is_admin = true;
@@ -43,17 +37,10 @@ class AdminController extends Controller
         return redirect()->back();
     }
 
+
+
     public function demote(Admin $admin) {
         $this->authorize('demote', $admin);
-
-        // if (!Gate::allows('isAdmin', $user)) {
-        //     session()->flash('danger', [
-        //         'title' => 'Insufficient Permissions',
-        //         'message' => 'You must be an administrator to perform this action.'
-        //     ]);
-
-        //     return redirect()->back();
-        // }
         
         $admin->is_admin = false;
         $admin->save();

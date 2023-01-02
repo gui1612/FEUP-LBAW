@@ -15,15 +15,24 @@ class Follow extends Model
     protected $hidden = ['id'];
     protected $guarded = [];
 
-    public function owner() {
+    public function owner()
+    {
         return $this->belongsTo(User::class, 'owner_id');
     }
 
-    public function user() {
+    public function user()
+    {
         return $this->belongsTo(User::class, 'followed_user_id');
     }
-    
-    public function forum() {
-        return $this->belongsTo(User::class, 'followed_forum_id');
+
+    public function forum()
+    {
+        return $this->belongsTo(Forum::class, 'followed_forum_id');
+    }
+
+    public function getFollowerName(int $id)
+    {
+        $user = User::find($id);
+        return $user->username;
     }
 }

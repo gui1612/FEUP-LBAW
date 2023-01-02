@@ -13,24 +13,31 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
+use Spatie\LaravelMarkdown\Markdown;
 
 class PostController extends Controller {
+  public function __construct() {
+  }
+
   public function show_create_post_form() {
     $this->authorize('create', Post::class);
     return view('pages.create_post', ['new_post' => true]);
   }
 
-  public function show_post(Post $post) {
+  public function show_post(Post $post)
+  {
     $this->authorize('view', $post);
     return view('pages.post', ['post' => $post, 'preview' => False]);
   }
 
-  public function show_edit_post_form(Post $post) {
+  public function show_edit_post_form(Post $post)
+  {
     $this->authorize('edit', $post);
     return view('pages.edit_post', ['post' => $post, 'new_post' => false]);
   }
 
-  public function create_post(Request $request) {
+  public function create_post(Request $request)
+  {
     $this->authorize('create', Post::class);
 
     $data = $request->validate([
@@ -60,7 +67,7 @@ class PostController extends Controller {
       $post_image = new PostImage();
       $post_image->path = $path;
       $post_image->caption = $image['caption'];
-      
+
       $images[] = $post_image;
     }
 
@@ -75,14 +82,15 @@ class PostController extends Controller {
     return redirect()->route('post', ['post' => $post]);
   }
 
-  public function edit_post(Request $request, Post $post) {
+  public function edit_post(Request $request, Post $post)
+  {
     $this->authorize('edit', $post);
-    
+
     $validated = $request->validate([
       'title' => 'string|max:255',
       'body' => 'string',
     ]);
-    
+
     $post->title = $validated['title'] ?? $post->title;
     $post->body = $validated['body'] ?? $post->body;
     $post->save();
@@ -90,7 +98,8 @@ class PostController extends Controller {
     return redirect()->route('post', ['post' => $post]);
   }
 
-  public function delete_post(Request $request, Post $post) {
+  public function delete_post(Request $request, Post $post)
+  {
     $this->authorize('delete', $post);
 
     $post->hidden = True;

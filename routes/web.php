@@ -3,6 +3,9 @@
 use App\Http\Controllers\PostController;
 use Illuminate\Support\Facades\Route;
 use App\Models\User;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Validator;
+use Laravel\Socialite\Facades\Socialite;
 
 /*
 |--------------------------------------------------------------------------
@@ -14,6 +17,10 @@ use App\Models\User;
 | contains the "web" middleware group. Now create something great!
 |
 */
+
+// OAuth
+Route::get('/auth/{provider}/redirect', 'Auth\LoginController@redirectToProvider');
+Route::get('/auth/{provider}/callback', 'Auth\LoginController@handleProviderCallback');
 
 // Home
 Route::get('/', 'FeedController@show')->name('feed.show');
@@ -28,6 +35,7 @@ Route::post('register', 'Auth\RegisterController@register')->name('register.subm
 // Users
 Route::get('users/{user}', 'UserController@show_user')->name('user.show');
 Route::get('users/{user}/edit', 'UserController@showEditForm')->name('user.edit');
+Route::delete('users/{user}', 'UserController@delete')->name('user.delete');
 Route::put('user/{user}/edit', 'UserController@update')->name('editProfile')->where(['id' => '[0-9]+']);
 
 // Administration
@@ -40,6 +48,8 @@ Route::put('admin/reports/{report}/approved', 'ReportsController@approved')->nam
 Route::put('admin/reports/{report}/denied', 'ReportsController@denied')->name('admin.reports.denied');
 Route::post('admin/team', 'AdminController@promote')->name('admin.team.promote');
 Route::delete('admin/team/{admin}', 'AdminController@demote')->name('admin.team.demote');
+Route::post('admin/team/{user}', 'AdminController@promote')->name('admin.team.promote');
+Route::delete('admin/team/{user}', 'AdminController@demote')->name('admin.team.demote');
 
 // Post
 Route::post('posts/', 'PostController@create_post')->name('post.create_post');
@@ -80,3 +90,21 @@ Route::get('/notifications/{notification}', 'NotificationController@show_notific
 // Reports
 Route::post('posts/{post}/report', 'ReportsController@post_report')->name('post.report.new');
 Route::post('posts/{post}/comment/{comment}/report', 'ReportsController@comment_report')->name('comment.report.new');
+Route::post('/forums/{forum}/follow', 'ForumFollowController@follow')->name('follow');
+Route::delete('/forums/{forum}/unfollow', 'ForumFollowController@unfollow')->name('unfollow');
+
+//Forum Management
+Route::get('/forums/{forum}/management', 'ForumOwnerController@show_forum_management')->name('forum.management');
+Route::put('forums/{forum}/update', 'ForumController@update')->name('forum.update');
+
+//Forums
+Route::post('forums/', 'ForumController@create_forum')->name('forum.create_forum');
+Route::get('/forums/new', 'ForumController@show_create_forum_form')->name('forum.create');
+Route::get('/forums/{forum}', 'ForumController@show')->name('forum.show');
+
+Route::middleware([])->group(function () {
+  Route::post('/forums/{forum}/promote/{user}', 'ForumOwnerController@promote')->name('forum.management.promote');
+  Route::delete('/forums/{forum}/demote/{user}', 'ForumOwnerController@demote')->name('forum.management.demote');
+});
+
+Route::get('/search', 'SearchController@search')->name('search');
