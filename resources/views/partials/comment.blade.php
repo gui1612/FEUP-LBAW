@@ -1,7 +1,7 @@
 <section class="container d-flex flex-column">
     <div class="d-flex align-items-center justify-content-between">
         @include('partials.user_info', ['user' => $comment->owner])
-        @if(Auth::check() && ((Auth::user()->id == $comment->owner_id) || Auth::user()->is_admin))
+        @if(Auth::check() && ((Auth::user()->id === $comment->owner_id) || Auth::user()->is_admin || ($comment->post->forum->owners->contains(Auth::user()))))
             <div class="d-flex">
                 <button id="edit-comment-button" class="btn" action="onPencilClick()">
                     <i class="bi bi-pencil-fill"></i>

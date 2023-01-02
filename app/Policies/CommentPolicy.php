@@ -75,7 +75,15 @@ class CommentPolicy
      * @return \Illuminate\Auth\Access\Response|bool
      */
     public function delete(User $user, Comment $comment) {
-        if ($comment->hidden) {
+
+
+        // Forum owner or admin can delete any comment
+        if ($user->is_admin || $comment->post->forum->owners->contains($user)) {
+
+            return true;
+            
+        } else if ($comment->hidden) {
+
             if ($user->id === $comment->owner_id) {
                 return Response::denyWithStatus(403, 'You cannot delete a hidden comment.');
             }
