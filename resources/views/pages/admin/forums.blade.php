@@ -6,7 +6,7 @@
 <section class="container-fluid">
   <div class="table-responsive">
     <table class="table table-hover caption-top">
-      <h3 class="py-3">Users</h3>
+      <h3 class="py-3">Forums</h3>
       <thead>
         <tr>
           <th scope="col">#</th>
