@@ -13,13 +13,13 @@ export const onAdminTeamDemoteOpen = {
     }
 }
 
-export const onAdminTeamPromoteOpen = {
+export const onAdminUsersDemoteOpen = {
     params: ({el}) => ({
         url: el.getAttribute("data-wt-url"),
         username: el.getAttribute("data-wt-username")
     }),
     onClick: ({url, username}) => {
-        signal("modals.admin.team.promote.username").set(username);
-        signal("modals.admin.team.promote.url").set(url);
+        signal("modals.admin.users.demote.username").set(username);
+        signal("modals.admin.users.demote.url").set(url);
     }
 }
