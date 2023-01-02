@@ -17,9 +17,9 @@ export function setupState() {
             return;
         }
 
-        let value = container.getAttribute('data-wt-value');
+        let defaultValue = container.getAttribute('data-wt-value');
 
-        const { subscribe } = signal(signalName, value);
+        const { subscribe } = signal(name, defaultValue);
         subscribe((v) => {
             let value = v ? v.toString() : '';
 

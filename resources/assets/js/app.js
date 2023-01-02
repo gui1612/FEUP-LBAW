@@ -36,17 +36,3 @@ if (cancel_edit_btn) {
         comment_body.style.display = 'block';
     });
 }
-
-// Demote buttons
-const demote_btns = document.querySelectorAll('.demote-button');
-
-if (demote_btns) {
-    if (demote_btns.length > 0) {
-        demote_btns.forEach(function(btn, idx) {
-            btn.addEventListener('click', function(event) {
-                let username = event.target.dataset.wtUsername;
-                document.getElementById('demotion-modal-title').textContent = `Demote ${username}`;
-            })
-        })
-    }
-}

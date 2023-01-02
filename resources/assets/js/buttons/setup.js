@@ -1,6 +1,7 @@
 import { onPostLike, onPostDislike } from './ratings';
 import { onUserFollow, onUserUnfollow } from './users';
 import { onForumFollow, onForumUnfollow } from './forums';
+import { onForumDemoteOpen, onForumPromoteOpen } from './forums/management';
 
 const actions = {
     'ratings.like': onPostLike,
@@ -9,6 +10,8 @@ const actions = {
     'user.unfollow': onUserUnfollow,
     'forum.follow': onForumFollow,
     'forum.unfollow': onForumUnfollow,    
+    'modals.forum.demote.open': onForumDemoteOpen,    
+    'modals.forum.promote.open': onForumPromoteOpen,    
 };
 
 const csrf = document.head.querySelector('meta[name="csrf-token"]')?.content;

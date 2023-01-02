@@ -1,7 +1,7 @@
 'use strict';
-import { makeRequest } from "../utils/requests";
-import { signal } from "../state/signals";
-import { createEphemeralToast, showEphemeralToasts } from '../utils/toasts';
+import { makeRequest } from "../../utils/requests";
+import { signal } from "../../state/signals";
+import { createEphemeralToast, showEphemeralToasts } from '../../utils/toasts';
 
 function syncButton({ isFollowing, button }) {
     if (!isFollowing) {
