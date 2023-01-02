@@ -1,6 +1,6 @@
 @if(Auth::check())
-<button class="btn" data-bs-toggle="modal" data-bs-target="#reportModal">
-    <i class="bi bi-flag"></i>
+<button class="btn" title="Report this content" data-bs-toggle="modal" data-bs-target="#reportModal">
+    <i class="bi bi-flag text"></i>
 </button>
 @endif
 
