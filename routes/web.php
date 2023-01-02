@@ -40,6 +40,7 @@ Route::put('user/{user}/edit', 'UserController@update')->name('editProfile')->wh
 
 // Administration
 Route::get('admin/users', 'AdminController@show_users')->name('admin.users');
+Route::get('admin/forums', 'AdminController@show_forums')->name('admin.forums');
 Route::get('admin/team', 'AdminController@show_team')->name('admin.team');
 Route::get('admin/reports', 'ReportsController@show_reports')->name('admin.reports');
 Route::get('admin/reports/{report}', 'ReportsController@show_report')->name('admin.reports.report');

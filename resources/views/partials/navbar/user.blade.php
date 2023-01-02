@@ -31,16 +31,17 @@
                     @admin
                     <li class="nav-item"><a class="nav-link text-primary" href="{{ route('admin.team') }}">Manage Team</a></li>
                     <li class="nav-item"><a class="nav-link text-primary" href="{{ route('admin.users') }}">Manage Users</a></li>
+                    <li class="nav-item"><a class="nav-link text-primary" href="{{ route('admin.forums') }}">Manage Forums</a></li>
                     <li class="nav-item"><a class="nav-link text-primary" href="{{ route('admin.reports') }}">Manage Reports</a></li>
                     @endadmin
                     <li class="nav-item">
                         <a class="nav-link d-flex align-items-center" href="{{ route('forum.create') }}">
-                        <i class="d-none d-md-inline-block bi bi-plus me-1"></i>New Forum
+                            <i class="d-none d-md-inline-block bi bi-plus me-1"></i>New Forum
                         </a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link d-flex align-items-center" href=" {{ route('post.create') }} ">
-                        <i class="d-none d-md-inline-block bi bi-plus me-1"></i>New Post
+                            <i class="d-none d-md-inline-block bi bi-plus me-1"></i>New Post
                         </a>
                     </li>
                     <li class="nav-item d-none d-md-block">
@@ -51,18 +52,22 @@
                             <ul class="dropdown-menu dropdown-menu-end">
                                 @if($notifications->count() > 0)
                                 @foreach($notifications as $notif)
-                                    <li><a class="dropdown-item" href="{{ $notif->link() }}">{{ $notif->body() }}</a></li>
+                                <li><a class="dropdown-item" href="{{ $notif->link() }}">{{ $notif->body() }}</a></li>
                                 @endforeach
                                 @else
                                 <span class="dropdown-item">No notifications pending</span>
                                 @endif
-                                <li><hr class="dropdown-divider"></li>
+                                <li>
+                                    <hr class="dropdown-divider">
+                                </li>
                                 <li><a class="dropdown-item" href="{{ route('notifications.show_all') }}">View all</a></li>
                             </ul>
                         </div>
                     </li>
 
-                    <li><hr class="offcanvas-divider"></li>
+                    <li>
+                        <hr class="offcanvas-divider">
+                    </li>
                     <li class="d-md-none nav-item">
                         <a class="nav-link" href="{{ route('logout') }}">Logout</a>
                     </li>
