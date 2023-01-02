@@ -26,10 +26,10 @@ export const onForumPromoteOpen = {
 export const onForumDeleteOpen = {
     params: ({el}) => ({
         url: el.getAttribute("data-wt-url"),
-        username: el.getAttribute("data-wt-username")
+        forum_name: el.getAttribute("data-wt-forum_name")
     }),
-    onClick: ({url, username}) => {
-        signal("modals.forum.delete.username").set(username);
+    onClick: ({url, forum_name}) => {
+        signal("modals.forum.delete.forum_name").set(forum_name);
         signal("modals.forum.delete.url").set(url);
     }
 }
