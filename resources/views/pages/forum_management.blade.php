@@ -5,6 +5,7 @@
 @php($paginator_own = $forum->posts()->visible()->paginate(10))
 
 @section('content')
+<script src="{{ asset('js/app.js') }}"></script>
 
 <div class="d-flex flex-column justify-content-center bg-white container m-3 px-0">
   <div id="forum-info" class="position-relative" style="margin-bottom: clamp(1.5rem, 5vw, 4rem);">
@@ -85,13 +86,13 @@
             <td class="d-none pt-3 d-md-table-cell">@ {{ $owner->username }}</td>
 
             <td>
-                <button type="button" class="btn btn-danger d-flex gap-2" data-bs-toggle="modal" data-bs-target="#demotionWarningModal"><i class="bi bi-arrow-down-circle"></i>Demote User</button>
+                <button type="button" id="demote-button"class="btn btn-danger d-flex gap-2 demote-button" data-bs-toggle="modal" data-bs-target="#demotionWarningModal" data-wt-username="{{ $owner->username }}"><i class="bi bi-arrow-down-circle"></i>Demote User</button>
                 <!-- Modal -->
-                <div class="modal fade" id="demotionWarningModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal fade demotionWarningModal" id="demotionWarningModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
                     <div class="modal-dialog">
                         <div class="modal-content">
                             <div class="modal-header">
-                                <h5 class="modal-title" id="exampleModalLabel">Demote</h5>
+                                <h5 class="modal-title" id="demotion-modal-title">Demote</h5>
                                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                             </div>
                             <div class="modal-body">
@@ -99,7 +100,7 @@
                             </div>
                             <div class="modal-footer">
                                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">No</button>
-                                <form method="POST" action="{{ route('admin.team.demote', $forum->id) }}">
+                                <form method="POST" action="{{ route('forum.management.demote', ['forum' => $forum, 'user' => $owner]) }}">
                                     @csrf
                                     @method('DELETE')
                                     <button class="btn btn-danger" type="submit">Yes</button>
