@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Notification;
 use App\Models\User;
+use App\Events\UpdateNotifications;
 use Illuminate\Http\Request;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Validator;
@@ -29,6 +30,9 @@ class NotificationController extends Controller {
     $this->authorize('update', $notification);
     $notification->read = 'true';
     $notification->save();
+
+    UpdateNotifications::dispatch($user, 'consistency');
+
     return redirect()->back();
   }
 
@@ -37,6 +41,9 @@ class NotificationController extends Controller {
     $this->authorize('update', $notification);
     $notification->read = 'false';
     $notification->save();
+
+    UpdateNotifications::dispatch($user, 'consistency');
+
     return redirect()->back();
   }
 
