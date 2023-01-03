@@ -60,4 +60,29 @@ class AdminController extends Controller
 
         return redirect()->back();
     }
+
+    public function block(Request $request, User $user) {
+        $this->authorize('block', $user);
+
+        $data = $request->validate([
+            'block_reason' => 'required|string|max:1000',
+        ]);
+
+        $user->block_reason = $data['block_reason'];
+        $user->save();
+
+
+        return redirect()->back();
+    }
+
+    public function unblock(User $user) {
+        $this->authorize('block', $user);
+
+
+        $user->block_reason = NULL;
+        $user->save();
+
+        return redirect()->back();
+    }
+
 }
