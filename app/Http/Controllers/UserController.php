@@ -132,7 +132,6 @@ class UserController extends Controller
 
       $user->owned_forums()->detach($user);
       Follow::where('owner_id', $user->id)->delete();
-      Report::where('reporter_id', $user->id)->delete();
       Notification::where('receiver_id', $user->id)->delete();
     });
   

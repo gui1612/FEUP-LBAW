@@ -37,18 +37,17 @@ class PostController extends Controller {
     return view('pages.edit_post', ['post' => $post, 'new_post' => false]);
   }
 
-  public function create_post(Request $request)
+  public function create_post(Request $request, Forum $forum)
   {
     $this->authorize('create', Post::class);
 
     $data = $request->validate([
-    'title' => 'required|string|max:255',
-    'body' => 'required|string',
-    'forum' => 'required|string',
-    'images.*.caption' => 'sometimes|string',
-    'images.*.file' => 'sometimes|required_with:images|image|max:4096',
-    ], [
-    'images.*.file.required_with' => 'The :attribute field is required when images are present.'
+      'title' => 'required|string|max:255',
+      'body' => 'required|string',
+      'images.*.caption' => 'nullable|string',
+      'images.*.file' => 'nullable|required_with:images|image|max:4096',
+      ], [
+      'images.*.file.required_with' => 'The :attribute field is required when images are present.'
     ]);
 
 
@@ -63,7 +62,7 @@ class PostController extends Controller {
     $post = new Post();
     $post->title = $data['title'];
     $post->body = $data['body'];
-    $post->forum_id = $data['forum'];
+    $post->forum()->associate($forum);
     $post->owner()->associate(Auth::user());
 
     $images = [];

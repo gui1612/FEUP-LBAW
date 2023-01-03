@@ -70,8 +70,10 @@ class Notification extends Model
         } else if ($this->type == 'content_reported') {
             if ($this->report->post != NULL) {
                 return route('post', ['post'=>$this->report->post]);
-            } else {
+            } elseif ($this->report->comment != NULL) {
                 return route('post', ['post'=>$this->report->comment->post]);
+            } else {
+                return route('forum.show', ['forum'=>$this->report->forum]);
             }
 
         } else if ($this->type == 'post_comment') {

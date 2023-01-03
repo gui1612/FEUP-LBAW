@@ -14,24 +14,26 @@
                                 <img src=" {{ $user->banner_picture_url() }}" alt="{{ $user->username . '\'s banner picture' }}" class="w-auto h-75" style="aspect-ratio: 16 / 9; object-fit: cover;">
                                 <img src=" {{ $user->profile_picture_or_default_url() }}" alt="{{ $user->username . '\'s picture' }}" class="rounded-circle img-fluid position-absolute" style="border: solid white 2px; width: 100px; top: 27%;">
                             </div>
-                            <h4 class="mb-2"> {{ $user->username }} </h4>
+                            <h4 class="mb-2"> {{ $user->first_name . ' ' . $user->last_name }} </h4>
                             <p class="text-muted mb-4"> {{ '@' . $user->username }} <span class="mx-2"></span> </p>
 
                             @auth
-                            @if($user->id == Auth::user()->id)
-                            <a href="{{ route('user.edit', ['user'=>$user]) }}" class="btn btn-primary">
-                                Edit Profile
-                            </a>
-                            @elseif($user->followers()->where('owner_id', Auth::user()->id)->first())
-                            <button class="btn btn-primary d-flex gap-2" data-wt-action="user.unfollow" data-wt-user-id="{{ $user->id }}">
-                                <i class="bi bi-person-check-fill"></i>
-                                <span>Unfollow</span>
-                            </button>
-                            @else
-                            <button class="btn btn-primary d-flex gap-2" data-wt-action="user.follow" data-wt-user-id="{{ $user->id }}">
-                                <i class="bi bi-person-add"></i>
-                                <span>Follow</span>
-                            </button>
+                            @if(!$user->email == null)
+                                @if($user->id == Auth::user()->id)
+                                <a href="{{ route('user.edit', ['user'=>$user]) }}" class="btn btn-primary">
+                                    Edit Profile
+                                </a>
+                                @elseif($user->followers()->where('owner_id', Auth::user()->id)->first())
+                                <button class="btn btn-primary d-flex gap-2" data-wt-action="user.unfollow" data-wt-user-id="{{ $user->id }}">
+                                    <i class="bi bi-person-check-fill"></i>
+                                    <span>Unfollow</span>
+                                </button>
+                                @else
+                                <button class="btn btn-primary d-flex gap-2" data-wt-action="user.follow" data-wt-user-id="{{ $user->id }}">
+                                    <i class="bi bi-person-add"></i>
+                                    <span>Follow</span>
+                                </button>
+                                @endif
                             @endif
                             @endauth
                             <div class="d-flex justify-content-between text-center mt-4 mb-2">

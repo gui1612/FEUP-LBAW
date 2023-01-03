@@ -61,7 +61,7 @@ Route::post('admin/team/{user}/block', 'AdminController@block')->name('admin.tea
 Route::delete('admin/team/{user}/unblock', 'AdminController@block')->name('admin.team.unblock');
 
 // Post
-Route::post('posts/', 'PostController@create_post')->name('post.create_post');
+Route::post('forums/{forum}/posts/', 'PostController@create_post')->name('post.create_post');
 Route::get('forums/{forum}/posts/new', 'PostController@show_create_post_form')->name('post.create');
 Route::get('posts/{post}', 'PostController@show_post')->name('post');
 Route::put('posts/{post}', 'PostController@edit_post')->name('post.edit_with_new_data');

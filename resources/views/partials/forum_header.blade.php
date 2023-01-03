@@ -1,6 +1,6 @@
 <header>
   @auth
-    @include('partials.navbar.user_forum')
+    @include('partials.navbar.user', ['in_forum'=>True])
   @endauth
 
   @guest

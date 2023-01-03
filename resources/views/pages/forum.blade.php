@@ -22,22 +22,30 @@
                                 <h4 class="mb-2"> {{ $forum->name }} </h4>
                                 @include('partials.report', ['content'=>'forum', 'forum'=>$forum])
                             </div>
-                            @auth
-                            @can("edit", $forum)
-                            <a href="{{ route('forum.management', ['forum'=>$forum->id]) }}" type="button" class="btn btn-primary d-flex gap-2">
-                                Manage Forum
-                            </a>
-                            @elsecan("unfollow", $forum)
-                            <button class="btn btn-primary d-flex gap-2" data-wt-action="forum.unfollow" data-wt-forum-id="{{ $forum->id }}">
-                                <span>Unfollow</span>
-                            </button>
-                            @else
-                            <button class="btn btn-primary d-flex gap-2" data-wt-action="forum.follow" data-wt-forum-id="{{ $forum->id }}">
-                                <i class="bi bi-person-add"></i>
-                                <span>Follow</span>
-                            </button>
-                            @endif
-                            @endauth
+                            <div class="d-flex gap-2 flex-column justify-content-center mt-2">
+                                @auth
+                                    @can("edit", $forum)
+                                    <a href="{{ route('forum.management', ['forum'=>$forum->id]) }}" type="button" class="btn btn-primary d-flex gap-2 mx-auto">
+                                        Manage Forum
+                                    </a>
+                                    @elsecan("unfollow", $forum)
+                                    <button class="btn btn-primary d-flex gap-2 mx-auto" data-wt-action="forum.unfollow" data-wt-forum-id="{{ $forum->id }}">
+                                        <i class="bi bi-person-check-fill"></i>
+                                        <span>Unfollow</span>
+                                    </button>
+                                    @else
+                                    <button class="btn btn-primary d-flex gap-2 mx-auto" data-wt-action="forum.follow" data-wt-forum-id="{{ $forum->id }}">
+                                        <i class="bi bi-person-add"></i>
+                                        <span>Follow</span>
+                                    </button>
+                                    @endif
+                                @endauth
+
+                                <a href="{{ route('post.create', ['forum'=>$forum]) }}" class="d-flex btn btn-primary gap-2 mx-auto">
+                                    <i class="bi bi-plus-square"></i>
+                                    New Post
+                                </a>
+                            </div>
                             <div class="d-flex justify-content-between text-center mt-4 mb-2">
                                 <div class="px-3">
                                     <p class="mb-2 h5"> {{ $paginator_own->total() }} </p>
@@ -48,7 +56,7 @@
                                     <p class="text-muted mb-0">Followers</p>
                                 </div>
                             </div>
-                            <p class="my-3"> {{ $forum->description }} </p>
+                            <p class="mt-3"> {{ $forum->description }} </p>
                         </div>
                     </div>
                 </div>
@@ -63,7 +71,7 @@
         @endforeach
         {{ $paginator_own }}
         @else
-        <p class="text-center">
+        <p class="text-center pt-5">
             It is really empty in here...
             <i class="bi bi-heartbreak-fill wt-icon-like"></i>
         </p>

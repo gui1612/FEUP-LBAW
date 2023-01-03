@@ -4,15 +4,17 @@
 
 @section('content')
 <div class="container w-75 m-4 bg-white px-4 py-3 d-flex flex-column gap-2 justify-content-center">
-  <h3>New Post</h3>
-  <form class="col-md-11 mx-auto" method="POST" action="{{ route('post.create_post') }}" enctype="multipart/form-data">
+  <h3>New Post in 
+    <a href="{{ route('forum.show', ['forum'=>$forum]) }}" class="wt-hoverable text-decoration-none">{{ $forum->name }}</a>
+  </h3>
+  <form class="col-md-11 mx-auto" method="POST" action="{{ route('post.create_post', ['forum'=>$forum]) }}" enctype="multipart/form-data">
       @csrf
       <div class="mb-3">
-          <label for="title" class="form-label visually-hidden">Title</label>
+          <label for="title" class="form-label">Title</label>
           <input class="form-control" id="title" name="title" placeholder="Title" required>
       </div>
       <div class="mb-3">
-          <label for="body" class="form-label visually-hidden">Body</label>
+          <label for="body" class="form-label">Body</label>
           <textarea rows="18" class="form-control" name="body" id="body" placeholder="Share your thoughts" required></textarea>
       </div>
       <div class="mb-3">

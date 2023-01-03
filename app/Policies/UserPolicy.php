@@ -47,28 +47,4 @@ class UserPolicy
 
         return $user->is_admin;
     }
-
-    public function delete_post(User $user, Post $post) {
-        if ($post->hidden) {
-            if ($user->id === $post->owner_id) {
-                return Response::denyWithStatus(403, 'You cannot delete a hidden post.');
-            }
-        
-            return Response::denyAsNotFound();
-        }
-        
-        if ($post->owner_id !== $user->id) {
-            return Response::denyWithStatus(403, 'You are not the owner of this post.');
-        }
-        
-        if ($post->ratings->count() > 0) {
-            return Response::denyWithStatus(403, 'You cannot delete a post that has ratings.');
-        }
-
-        if ($post->comments->count() > 0) {
-            return Response::denyWithStatus(403, 'You cannot delete a post that has comments.');
-        }
-        
-        return true;
-    }
 }

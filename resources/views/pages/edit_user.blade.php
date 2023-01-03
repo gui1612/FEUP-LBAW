@@ -15,9 +15,9 @@
         </div>
     </div>
 
-    <div class="d-flex align-items-start p-4 justify-content-center m-2">
+    <div class="d-flex flex-column flex-md-row gap-3 align-items-start p-4 justify-content-center m-2 mt-4">
         <div class="flex-column px-5 gap-2">
-            <form method="POST" action="{{ route('editProfile', ['user'=>$user]) }}" enctype="multipart/form-data" id="editProfileForm">
+            <form class="d-flex flex-column" method="POST" action="{{ route('editProfile', ['user'=>$user]) }}" enctype="multipart/form-data" id="editProfileForm">
                 @method('PUT')
                 @csrf
                 <h3>Profile Changes</h3>
@@ -98,7 +98,8 @@
                     @enderror
                 </div>
 
-                <button type="submit" class="btn btn-primary mt-5">Update profile</button>
+                <button type="submit" class="btn btn-primary mt-5 me-auto">Update profile</button>
+                <a href="{{ route('user.show', ['user'=>$user]) }}" class="btn btn-danger mt-2" style="width: max-content">Cancel</a>
             </form>
         </div>
         <form method="POST" action="{{ route('editProfile', ['user'=>$user]) }}" id="changePasswordForm">
@@ -135,6 +136,12 @@
                 @enderror
             </div>
             <button type="submit" class="btn btn-primary mt-5">Change Password</button>
+        </form>
+        <form method="DELETE" action="{{ route('user.delete', ['user'=>$user]) }}">
+            <button type="submit" class="btn btn-danger">
+                <i class="bi bi-trash3"></i>
+                Delete Account
+            </button>
         </form>
     </div>
 </div>

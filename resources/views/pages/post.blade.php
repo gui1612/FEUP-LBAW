@@ -50,10 +50,16 @@
         @include('partials.post_body')
 
         <div class="d-flex gap-4">
-            <span class="mb-2 d-flex gap-2">By 
-                <a href="{{ route('user.show', $post->owner) }}">{{ $post->owner->username }}</a> 
+            <div class="mb-2 d-flex flex-column flex-sm-row gap-3">
+                <span>
+                    By 
+                    <a href="{{ route('user.show', $post->owner) }}" class="wt-hoverable text-decoration-none">{{ $post->owner->username }}</a> 
+                    <i class="bi bi-dot"></i>
+                    on
+                    <a href="{{ route('forum.show', ['forum'=>$post->forum]) }}" class="wt-hoverable text-decoration-none">{{ $post->forum->name }}</a>
+                </span>
                 <span style="font-weight: 300">{{ displayDate($post->last_edited) }}</span>
-            </span>
+            </div>
         </div>
 
         <div class="d-flex align-items-center gap-2 mt-2">

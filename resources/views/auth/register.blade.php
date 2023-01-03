@@ -67,8 +67,19 @@
             <div class="d-flex justify-content-center">
                 <button type="submit" class="btn btn-primary mt-3 mb-2">Submit</button>
             </div>
+            <div class="d-flex justify-content-center" style="opacity: 0.5">
+                OR
+            </div>
+            <div class="mb-4 d-flex mx-auto justify-content-center">
+                <a href="/auth/google/redirect" class="btn btn-primary mt-3 mx-2">
+                    <i class="bi bi-google px-2 py-2"></i> Sign in with Google
+                </a>
+                <a href="/auth/github/redirect" class="btn btn-primary mt-3">
+                    <i class="bi bi-github px-2 py-2"></i> Sign in with Github
+                </a>
+            </div>
         </fieldset>
-        <div class="bg-white p-3 text-center">
+        <div class="bg-white p-3 mb-3 text-center">
             <p class="mb-0">Already have an account? <a href="{{ route('login') }}">Sign in</a></p>
         </div>
     </form>

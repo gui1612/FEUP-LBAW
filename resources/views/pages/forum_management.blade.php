@@ -70,23 +70,26 @@
     <button type="submit" class="btn btn-primary mt-5">Update Forum</button>
   </form>
 
-  <section class="container-fluid mt-5 w-50">
+  <section class="container-fluid mt-5 mx-2">
     <div class="table-responsive">
       <table class="table table-hover caption-top" style="table-layout: fixed;">
-        <caption>Forum Owners</caption>
+        <h4>Forum Owners</h4>
         <thead>
           <tr>
-            <th scope="col" class="d-none d-md-table-cell">Name</th>
+            <th scope="col" class="d-table-cell">Name</th>
             <th scope="col">Actions</th>
           </tr>
         </thead>
         <tbody>
           @foreach ($owners->items() as $owner)
           <tr>
-            <td class="d-none pt-3 d-md-table-cell">@ {{ $owner->username }}</td>
+            <td class="pt-3 d-table-cell">{{ '@' . $owner->username }}</td>
 
             <td>
-              <button type="button" class="btn btn-danger d-flex gap-2 demote-button" data-bs-toggle="modal" data-bs-target="#demotionWarningModal" data-wt-action="modals.forum.demote.open" data-wt-url="{{ route('forum.management.demote', ['forum' => $forum, 'user' => $owner]) }}" data-wt-username="{{$owner->username}}"><i class="bi bi-arrow-down-circle"></i>Demote User</button>
+              <button type="button" class="btn btn-danger d-flex gap-2 demote-button" data-bs-toggle="modal" data-bs-target="#demotionWarningModal" data-wt-action="modals.forum.demote.open" data-wt-url="{{ route('forum.management.demote', ['forum' => $forum, 'user' => $owner]) }}" data-wt-username="{{$owner->username}}">
+                <i class="bi bi-arrow-down-circle"></i>
+                <span class="d-none d-md-block">Demote User</span>
+              </button>
               <!-- Modal -->
               <div class="modal fade" id="demotionWarningModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
                 <div class="modal-dialog">
@@ -118,23 +121,27 @@
     {{ $owners}}
   </section>
 
-  <section class="align-self-right container-fluid mt-5 w-50 my-5">
+  @if($followers->total() > 0)
+  <section class="align-self-right container-fluid mt-5 my-5 mx-2">
     <div class="table-responsive">
       <table class="table table-hover caption-top " style="table-layout: fixed;">
-        <caption>Users</caption>
+        <h4>Users</h4>
         <thead>
           <tr>
-            <th scope="col" class="d-none d-md-table-cell">Name</th>
+            <th scope="col" class="d-table-cell">Name</th>
             <th scope="col">Actions</th>
           </tr>
         </thead>
         <tbody>
           @foreach ($followers->items() as $follower)
           <tr>
-            <td class="d-none d-md-table-cell">@ {{ $follower->username }}</td>
+            <td class="d-table-cell">@ {{ $follower->username }}</td>
 
             <td>
-              <button type="button" class="btn btn-secondary d-flex gap-2" data-bs-toggle="modal" data-bs-target="#promotionWarningModal" data-wt-action="modals.forum.promote.open" data-wt-url="{{ route('forum.management.promote', ['forum' => $forum, 'user' => $follower]) }}" data-wt-username="{{$follower->username}}"><i class="bi bi-arrow-up-circle"></i>Promote User</button>
+              <button type="button" class="btn btn-secondary d-flex gap-2" data-bs-toggle="modal" data-bs-target="#promotionWarningModal" data-wt-action="modals.forum.promote.open" data-wt-url="{{ route('forum.management.promote', ['forum' => $forum, 'user' => $follower]) }}" data-wt-username="{{$follower->username}}">
+                <i class="bi bi-arrow-up-circle"></i>
+                <span class="d-none d-md-block">Promote Use</span>
+                </button>
               <!-- Modal -->
               <div class="modal fade" id="promotionWarningModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
                 <div class="modal-dialog">
@@ -164,8 +171,9 @@
     </div>
     {{ $followers }}
   </section>
+  @endif
 
-  <button type="button" class="btn btn-danger  d-flex gap-2 align-self-center mb-2" data-bs-toggle="modal" data-bs-target="#deletionWarningModal" data-wt-action="modals.forum.delete.open" data-wt-forum_name="{{$forum->name}}"><i class="bi bi-trash"></i>Delete Forum</button>
+  <button type="button" class="btn btn-danger d-flex gap-2 align-self-center mb-3" data-bs-toggle="modal" data-bs-target="#deletionWarningModal" data-wt-action="modals.forum.delete.open" data-wt-forum_name="{{$forum->name}}"><i class="bi bi-trash"></i>Delete Forum</button>
   <!-- Modal -->
   <div class="modal fade" id="deletionWarningModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog">
@@ -189,4 +197,4 @@
       </div>
     </div>
   </div>
-  @endsection
+@endsection
