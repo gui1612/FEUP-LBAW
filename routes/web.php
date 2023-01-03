@@ -57,6 +57,8 @@ Route::post('admin/team', 'AdminController@promote')->name('admin.team.promote')
 Route::delete('admin/team/{admin}', 'AdminController@demote')->name('admin.team.demote');
 Route::post('admin/team/{user}', 'AdminController@promote')->name('admin.team.promote');
 Route::delete('admin/team/{user}', 'AdminController@demote')->name('admin.team.demote');
+Route::post('admin/team/{user}/block', 'AdminController@block')->name('admin.team.block');
+Route::delete('admin/team/{user}/unblock', 'AdminController@block')->name('admin.team.unblock');
 
 // Post
 Route::post('posts/', 'PostController@create_post')->name('post.create_post');
