@@ -5,8 +5,11 @@ namespace App\Http\Controllers;
 use App\Models\User;
 use App\Models\Follow;
 use App\Models\ForumOwners;
+use App\Models\Notification;
+use App\Models\Report;
 use Illuminate\Http\Request;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Storage;
@@ -111,14 +114,28 @@ class UserController extends Controller
   public function delete(User $user) {
     $this->authorize('delete', $user);
     
+    DB::transaction(function () use ($user) {
+      $user->username = "[deleted user $user->id]";
+      $user->bio = null;
+      $user->reputation = 0;
+      $user->first_name = null;
+      $user->last_name = null;
+      $user->email = null;
+      $user->profile_picture = null;
+      $user->banner_picture = null;
+      $user->provider = null;
+      $user->provider_id = null;
+      $user->remember_token = null;
+      $user->is_admin = false;
 
-    try {
-        $user->delete();
-    } catch (\Exception $e) {
-        Log::error($e->getMessage());
-        return redirect()->back()->withErrors(['Error deleting user']);
-    }
+      $user->save();
 
+      $user->owned_forums()->detach($user);
+      Follow::where('owner_id', $user->id)->delete();
+      Report::where('reporter_id', $user->id)->delete();
+      Notification::where('receiver_id', $user->id)->delete();
+    });
+  
     return redirect()->back();
   }
 }
