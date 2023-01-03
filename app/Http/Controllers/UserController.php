@@ -110,6 +110,7 @@ class UserController extends Controller
 
   public function delete(User $user) {
     $this->authorize('delete', $user);
+    
 
     try {
         $user->delete();
