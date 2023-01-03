@@ -16,6 +16,7 @@ DROP TABLE IF EXISTS Follows CASCADE;
 DROP TABLE IF EXISTS Reports CASCADE;
 DROP TABLE IF EXISTS Notifications CASCADE;
 DROP TABLE IF EXISTS PostImages CASCADE;
+DROP TABLE IF EXISTS PasswordResets CASCADE;
 
 ----------------------------------------------------------------------
 -- Types
@@ -155,6 +156,12 @@ CREATE TABLE PostImages (
     post_id INTEGER CONSTRAINT post_image_ref_post REFERENCES Posts ON DELETE CASCADE CONSTRAINT post_image_post_id_nn NOT NULL
 );
 
+CREATE TABLE PasswordResets (
+    email TEXT NOT NULL,
+    token TEXT NOT NULL,
+    created_at TIMESTAMP WITHOUT TIME ZONE
+);
+
 -----------------------------------------
 -- Indexes
 -----------------------------------------
@@ -173,6 +180,7 @@ CREATE INDEX idx_user_followers ON Follows USING HASH(followed_user_id);
 CREATE INDEX idx_forum_followers ON Follows USING HASH(followed_forum_id);
 CREATE INDEX idx_user_notifications ON Notifications USING HASH(receiver_id);
 CREATE INDEX idx_notifications_created_at ON Notifications USING BTree(created_at);
+CREATE INDEX idx_password_resets ON PasswordResets USING HASH(email);
 
 
 -----------------------------------------
