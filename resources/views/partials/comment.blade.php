@@ -8,12 +8,12 @@
                         <i class="bi bi-pencil-fill"></i>
                     </button>
                 @endif
-                <button type="button" class="btn" data-bs-toggle="modal" data-bs-target="#commentDeletionModal">
+                <button type="button" class="btn" data-bs-toggle="modal" data-bs-target="#commentDeletionModal" data-wt-action="modals.comment.delete" wt-action="{{ route('post.comments.delete', ['post'=>$post, 'comment'=>$comment]) }}">
                     <i class="bi bi-trash-fill"></i>
                 </button>
             </div>
             <!-- Modal -->
-            <div class="modal fade" id="commentDeletionModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true" data-wt-action="modals.comment.delete" wt-action="{{ route('post.comments.delete', ['post'=>$post, 'comment'=>$comment]) }}">
+            <div class="modal fade" id="commentDeletionModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
                 <div class="modal-dialog">
                     <div class="modal-content">
                         <div class="modal-header">
