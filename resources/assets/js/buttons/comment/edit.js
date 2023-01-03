@@ -1,5 +1,4 @@
 'use strict';
-import { param } from "jquery";
 import { signal } from "../../state/signals";
 
 const params = ({el}) => {
