@@ -16,25 +16,3 @@ showEphemeralToasts();
 setupNotifications();
 setupState();
 setupButtons();
-
-const edit_btn = document.getElementById('edit-comment-button');
-const edit_form = document.getElementById('edit-comment-form');
-const cancel_edit_btn = document.getElementById('edit-cancel-button');
-const comment_body = document.getElementById('comment-body');
-
-
-if (edit_btn) {
-    edit_btn.addEventListener('click', function() {
-        edit_form.style.display = 'flex';
-        edit_btn.style.display = 'none';
-        comment_body.style.display = 'none';
-    });
-}
-
-if (cancel_edit_btn) {
-    cancel_edit_btn.addEventListener('click', function() {
-        edit_form.style.display = 'none';
-        edit_btn.style.display = 'block';
-        comment_body.style.display = 'block';
-    });
-}

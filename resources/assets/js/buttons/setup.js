@@ -5,6 +5,7 @@ import { onForumFollow, onForumUnfollow } from './forums';
 import { onForumDemoteOpen, onForumPromoteOpen, onForumDeleteOpen } from './forums/management';
 import { onAdminTeamDemoteOpen, onAdminUsersDemoteOpen, onAdminUsersPromoteOpen, onAdminUsersDeleteOpen, onAdminUsersBlockOpen, onAdminUsersUnblockOpen } from './admin/management';
 import { onCommentDeleteOpen } from './comment/management';
+import { onCommentEditShow, onCommentEditHide } from './comment/edit';
 
 const actions = {
     'ratings.like': onPostLike,
@@ -25,6 +26,8 @@ const actions = {
     'modals.admin.users.block.open': onAdminUsersBlockOpen,
     'modals.admin.users.unblock.open': onAdminUsersUnblockOpen,
     'modals.comment.delete.open': onCommentDeleteOpen,
+    'comment.edit.show': onCommentEditShow,
+    'comment.edit.hide': onCommentEditHide,
 };
 
 const csrf = document.head.querySelector('meta[name="csrf-token"]')?.content;
