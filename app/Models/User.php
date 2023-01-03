@@ -27,6 +27,7 @@ class User extends AuthUser
     ];
 
     protected $hidden = [
+        'block_reason',
         'is_admin',
         'password',
         'remember_token',
@@ -88,6 +89,10 @@ class User extends AuthUser
 
     public function is_deleted() {
         return is_null($this->email);
+    }
+
+    public function is_blocked() {
+        return !is_null($this->block_reason);
     }
 
     public function scopeActive($query)
