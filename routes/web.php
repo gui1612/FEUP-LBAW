@@ -32,6 +32,12 @@ Route::get('logout', 'Auth\LoginController@logout')->name('logout');
 Route::get('register', 'Auth\RegisterController@showRegistrationForm')->name('register.show');
 Route::post('register', 'Auth\RegisterController@register')->name('register.submit');
 
+// Password Reset
+Route::get('forgot-password', 'Auth\PasswordResetController@showSendLinkForm')->name('showLinkForm');
+Route::post('forgot-password', 'Auth\PasswordResetController@sendLink')->name('sendLink');
+Route::get('reset', 'Auth\PasswordResetController@showResetPasswordForm')->name('password.reset');
+Route::post('reset', 'Auth\PasswordResetController@reset')->name('password.update');
+
 // Users
 Route::get('users/{user}', 'UserController@show_user')->name('user.show');
 Route::get('users/{user}/edit', 'UserController@showEditForm')->name('user.edit');
