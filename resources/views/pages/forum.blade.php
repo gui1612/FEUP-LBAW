@@ -20,7 +20,9 @@
                             </div>
                             <div class="d-flex align-items-center">
                                 <h4 class="mb-2"> {{ $forum->name }} </h4>
+                                @can('report', $forum)
                                 @include('partials.report', ['content'=>'forum', 'forum'=>$forum])
+                                @endcan
                             </div>
                             <div class="d-flex gap-2 flex-column justify-content-center mt-2">
                                 @auth

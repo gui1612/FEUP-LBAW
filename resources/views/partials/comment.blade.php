@@ -52,9 +52,9 @@
 
         <div class="d-flex align-items-center gap-2 mt-2">
             @include('partials.comment_rating')
-            @if($comment->owner != Auth::user())
+            @can('report', $comment)
                 @include('partials.report', ['content'=>'comment', 'comment'=>$comment])
-            @endif
+            @endcan
         </div>
     </div>
     @if($post->comments->count() > 1)

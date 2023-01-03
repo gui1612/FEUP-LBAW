@@ -59,7 +59,7 @@ class ForumPolicy
             return Response::denyAsNotFound();
         }
         
-        if ($forum->owner_id === $user->id) {
+        if ($forum->owners()->where('users.id', $user->id)->count()) {
             return Response::denyWithStatus(403, 'You cannot report your own forum.');
         }
         

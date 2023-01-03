@@ -31,7 +31,7 @@ class CommentPolicy
      */
     public function view(User $user, Comment $comment)
     {
-        //
+        return !$comment->hidden;
     }
 
     /**
