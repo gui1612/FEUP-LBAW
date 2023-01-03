@@ -12,7 +12,7 @@ class SearchController extends Controller {
     public function search(Request $request) {
         $search = $request->input('q');
 
-        $posts = Post::whereRaw("tsvector @@ plainto_tsquery('english', ?)", [$search])
+        $posts = Post::whereRaw("NOT hidden AND tsvector @@ plainto_tsquery('english', ?)", [$search])
             ->orderByRaw("ts_rank(tsvector, plainto_tsquery('english', ?)) DESC", [$search])
             ->paginate(20);
 
@@ -21,7 +21,7 @@ class SearchController extends Controller {
             ->union(User::where('username', $search))
             ->paginate(20);
 
-        $forums = Forum::whereRaw("tsvector @@ plainto_tsquery('english', ?)", [$search])
+        $forums = Forum::whereRaw("NOT hidden AND tsvector @@ plainto_tsquery('english', ?)", [$search])
         ->orderByRaw("ts_rank(tsvector, plainto_tsquery('english', ?)) DESC", [$search])
         ->paginate(20);
 

@@ -55,6 +55,6 @@ class UserPolicy
         if ($target->is_admin)
             return Response::denyWithStatus(403, 'An admin account cannot be deleted.');
 
-        return $user->is_admin;
+        return $user->id == $target->id;
     }
 }

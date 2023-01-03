@@ -9,6 +9,7 @@ use App\Models\Notification;
 use App\Models\Report;
 use Illuminate\Http\Request;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
@@ -118,8 +119,8 @@ class UserController extends Controller
       $user->username = "[deleted user $user->id]";
       $user->bio = null;
       $user->reputation = 0;
-      $user->first_name = null;
-      $user->last_name = null;
+      $user->first_name = "Deleted User";
+      $user->last_name = "#$user->id";
       $user->email = null;
       $user->profile_picture = null;
       $user->banner_picture = null;
@@ -127,14 +128,19 @@ class UserController extends Controller
       $user->provider_id = null;
       $user->remember_token = null;
       $user->is_admin = false;
+      $user->tsvector = null;
 
       $user->save();
-
+      
       $user->owned_forums()->detach($user);
       Follow::where('owner_id', $user->id)->delete();
       Notification::where('receiver_id', $user->id)->delete();
     });
+
+    if ($user->id === Auth::id()) {
+      Auth::logout();
+    }
   
-    return redirect()->back();
+    return redirect()->route('feed.show');
   }
 }

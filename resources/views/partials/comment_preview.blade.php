@@ -1,7 +1,7 @@
 <article class="container p-4 shadow mb-5 bg-white rounded">
     <div class="d-flex gap-1 align-items-center">
         @include('partials.user_info', ['user'=>$comment->owner])
-        <span class="d-none d-md-block">commented on <a class="wt-hoverable text-decoration-none" href="{{ route('post', ['post'=>$comment->post, 'forum'=>$post->forum]) }}">{{ Str::limit($post->title, 100) }}</a></span>
+        <span class="d-none d-md-block">commented on <a class="wt-hoverable text-decoration-none" href="{{ route('post', ['post'=>$comment->post, 'forum'=>$comment->post->forum]) }}">{{ Str::limit($post->title, 100) }}</a></span>
     </div>
     
     <p>{{ $comment->body }}</p>

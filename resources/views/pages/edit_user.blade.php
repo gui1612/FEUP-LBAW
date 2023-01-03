@@ -102,47 +102,69 @@
                 <a href="{{ route('user.show', ['user'=>$user]) }}" class="btn btn-danger mt-2" style="width: max-content">Cancel</a>
             </form>
         </div>
-        <form method="POST" action="{{ route('editProfile', ['user'=>$user]) }}" id="changePasswordForm">
-            @csrf
-            @method('PUT')
-            <h3>Password Reset</h3>
-            <div>
-                <label for="passwordInput" class="form-label pt-4">Current Password:</label>
-                <input id="passwordInput" class="form-control @error('password') is-invalid @enderror" type="password" name="password" required>
-                @error('password')
-                <div class="invalid-feedback">
-                    {{ $message }}
+        <div>
+            <form method="POST" action="{{ route('editProfile', ['user'=>$user]) }}" id="changePasswordForm">
+                @csrf
+                @method('PUT')
+                <h3>Password Reset</h3>
+                <div>
+                    <label for="passwordInput" class="form-label pt-4">Current Password:</label>
+                    <input id="passwordInput" class="form-control @error('password') is-invalid @enderror" type="password" name="password" required>
+                    @error('password')
+                    <div class="invalid-feedback">
+                        {{ $message }}
+                    </div>
+                    @enderror
                 </div>
-                @enderror
-            </div>
+                <div>
+                    <label for="newPasswordInput" class="form-label pt-4">New password:</label>
+                    <input id="newPasswordInput" class="form-control @error('new_password') is-invalid @enderror" type="password" name="new_password" required>
+                    @error('new_password')
+                    <div class="invalid-feedback">
+                        {{ $message }}
+                    </div>
+                    @enderror
+                </div>
+                <div>
+                    <label for="confirmPasswordInput" class="form-label pt-4">Confirm new password:</label>
+                    <input id="confirmPasswordInput" class="form-control @error('new_password_confirmation') is-invalid @enderror" type="password" name="new_password_confirmation" required>
+                    @error('new_password_confirmation')
+                    <div class="invalid-feedback">
+                        {{ $message }}
+                    </div>
+                    @enderror
+                </div>
+                <button type="submit" class="btn btn-primary mt-5">Change Password</button>
+            </form>
 
-            <div>
-                <label for="newPasswordInput" class="form-label pt-4">New password:</label>
-                <input id="newPasswordInput" class="form-control @error('new_password') is-invalid @enderror" type="password" name="new_password" required>
-                @error('new_password')
-                <div class="invalid-feedback">
-                    {{ $message }}
-                </div>
-                @enderror
-            </div>
-
-            <div>
-                <label for="confirmPasswordInput" class="form-label pt-4">Confirm new password:</label>
-                <input id="confirmPasswordInput" class="form-control @error('new_password_confirmation') is-invalid @enderror" type="password" name="new_password_confirmation" required>
-                @error('new_password_confirmation')
-                <div class="invalid-feedback">
-                    {{ $message }}
-                </div>
-                @enderror
-            </div>
-            <button type="submit" class="btn btn-primary mt-5">Change Password</button>
-        </form>
-        <form method="DELETE" action="{{ route('user.delete', ['user'=>$user]) }}">
-            <button type="submit" class="btn btn-danger">
+            <button type="button" class="btn btn-danger d-flex gap-2 mt-2" data-bs-toggle="modal" data-bs-target="#deletionWarningModal" data-wt-action="modals.admin.users.delete.open" data-wt-url="{{ route('user.delete', $user->id) }}" data-wt-username="{{$user->username}}">
                 <i class="bi bi-trash3"></i>
-                Delete Account
+                <span class="d-none d-md-block">Delete Account</span>
             </button>
-        </form>
+
+            <!-- Modal -->
+            <div class="modal fade" id="deletionWarningModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title">Delete <span data-wt-signal="modals.admin.users.delete.username"></span></h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            Are you sure you want to delete your account?
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">No</button>
+                            <form method="POST" data-wt-signal="modals.admin.users.delete.url:action">
+                                @csrf
+                                @method('DELETE')
+                                <button class="btn btn-danger" type="submit">Yes</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
 

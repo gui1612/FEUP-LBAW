@@ -19,6 +19,10 @@
                 @include('partials.post_preview', ['post'=>$post, 'preview'=>True, 'on_profile'=>False, 'user'=>$post->owner, 'forum'=>$post->forum_id])
             @endforeach
             {{ $paginator }}
+
+            @if(!$paginator->hasMorePages())
+                <em class="text-center d-block">That's it! You have no more posts in your feed. Follow other users or forums to fill it up.</em>
+            @endif
         </div>
     </div>
 </div>
