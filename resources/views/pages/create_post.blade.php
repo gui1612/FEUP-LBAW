@@ -10,23 +10,41 @@
   <form class="col-md-11 mx-auto" method="POST" action="{{ route('post.create_post', ['forum'=>$forum]) }}" enctype="multipart/form-data">
       @csrf
       <div class="mb-3">
-          <label for="title" class="form-label">Title</label>
-          <input class="form-control" id="title" name="title" placeholder="Title" required>
+        <label for="inputPostTitle" class="form-label">Title</label>
+        <input type="text" class="form-control @error('title') is-invalid @enderror" id="inputPostTitle" name="title" placeholder="Title" value="{{ old('title') }}" required>
+        @error('title')
+          <div class="invalid-feedback">
+              {{ $message }}
+          </div>
+        @enderror
       </div>
       <div class="mb-3">
-          <label for="body" class="form-label">Body</label>
-          <textarea rows="18" class="form-control" name="body" id="body" placeholder="Share your thoughts" required></textarea>
+        <label for="inputPostBody" class="form-label">Body</label>
+        <textarea rows="18" class="form-control @error('body') is-invalid @enderror" id="inputPostBody" name="body" placeholder="Share your thoughts" required>{{ old('body') }}</textarea>
+        @error('body')
+          <div class="invalid-feedback">
+              {{ $message }}
+          </div>
+        @enderror
       </div>
       <div class="mb-3">
-        <label for="image1" class="form-label">Image</label>
-        <input type="file" id="image1" name="images[][file]" class="form-control" accept="image/*">
+        <label for="inputPostImage" class="form-label">Image</label>
+        <input type="file" class="form-control @error('images.0.file') is-invalid @enderror" id="inputPostImage" name="images[][file]" accept="image/*">
+        @error('images.0.file')
+          <div class="invalid-feedback">
+              {{ $message }}
+          </div>
+        @enderror
       </div>
       <div class="mb-3">
-        <label for="caption1" class="form-label">Caption</label>
-        <input type="text" id="caption1" name="images[][caption]" class="form-control">
+        <label for="inputPostImageCaption" class="form-label">Image caption</label>
+        <input type="text" class="form-control @error('images.0.caption') is-invalid @enderror" id="inputPostImageCaption" name="images[][caption]">
+        @error('images.0.caption')
+          <div class="invalid-feedback">
+              {{ $message }}
+          </div>
+        @enderror
       </div>
-
-      <input type="hidden" id="forum" name="forum" value="{{ $forum->id }}">
 
       <button type="submit" class="btn btn-primary">Submit</button>
   </form>

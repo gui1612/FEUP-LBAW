@@ -390,39 +390,39 @@ CREATE TRIGGER hide_reported_content
 
 -- ---
 
--- CREATE OR REPLACE FUNCTION hide_hidden_forum_posts() RETURNS TRIGGER AS
--- $BODY$
--- BEGIN
---   IF NOT OLD.hidden AND NEW.hidden THEN
---     UPDATE Posts SET hidden = TRUE WHERE forum_id = NEW.id;
---   END IF;
---   RETURN NEW;
--- END
--- $BODY$
--- LANGUAGE plpgsql;
+CREATE OR REPLACE FUNCTION hide_hidden_forum_posts() RETURNS TRIGGER AS
+$BODY$
+BEGIN
+  IF NOT OLD.hidden AND NEW.hidden THEN
+    UPDATE Posts SET hidden = TRUE WHERE forum_id = NEW.id;
+  END IF;
+  RETURN NEW;
+END
+$BODY$
+LANGUAGE plpgsql;
 
--- CREATE TRIGGER hide_hidden_forum_posts
---   BEFORE UPDATE ON Forums
---   FOR EACH ROW
---   EXECUTE PROCEDURE hide_hidden_forum_posts();
+CREATE TRIGGER hide_hidden_forum_posts
+  AFTER UPDATE ON Forums
+  FOR EACH ROW
+  EXECUTE PROCEDURE hide_hidden_forum_posts();
 
--- ---
+---
 
--- CREATE OR REPLACE FUNCTION hide_hidden_post_comments() RETURNS TRIGGER AS
--- $BODY$
--- BEGIN
---   IF NOT OLD.hidden AND NEW.hidden THEN
---     UPDATE Comments SET hidden = TRUE WHERE post_id = NEW.id;
---   END IF;
---   RETURN NEW;
--- END
--- $BODY$
--- LANGUAGE plpgsql;
+CREATE OR REPLACE FUNCTION hide_hidden_post_comments() RETURNS TRIGGER AS
+$BODY$
+BEGIN
+  IF NOT OLD.hidden AND NEW.hidden THEN
+    UPDATE Comments SET hidden = TRUE WHERE post_id = NEW.id;
+  END IF;
+  RETURN NEW;
+END
+$BODY$
+LANGUAGE plpgsql;
 
--- CREATE TRIGGER hide_hidden_post_comments
---   BEFORE UPDATE ON Posts
---   FOR EACH ROW
---   EXECUTE PROCEDURE hide_hidden_post_comments();
+CREATE TRIGGER hide_hidden_post_comments
+  AFTER UPDATE ON Posts
+  FOR EACH ROW
+  EXECUTE PROCEDURE hide_hidden_post_comments();
 
 ---
 
@@ -440,7 +440,7 @@ $BODY$
 LANGUAGE plpgsql;
 
 CREATE TRIGGER hide_blocked_user_content
-  BEFORE UPDATE ON Users
+  AFTER UPDATE ON Users
   FOR EACH ROW
   EXECUTE PROCEDURE hide_blocked_user_content();
 
@@ -485,12 +485,10 @@ $BODY$
 DECLARE
   receiver INTEGER;
 BEGIN
-  IF NEW.type = 'like' THEN
-    IF NEW.rated_post_id IS NOT NULL THEN
-      INSERT INTO Notifications(type, receiver_id, rating_id) VALUES ('content_rated', (SELECT owner_id FROM Posts WHERE id = NEW.rated_post_id), NEW.id);
-    ELSIF NEW.rated_comment_id IS NOT NULL THEN
-      INSERT INTO Notifications(type, receiver_id, rating_id) VALUES ('content_rated', (SELECT owner_id FROM Comments WHERE id = NEW.rated_comment_id), NEW.id);
-    END IF;
+  IF NEW.rated_post_id IS NOT NULL THEN
+    INSERT INTO Notifications(type, receiver_id, rating_id) VALUES ('content_rated', (SELECT owner_id FROM Posts WHERE id = NEW.rated_post_id), NEW.id);
+  ELSIF NEW.rated_comment_id IS NOT NULL THEN
+    INSERT INTO Notifications(type, receiver_id, rating_id) VALUES ('content_rated', (SELECT owner_id FROM Comments WHERE id = NEW.rated_comment_id), NEW.id);
   END IF;
   RETURN NEW;
 END
@@ -534,11 +532,11 @@ BEGIN
       IF NEW.rated_post_id IS NOT NULL THEN
         table_name := 'posts';
         content_id := NEW.rated_post_id;
-        user_id := NEW.owner_id;
+        SELECT owner_id INTO user_id FROM Posts WHERE id = NEW.rated_post_id;
       ELSE
         table_name := 'comments';
         content_id := NEW.rated_comment_id;
-        user_id := NEW.owner_id;
+        SELECT owner_id INTO user_id FROM Comments WHERE id = NEW.rated_comment_id;
       END IF;
     END IF;
       
@@ -552,11 +550,11 @@ BEGIN
       IF OLD.rated_post_id IS NOT NULL THEN
         table_name := 'posts';
         content_id := OLD.rated_post_id;
-        user_id := OLD.owner_id;
+        SELECT owner_id INTO user_id FROM Posts WHERE id = OLD.rated_post_id;
       ELSE
         table_name := 'comments';
         content_id := OLD.rated_comment_id;
-        user_id := OLD.owner_id;
+        SELECT owner_id INTO user_id FROM Comments WHERE id = OLD.rated_comment_id;
       END IF;
     END IF;
 
@@ -567,8 +565,6 @@ BEGIN
   UPDATE Users
     SET reputation = reputation + rating_diff
     WHERE id = user_id;
-
-  -- FIXME: faltam comments
 
   IF TG_OP = 'INSERT' OR TG_OP = 'UPDATE' THEN
     RETURN NEW;
@@ -589,23 +585,21 @@ CREATE TRIGGER update_user_rating
 CREATE OR REPLACE FUNCTION no_post_delete_with_likes_or_comments() RETURNS TRIGGER AS
 $BODY$
 BEGIN
-  IF NOT OLD.hidden AND NEW.hidden THEN
-    IF EXISTS (SELECT * FROM Ratings WHERE Ratings.rated_post_id = OLD.id) THEN
-      RAISE EXCEPTION 'A post cannot be deleted if it has ratings';
-    END IF;
-
-    IF EXISTS (SELECT * FROM Comments WHERE Comments.post_id = OLD.id) THEN
-      RAISE EXCEPTION 'A post cannot be deleted if it has comments';
-    END IF;
-
+  IF EXISTS (SELECT * FROM Ratings WHERE Ratings.rated_post_id = OLD.id) THEN
+    RAISE EXCEPTION 'A post cannot be deleted if it has ratings';
   END IF;
+
+  IF EXISTS (SELECT * FROM Comments WHERE Comments.post_id = OLD.id) THEN
+    RAISE EXCEPTION 'A post cannot be deleted if it has comments';
+  END IF;
+
   RETURN NEW;
 END
 $BODY$
 LANGUAGE plpgsql;
 
 CREATE TRIGGER no_post_delete_with_likes_or_comments
-  BEFORE UPDATE ON Posts
+  BEFORE DELETE ON Posts
   FOR EACH ROW
   EXECUTE PROCEDURE no_post_delete_with_likes_or_comments();
 

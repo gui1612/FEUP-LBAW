@@ -16,10 +16,6 @@ class PostPolicy
         if ($user->is_deleted()) {
             return false;
         }
-
-        if ($user->is_admin) {
-            return true;
-        }
     }
 
     public function create(User $user) {
@@ -27,7 +23,7 @@ class PostPolicy
     }
 
     public function view(?User $user, Post $post) {
-        if ($post->hidden && $user->id !== $post->owner_id) {
+        if (!$user->is_admin && $post->hidden && $user->id !== $post->owner_id) {
             return Response::denyAsNotFound();
         }
         
@@ -77,6 +73,18 @@ class PostPolicy
     public function rate(User $user, Post $post) {
         if ($post->hidden) {
             return Response::denyAsNotFound();
+        }
+        
+        return true;
+    }
+    
+    public function report(User $user, Post $post) {
+        if ($post->hidden) {
+            return Response::denyAsNotFound();
+        }
+        
+        if ($post->owner_id === $user->id) {
+            return Response::denyWithStatus(403, 'You cannot report your own post.');
         }
         
         return true;

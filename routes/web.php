@@ -63,10 +63,10 @@ Route::delete('admin/team/{user}/unblock', 'AdminController@block')->name('admin
 // Post
 Route::post('forums/{forum}/posts/', 'PostController@create_post')->name('post.create_post');
 Route::get('forums/{forum}/posts/new', 'PostController@show_create_post_form')->name('post.create');
-Route::get('posts/{post}', 'PostController@show_post')->name('post');
-Route::put('posts/{post}', 'PostController@edit_post')->name('post.edit_with_new_data');
-Route::delete('posts/{post}', 'PostController@delete_post')->name('post.delete');
-Route::get('posts/{post}/edit', 'PostController@show_edit_post_form')->name('post.edit');
+Route::get('forums/{forum}/posts/{post}', 'PostController@show_post')->name('post');
+Route::put('forums/{forum}/posts/{post}', 'PostController@edit_post')->name('post.edit_with_new_data');
+Route::delete('forums/{forum}/posts/{post}', 'PostController@delete_post')->name('post.delete');
+Route::get('forums/{forum}/posts/{post}/edit', 'PostController@show_edit_post_form')->name('post.edit');
 
 // Post Comments
 Route::post('posts/{post}/comments', 'PostCommentsController@create_comment')->name('post.comments.create');

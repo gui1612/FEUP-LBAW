@@ -5,7 +5,7 @@
     </button>
     <ul class="dropdown-menu dropdown-menu-end">
         <li>
-            <a href="{{ route('post.edit', ['post'=>$post->id]) }}" class="dropdown-item">Edit</a>
+            <a href="{{ route('post.edit', ['forum' => $post->forum, 'post'=>$post->id]) }}" class="dropdown-item">Edit</a>
         </li>
         <!-- Button trigger modal -->
         <li><button type="button" class="btn btn-primary dropdown-item text-danger" data-bs-toggle="modal" data-bs-target="#exampleModal">Delete</a></li>
@@ -23,7 +23,7 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">No</button>
-                    <form method="POST" action="{{ route('post.delete', $post->id)}}">
+                    <form method="POST" action="{{ route('post.delete', ['forum' => $post->forum, 'post' => $post->id])}}">
                         @csrf
                         @method('delete')
                         <button class="btn btn-danger" type="submit">Yes</button>

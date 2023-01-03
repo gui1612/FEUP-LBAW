@@ -69,21 +69,21 @@ class Notification extends Model
 
         } else if ($this->type == 'content_reported') {
             if ($this->report->post != NULL) {
-                return route('post', ['post'=>$this->report->post]);
+                return route('post', ['forum' => $this->report->post->forum, 'post'=>$this->report->post]);
             } elseif ($this->report->comment != NULL) {
-                return route('post', ['post'=>$this->report->comment->post]);
+                return route('post', ['forum' => $this->report->comment->post->forum, 'post'=>$this->report->comment->post]);
             } else {
                 return route('forum.show', ['forum'=>$this->report->forum]);
             }
 
         } else if ($this->type == 'post_comment') {
-            return route('post', ['post'=>$this->comment->post]);
+            return route('post', ['forum' => $this->comment->post->forum, 'post'=>$this->comment->post]);
 
         } else if ($this->type == 'content_rated') {
             if ($this->rating->post != NULL) {
-                return route('post', ['post'=>$this->rating->post]);
+                return route('post', ['forum' => $this->rating->post->forum, 'post'=>$this->rating->post]);
             } else {
-                return route('post', ['post'=>$this->rating->comment->post]);
+                return route('post', ['forum' => $this->rating->comment->post->forum, 'post'=>$this->rating->comment->post]);
             }
         }
     }

@@ -28,7 +28,7 @@ class PostCommentsController extends Controller {
 
         UpdateNotifications::dispatch($post->owner, 'new');
 
-        return redirect()->route('post', ['post' => $post]);
+        return redirect()->route('post', ['post' => $post, 'forum'=>$post->forum]);
     }
 
     public function edit_comment(Request $request, Post $post, Comment $comment) {
@@ -42,7 +42,7 @@ class PostCommentsController extends Controller {
         $comment->body = $data['body'];
         $comment->save();
 
-        return redirect()->route('post', ['post' => $post]);
+        return redirect()->route('post', ['post' => $post, 'forum'=>$post->forum]);
     }
 
     public function delete_comment(Post $post, Comment $comment) {
@@ -52,6 +52,6 @@ class PostCommentsController extends Controller {
         $comment->hidden = true;
         $comment->save();
 
-        return redirect()->route('post', ['post' => $post]);
+        return redirect()->route('post', ['post' => $post, 'forum'=>$post->forum]);
     }
 }

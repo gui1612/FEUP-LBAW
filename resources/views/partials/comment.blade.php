@@ -57,5 +57,7 @@
             @endif
         </div>
     </div>
+    @if($post->comments->count() > 1)
     <hr>
+    @endif
 </section>

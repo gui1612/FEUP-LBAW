@@ -6,7 +6,7 @@
 <body>
   <div class="container w-75 m-4 bg-white px-4 py-3 d-flex flex-column gap-2 justify-content-center">
     <h3>Edit Post</h3>
-    <form class="col-md-11 mx-auto" method="POST" action="{{ route('post.edit_with_new_data', $post->id) }}" enctype="multipart/form-data">
+    <form class="col-md-11 mx-auto" method="POST" action="{{ route('post.edit_with_new_data', ['forum' => $post->forum, 'post' => $post->id]) }}" enctype="multipart/form-data">
         @csrf
         @method('PUT')
         <div class="mb-3">
@@ -39,7 +39,7 @@
       <button type="submit" class="btn btn-primary mb-4">Upload Image</button>
     </form>
     <div class="col-md-11 mx-auto">
-        <a href="{{ route('post', $post->id) }}" class="btn btn-secondary mb-2 ">Back to post</a>    
+        <a href="{{ route('post', ['forum' => $post->forum, 'post' => $post->id]) }}" class="btn btn-secondary mb-2 ">Back to post</a>    
     </div>
   </div>
 </body>
