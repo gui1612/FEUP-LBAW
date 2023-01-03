@@ -36,7 +36,7 @@
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link d-flex align-items-center" href=" {{ route('post.create') }} ">
+                        <a class="nav-link d-flex align-items-center" href=" {{ route('post.create', ['forum'=>$forum]) }} ">
                             <i class="d-none d-md-inline-block bi bi-plus me-1"></i>New Post
                         </a>
                     </li>

@@ -23,10 +23,14 @@
         <label for="caption1" class="form-label">Caption</label>
         <input type="text" id="caption1" name="images[][caption]" class="form-control">
       </div>
+
+      <input type="hidden" id="forum" name="forum" value="{{ $forum->id }}">
+
       <button type="submit" class="btn btn-primary">Submit</button>
   </form>
   <div class="col-md-11 mx-auto">
       <a href="{{ url()->previous(); }}" class="btn btn-secondary mb-2 ">Cancel</a>    
   </div>
+  
 </div>
 @endsection

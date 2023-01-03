@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Resources\RatingResource;
 use App\Models\Comment;
+use App\Models\Forum;
 use App\Models\Post;
 use App\Models\PostImage;
 use App\Models\Rating;
@@ -19,9 +20,9 @@ class PostController extends Controller {
   public function __construct() {
   }
 
-  public function show_create_post_form() {
+  public function show_create_post_form(Forum $forum) {
     $this->authorize('create', Post::class);
-    return view('pages.create_post', ['new_post' => true]);
+    return view('pages.create_post', ['new_post' => true, 'forum' => $forum]);
   }
 
   public function show_post(Post $post)
@@ -41,11 +42,15 @@ class PostController extends Controller {
     $this->authorize('create', Post::class);
 
     $data = $request->validate([
-      'title' => 'required|string|max:255',
-      'body' => 'required|string',
-      'images.*.caption' => 'required|string',
-      'images.*.file' => 'required|image|max:4096',
+    'title' => 'required|string|max:255',
+    'body' => 'required|string',
+    'forum' => 'required|string',
+    'images.*.caption' => 'sometimes|string',
+    'images.*.file' => 'sometimes|required_with:images|image|max:4096',
+    ], [
+    'images.*.file.required_with' => 'The :attribute field is required when images are present.'
     ]);
+
 
     if (!isset($data['images'])) {
       $data['images'] = [];
@@ -58,6 +63,7 @@ class PostController extends Controller {
     $post = new Post();
     $post->title = $data['title'];
     $post->body = $data['body'];
+    $post->forum_id = $data['forum'];
     $post->owner()->associate(Auth::user());
 
     $images = [];
