@@ -42,7 +42,8 @@
             </div>
         </fieldset>
         <div class="bg-white p-3 text-center">
-            <p class="mb-0">Don't have an account? <a href="{{ route('register.show') }}">Create one</a></p>
+            <p class="mb-2">Don't have an account? <a href="{{ route('register.show') }}">Create one</a></p>
+            <p class="mb-2"><a href="{{ route('showLinkForm') }}">Forgot your password?</a></p>
         </div>
     </form>
 </div>
