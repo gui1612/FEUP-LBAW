@@ -14,9 +14,11 @@ externalDocs:
   description: Wrottit documentation
 
 tags:
-  - name: "M01: Authentication and User Profile"
-  - name: "M02: System Administration"
-  - name: "M03: Forums, Posts and Comments"
+  - name: "M01: Authentication"
+  - name: "M02: Profile and User Information"
+  - name: "M03: System Administration"
+  - name: "M04: Forums, Posts and Comments"
+  - name: "M05: Static pages"
 
 paths:
   # M01 - Authentication and User Profile
@@ -26,7 +28,7 @@ paths:
       summary: "R101: Login Form"
       description: "Provide a form for authentication. Acess: PUB"
       tags:
-        - "M01: Authentication and User Profile" 
+        - "M01: Authentication" 
       
       responses:  
         "200": 
@@ -37,7 +39,7 @@ paths:
       summary: "R102: Login Action"
       description: "Login form submission action. Acess: PUB"
       tags:
-        - "M01: Authentication and User Profile"
+        - "M01: Authentication"
       requestBody:
         required: true
         content:
@@ -76,7 +78,7 @@ paths:
       summary: "R103: Logout Action"
       description: "Logout the current authenticated user. Access: USR"
       tags:
-        - "M01: Authentication and User Profile"
+        - "M01: Authentication"
 
       responses:
         "302":
@@ -96,7 +98,7 @@ paths:
       summary: "R104: Register Form"
       description: "Provide form for new users. Access: PUB"
       tags:
-        - "M01: Authentication and User Profile"
+        - "M01: Authentication"
 
       responses:
         "200":
@@ -150,24 +152,50 @@ paths:
               examples:
                 302Success:
                   description: "Successful registration. Redirect to user profile."
-                  value: "/users/{id}"
+                  value: "/users/{user}"
                 302Failure:
                   description: "Failed registration. Redirect to sign-up form."
                   value: "/signup"
 
-  /users/{id}:
+  /auth/{provider}/redirect:
     get:
       operationId: R106
-      summary: "R106: View user profile"
+      summary: "R106: OAuth API Sign-in"
+      description: "Redirects the user to the authentication provider for authorization. Access: PUB"
+      tags:
+        - "M01: Authentication"
+      
+      responses:
+        "200":
+          description: "Ok. Redirects the user to the authentication provider"
+
+  /auth/{provider}/callback:
+    get:
+      operationId: R107
+      summary: "R107:  OAuth API callback"
+      description: "Handles the callback from the authentication provider. Access: PUB"
+      tags: 
+        - "M01: Authentication"
+
+      responses:
+        "200":
+          description: "Ok. The callback was successful"
+        "401":
+          description: "The callback was unsuccessful"
+
+  /users/{user}:
+    get:
+      operationId: R201
+      summary: "R201: View user profile"
       description: "Show the individual user profile. Access: PUB"
       tags:
-        - "M01: Authentication and User Profile"
+        - "M02: Profile and User Information"
 
       parameters:
         - in: path
-          name: id
+          name: user
           schema:
-            type: integer
+            type: string
           required: true
 
       responses:
@@ -176,19 +204,39 @@ paths:
         "404":
           description: "User does not exist"
 
-  /users/{id}/edit:
-    get:
-      operationId: R107
-      summary: "R107: User profile edition form"
-      description: "Provide form for user profile edition. Access: OWN"
+    delete:
+      operationId: R202
+      summary: "R202: Deletes user profile"
+      description: "Deletes specified user. Access: OWN"
       tags:
-        - "M01: Authentication and User Profile"
+        - "M02: Profile and User Information"
 
       parameters:
         - in: path
-          name: id
+          name: user
           schema:
-            type: integer
+            type: string
+          required: true
+
+      responses:
+        "200":
+          description: "Ok. Show user profile (UI07)"
+        "404":
+          description: "User does not exist"      
+
+  /users/{user}/edit:
+    get:
+      operationId: R203
+      summary: "R203: User profile edition form"
+      description: "Provide form for user profile edition. Access: OWN"
+      tags:
+        - "M02: Profile and User Information"
+
+      parameters:
+        - in: path
+          name: user
+          schema:
+            type: string
           required: true
 
       responses:
@@ -202,17 +250,17 @@ paths:
           description: "User not found"
 
     put:
-      operationId: R108
-      summary: "R108: Edit user profile action"
+      operationId: R204
+      summary: "R204: Edit user profile action"
       description: "Processes the user edit profile submission. Access: OWN"
       tags:
-        - "M01: Authentication and User Profile"
+        - "M02: Profile and User Information"
 
       parameters:
         - in: path
-          name: id
+          name: user
           schema:
-            type: integer
+            type: string
           required: true
 
       requestBody:
@@ -248,11 +296,11 @@ paths:
               examples:
                 302Success:
                   description: "Successful profile edition. Redirect to user profile."
-                  value: "/users/{id}"
+                  value: "/users/{user}"
                 302Failure:
                   description: "Failed profile edition. Redirect to edit profile form."
-                  value: "/users/{id}/edit"           
-
+                  value: "/users/{user}/edit"           
+# aqui
   # M02 - System Administration
   /admin/users:
     get:
