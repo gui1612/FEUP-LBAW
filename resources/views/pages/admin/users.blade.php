@@ -119,29 +119,6 @@
                         @endif
                         <!-- Modal -->
                         <div class="modal fade" id="blockWarningModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                        <div class="modal-dialog">
-                            <div class="modal-content">
-                            <div class="modal-header">
-                                <h5 class="modal-title">Block <span data-wt-signal="modals.admin.users.block.username"></span></h5>
-                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                            </div>
-                            <div class="modal-body">
-                                <p>Are you sure you want to block this user?</p>
-                                <form method="POST" data-wt-signal="modals.admin.users.unblock.url:action">
-                                @csrf
-                                <label for="block_reason">Block Reason:</label>
-                                <input type="text" class="form-control mt-1" id="block_reason" name="block_reason" required>
-                            </div>
-                            <div class="modal-footer">
-                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">No</button>
-                                <button class="btn btn-danger" type="submit">Yes</button>
-                                </form>
-                            </div>
-                            </div>
-                        </div>
-                        </div>
-
-                        <!-- <div class="modal fade" id="blockWarningModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
                             <div class="modal-dialog">
                                 <div class="modal-content">
                                     <div class="modal-header">
@@ -149,19 +126,20 @@
                                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                     </div>
                                     <div class="modal-body">
-                                        Are you sure you want to block this user?
+                                        <p>Are you sure you want to block this user?</p>
+                                        <form method="POST" data-wt-signal="modals.admin.users.unblock.url:action">
+                                            @csrf
+                                            <label for="block_reason">Block Reason:</label>
+                                            <input type="text" class="form-control mt-1" id="block_reason" name="block_reason" required>
                                     </div>
                                     <div class="modal-footer">
                                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">No</button>
-                                        <form method="POST" data-wt-signal="modals.admin.users.unblock.url:action">
-                                            @csrf
-                                            <input type="text" name="block_reason">
-                                            <button class="btn btn-danger" type="submit">Yes</button>
+                                        <button class="btn btn-danger" type="submit">Yes</button>
                                         </form>
                                     </div>
                                 </div>
                             </div>
-                        </div> -->
+                        </div>
                         <!-- Modal -->
                         <div class="modal fade" id="unblockWarningModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
                             <div class="modal-dialog">
