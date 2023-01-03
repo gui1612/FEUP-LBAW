@@ -38,14 +38,10 @@
             </div>
         @endif
         
-        @if(Auth::check() && ($post->owner_id == Auth::user()->id))
-            <div class="d-flex align-items-center justify-content-between">
-                @include('partials.post_title')
-                @include('partials.post_actions')
-            </div>
-        @else
+        <div class="d-flex align-items-center justify-content-between">
             @include('partials.post_title')
-        @endif
+            @include('partials.post_actions')
+        </div>
 
         @include('partials.post_body')
 

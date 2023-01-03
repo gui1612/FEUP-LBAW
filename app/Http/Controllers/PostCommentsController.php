@@ -49,8 +49,7 @@ class PostCommentsController extends Controller {
         $this->authorize('view', $post);
         $this->authorize('delete', $comment);
 
-        $comment->hidden = true;
-        $comment->save();
+        Comment::destroy($comment->id);
 
         return redirect()->route('post', ['post' => $post, 'forum'=>$post->forum]);
     }

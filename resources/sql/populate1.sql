@@ -37,7 +37,7 @@ INSERT INTO Posts (created_at, last_edited, title, body, rating, owner_id, forum
 INSERT INTO Posts (created_at, last_edited, title, body, rating, owner_id, forum_id, hidden) VALUES ('2022-10-24 12:53:40', '2022-10-24 12:53:40', 'His face while I''m eating meat', 'Poor thing but I can''t give him any more', 0, 9, 1, false);
 INSERT INTO Posts (created_at, last_edited, title, body, rating, owner_id, forum_id, hidden) VALUES ('2022-04-24 12:53:40', '2022-04-24 12:53:40', 'He had a rough day', 'I love watching him sleep. Not in a creepy way!', 0, 7, 1, false);
 
-INSERT INTO PostImages (path, caption, post_id) VALUES ('https://i.redd.it/2zezb2ru0q5a1.jpg', 'My cute dog!', 6);
+INSERT INTO PostImages (path, caption, post_id) VALUES ('https://external-preview.redd.it/WRHc5r0gnlGJx1s4fCT4yruOCL6XH8pz-iBMfpPjQi8.jpg?auto=webp&s=4e286d08762212dbfa8fcfe22e91e68ca677909f', 'My cute cat!', 6);
 INSERT INTO PostImages (path, caption, post_id) VALUES ('https://i.redd.it/jto6t3kyvm5a1.jpg', 'Notícias 12 dezembro de manhã', 3);
 INSERT INTO PostImages (path, caption, post_id) VALUES ('https://i.redd.it/ph1z7ls6mm5a1.png', 'Mapa que discrimina raiva sentida, portugueses quase no topo!', 4);
 INSERT INTO PostImages (path, caption, post_id) VALUES ('https://i.redd.it/nd8e1xou5g5a1.png', 'Mashup bandeiras da peninsula ibérica', 5);

@@ -14,7 +14,7 @@
             </ul>   
         </div>
 
-        <div class="mx-2 mx-md-0">
+        <div class="w-100 mx-2 mx-md-0">
             @foreach($paginator->items() as $post)
                 @include('partials.post_preview', ['post'=>$post, 'preview'=>True, 'on_profile'=>False, 'user'=>$post->owner, 'forum'=>$post->forum_id])
             @endforeach

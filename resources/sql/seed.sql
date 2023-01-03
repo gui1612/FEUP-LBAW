@@ -62,7 +62,7 @@ CREATE TABLE Forums (
 );
 
 CREATE TABLE ForumOwners (
-  forum_id INTEGER CONSTRAINT forum_owners_ref_forum REFERENCES Forums CONSTRAINT forum_owner_forum_id_nn NOT NULL,
+  forum_id INTEGER CONSTRAINT forum_owners_ref_forum REFERENCES Forums ON DELETE CASCADE CONSTRAINT forum_owner_forum_id_nn NOT NULL,
   owner_id INTEGER CONSTRAINT forum_owners_ref_owner REFERENCES Users CONSTRAINT forum_owner_owner_id_nn NOT NULL,
   CONSTRAINT forum_owner_pk PRIMARY KEY (forum_id, owner_id)
 );
@@ -106,7 +106,7 @@ CREATE TABLE Follows (
   id SERIAL CONSTRAINT follows_pk PRIMARY KEY, 
   owner_id INTEGER CONSTRAINT follow_ref_owner REFERENCES Users CONSTRAINT follow_owner_id_nn NOT NULL,
   followed_user_id INTEGER CONSTRAINT follow_ref_followed_user REFERENCES Users,
-  followed_forum_id INTEGER CONSTRAINT follow_ref_followed_forum REFERENCES Forums,
+  followed_forum_id INTEGER CONSTRAINT follow_ref_followed_forum REFERENCES Forums ON DELETE CASCADE,
   CONSTRAINT follow_refs_user_uk UNIQUE (owner_id, followed_user_id),
   CONSTRAINT follow_refs_forum_uk UNIQUE (owner_id, followed_forum_id),
 
@@ -139,8 +139,8 @@ CREATE TABLE Notifications (
   receiver_id INTEGER CONSTRAINT notification_ref_receiver REFERENCES Users CONSTRAINT notification_receiver_id_nn NOT NULL,
 
   follow_id INTEGER CONSTRAINT notification_ref_follow REFERENCES Follows ON DELETE CASCADE,
-  comment_id INTEGER CONSTRAINT notification_ref_comment REFERENCES Comments,
-  report_id INTEGER CONSTRAINT notification_ref_report REFERENCES Reports,
+  comment_id INTEGER CONSTRAINT notification_ref_comment REFERENCES Comments ON DELETE CASCADE,
+  report_id INTEGER CONSTRAINT notification_ref_report REFERENCES Reports ON DELETE CASCADE,
   rating_id INTEGER CONSTRAINT notification_ref_rating REFERENCES Ratings ON DELETE CASCADE,
 
   CONSTRAINT notification_xor_ref_follow CHECK ((type = 'follow_user') = (follow_id IS NOT NULL)),
@@ -261,7 +261,7 @@ $BODY$
 LANGUAGE plpgsql;
 
 CREATE TRIGGER at_least_one_forum_owner
-  BEFORE DELETE ON ForumOwners
+  AFTER DELETE ON ForumOwners
   FOR EACH ROW
   EXECUTE PROCEDURE at_least_one_forum_owner();
 
@@ -432,7 +432,7 @@ BEGIN
   IF OLD.block_reason IS NULL AND NEW.block_reason IS NOT NULL THEN
     UPDATE Posts SET hidden = TRUE WHERE owner_id = NEW.id;
     UPDATE Comments SET hidden = TRUE WHERE owner_id = NEW.id;
-    -- UPDATE Forums SET hidden = TRUE WHERE owner_id = NEW.id;
+    UPDATE Forums SET hidden = TRUE WHERE id IN (SELECT forum_id FROM ForumOwners WHERE owner_id = NEW.id);
   END IF;
   RETURN NEW;
 END
@@ -593,7 +593,7 @@ BEGIN
     RAISE EXCEPTION 'A post cannot be deleted if it has comments';
   END IF;
 
-  RETURN NEW;
+  RETURN OLD;
 END
 $BODY$
 LANGUAGE plpgsql;

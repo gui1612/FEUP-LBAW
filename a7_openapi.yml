@@ -619,7 +619,9 @@ paths:
       operationId: "R309"
       summary: "R309: Report ongoing state"
       description: "Administrators can mark the report as on going. Access: ADM"
-      
+      tags:
+        - "M03 - System Administration" 
+
       requestBody:
         required: true
         content:
@@ -650,7 +652,9 @@ paths:
       operationId: "R310"
       summary: "R310: Approve a report"
       description: "Administrators can aprove a report in order to apply Access: ADM"
-      
+      tags:
+        - "M03 - System Administration" 
+
       requestBody:
         required: true
         content:
@@ -681,7 +685,9 @@ paths:
       operationId: "R311"
       summary: "R311: Denie a report"
       description: "Administrators can denie a report in order to apply Access: ADM"
-      
+      tags:
+        - "M03 - System Administration" 
+        
       requestBody:
         required: true
         content:
@@ -1622,7 +1628,7 @@ paths:
       summary: "R502: View a Notification"
       description: "View the specific notification details. Access: USR"
       tags:
-        - "M05: Notification"  
+        - "M05: Notifications"  
 
       responses:
         "200":
@@ -1687,7 +1693,7 @@ paths:
       summary: "R601: About Page"
       description: "Page with information about application and its developers. Access: PUB"
       tags:
-        - "M08: Static Pages"
+        - "M06: Static Pages"
 
       responses:
         "200":
@@ -1708,10 +1714,10 @@ paths:
   /contact:
     get:
       operationId: "R603"
-      summary: "R803: Contacts Page"
+      summary: "R603: Contacts Page"
       description: "Application managers contact page. Access: PUB"
       tags:
-        - "M08: Static Pages"
+        - "M06: Static Pages"
 
       responses:
         "200":

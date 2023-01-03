@@ -57,7 +57,7 @@ class PostController extends Controller {
     }
 
     $data['images'] = array_filter($data['images'], function ($image) {
-      return $image['caption'] != null;
+      return $image['caption'] != null && isset($image['file']) && $image['file'] != null;
     });
 
     if (count($data['images']) > 0) {
@@ -112,9 +112,10 @@ class PostController extends Controller {
   {
     $this->authorize('delete_post', $post);
 
-    $post->hidden = True;
-    $post->save();
-
-    return redirect()->route('feed.show');
+    if (Post::destroy($post->id) > 0) {
+      return redirect()->route('forum.show', ['forum' => $forum]);
+    } else {
+      return abort(500, 'Failed to delete post.');
+    }
   }
 }

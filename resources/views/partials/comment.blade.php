@@ -4,7 +4,7 @@
         @if(Auth::check() && ((Auth::user()->id === $comment->owner_id) || Auth::user()->is_admin || ($comment->post->forum->owners->contains(Auth::user()))))
             <div class="d-flex">
                 @if (Auth::user()->id === $comment->owner_id)
-                    <button id="edit-comment-button" class="btn" action="onPencilClick()">
+                    <button id="edit-comment-button" class="btn" data-wt-action="modals.comment.edit" wt-action="{{ route('post.comments.edit', ['post'=>$post, 'comment'=>$comment]) }}">
                         <i class="bi bi-pencil-fill"></i>
                     </button>
                 @endif
@@ -13,7 +13,7 @@
                 </button>
             </div>
             <!-- Modal -->
-            <div class="modal fade" id="commentDeletionModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal fade" id="commentDeletionModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true" data-wt-action="modals.comment.delete" wt-action="{{ route('post.comments.delete', ['post'=>$post, 'comment'=>$comment]) }}">
                 <div class="modal-dialog">
                     <div class="modal-content">
                         <div class="modal-header">
@@ -25,7 +25,7 @@
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">No</button>
-                            <form method="POST" action="{{ route('post.comments.delete', ['post'=>$post, 'comment'=>$comment]) }}">
+                            <form method="POST" data-wt-signal="modals.comment.delete.url:action">
                                 @csrf
                                 @method('DELETE')
                                 <button class="btn btn-danger" type="submit">Yes</button>
