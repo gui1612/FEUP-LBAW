@@ -18,7 +18,8 @@ tags:
   - name: "M02: Profile and User Information"
   - name: "M03: System Administration"
   - name: "M04: Forums, Posts and Comments"
-  - name: "M05: Static pages"
+  - name: "M05: Notifications"
+  - name: "M06: Static pages"
 
 paths:
   # M01 - Authentication and User Profile
@@ -109,7 +110,7 @@ paths:
       summary: "R105: Register action"
       description: "Processes the new user register form submission. Access: PUB"
       tags:
-        - "M01: Authentication and User Profile"
+        - "M01: Authentication"
 
       requestBody:
         required: true
@@ -183,6 +184,82 @@ paths:
         "401":
           description: "The callback was unsuccessful"
 
+  /forgot_password:
+    get:
+      operationId: R108
+      summary: "R108: Request Password Form"
+      description: "Show form for user to request a password reset link. Access: PUB"
+      tags: 
+       - "M01: Authentication"
+
+      responses:
+        "200":
+          description: "Ok. Show request password form"
+        "422":
+          description: "Unprocessable Entity"
+    post:   
+      operationId: R109
+      summary: "R109: Request New Password"
+      description: "Sends a password reset link to the specified email address. Access: USR"
+      tags: 
+        - "M01: Authentication"
+      
+      requestBody:
+        required: true
+        content:
+          aplication/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+              required:
+                - email
+      
+      responses:     
+        "200":
+          description: "OK. Indicates whether the request was successful"  
+        "422":
+          description: "Unprocessable Entity"          
+  
+  /reset:
+    get:
+      operationId: R110
+      summary: "R110: Reset Password Form"
+      description: "Show form for user to reset the password. Access: USR"
+      tags: 
+       - "M01: Authentication"
+
+      responses:
+        "200":
+          description: "Ok. Show reset password form"
+        "422":
+          description: "Unprocessable Entity"
+    post:   
+      operationId: R111
+      summary: "R111: Reset Password Request"
+      description: "Sends a password reset request. Access: USR"
+      tags: 
+        - "M01: Authentication"
+      
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                password:
+                  type: string
+              required:
+                - password
+      
+      responses:     
+        "200":
+          description: "OK. Indicates whether the password request was successful"  
+        "422":
+          description: "Unprocessable Entity"
+  
   /users/{user}:
     get:
       operationId: R201
@@ -299,38 +376,99 @@ paths:
                   value: "/users/{user}"
                 302Failure:
                   description: "Failed profile edition. Redirect to edit profile form."
-                  value: "/users/{user}/edit"           
-# aqui
-  # M02 - System Administration
-  /admin/users:
-    get:
-      operationId: "R201"
-      summary: "R201: View Administration Panel"
-      description: "View administration panel. Access: ADM"
+                  value: "/users/{user}/edit"   
+
+  /user/{user}/follow:
+    post:
+      operationId: R205
+      summary: "R209: Follow user action"
+      description: "Processes a request to follow another user. Access: USR"
       tags:
-        - "M02 - System Administration"
+        - "M02: Profile and User Information"
+
+      parameters:
+        - in: path
+          name: user
+          schema:
+            type: string
+          required: true
 
       responses:
         "200":
-          description: "Ok. Show Administration Panel UI06"
+          description: "Success"
+        "401":
+          description: "Unauthorized. Must be authenticated"
+        "404":
+          description: "User not found"
+
+  /user/{user}/unfollow:
+    delete:
+      operationId: R206
+      summary: "R206: Unfollow user action"
+      description: "Processes a request to unfollow another user. Access: USR"
+      tags:
+        - "M02: Profile and User Information"
+
+      parameters:
+        - in: path
+          name: user
+          schema:
+            type: string
+          required: true
+
+      responses:
+        "200":
+          description: "Success"
+        "401":
+          description: "Unauthorized. Must be authenticated"
+        "404":
+          description: "User not found"
+        "409":
+          description: "Conflict. User not followed"                
+
+# aqui
+  # M03 - System Administration
+  /admin/users:
+    get:
+      operationId: "R301"
+      summary: "R301: View Administration Panel"
+      description: "View users administration panel. Access: ADM"
+      tags:
+        - "M03 - System Administration"
+
+      responses:
+        "200":
+          description: "Ok. Show Users Administration Panel UI06"
+
+  /admin/forums:
+    get:
+      operationId: "R302"
+      summary: "R302: View Forums Administration Panel"
+      description: "View forums administration panel. Access: ADM"
+      tags:
+        - "M03 - System Administration"
+
+      responses:
+        "200":
+          description: "Ok. Show Forums Administration"
 
   /admin/team:
     get:
-      operationId: "R202"
-      summary: "R202: Show Administration Team"
+      operationId: "R303"
+      summary: "R303: Show Administration Team"
       description: "View all system administrators. Access: ADM"
       tags:
-        - "M02 - System Administration"
+        - "M03 - System Administration"
 
       responses:
         "200":
           description: "Ok. Show Administrators Listing UI"
     post:
-      operationId: "R203"
-      summary: "R203: Promote User to Admin"
+      operationId: "R304"
+      summary: "R304: Promote User to Admin"
       description: "Promote Regular User to Admin Action. Access: ADM"
       tags:
-        - "M02 - System Administration"
+        - "M03 - System Administration"
 
       responses:
         "200":
@@ -346,13 +484,13 @@ paths:
                     enum:
                       - user:not-found
 
-  /admin/team/{username}:
+  /admin/team/{admin}:
     delete:
-      operationId: "R204"
-      summary: "R204: Remove Administrator API Route"
+      operationId: "R305"
+      summary: "R305: Remove Administrator API Route"
       description: "Remove user from the team of system administrators. Access: ADM"
       tags:
-        - "M02 - System Administration"
+        - "M03 - System Administration"
 
       parameters:
         - in: path
@@ -376,15 +514,207 @@ paths:
                   reason:
                     enum:
                       - user:not-found
+  
+  /admin/team/{user}: 
+    post:
+      operationId: "R304"
+      summary: "R304: Adds Administrator API Route"
+      description: "Adds user to the team of system administrators. Access: ADM"
+      tags:
+        - "M03 - System Administration"
 
-  #M03 : Forums, Posts and Comments
+      parameters:
+        - in: path
+          name: user
+          description: "The username of the user to added to the team of system administrators."
+          required: true
+          schema:
+            type: string
+
+      responses:
+        "200":
+          description: "Ok. Successfuly added the member to the administration team."
+
+        "422":
+          description: "Validation error. The member was not added to the administration team."
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  reason:
+                    enum:
+                      - user:not-found                  
+
+  /admin/team/{user}/block:
+    post:
+      operationId: "R305"
+      summary: "R305: Block a user"
+      description: "Administrators block for users. Access: ADM"
+      tags:
+        - "M03 - System Administration"
+
+      parameters:
+        - in: path
+          name: user
+          description: "The user is blocked from the server by the team of system administrators."
+          required: true
+          schema:
+            type: string
+
+      responses:
+        "200":
+          description: "Ok. Successfuly user block by administration team."
+
+        "400":
+          description: "Invalid Request. The user was not blocked by the administration team."
+    delete:
+      operationId: "R306"
+      summary: "R306: Unblock a user"
+      description: "Administrators unblock the user that was blocked before. Access: ADM"
+      tags:
+        - "M03 - System Administration"
+
+      parameters:
+        - in: path
+          name: user
+          description: "The user is blocked from the server by the team of system administrators."
+          required: true
+          schema:
+            type: string
+
+      responses:
+        "200":
+          description: "Ok. Successfuly user block by administration team."
+
+        "400":
+          description: "Invalid Request. The user was not blocked by the administration team."
+
+  /admin/reports:
+    get:
+      operationId: "R307"
+      summary: "R307: View Reports Administration Panel"
+      description: "View reports administration panel. Access: ADM"
+      tags:
+        - "M03 - System Administration"
+
+      responses:
+        "200":
+          description: "Ok. Show reports administration panel"
+  
+  /admin/reports/{report}:
+    get:
+      operationId: "R308"
+      summary: "R308: View a Report"
+      description: "View the specific report details like type and state. Access: ADM"
+      tags:
+        - "M03 - System Administration"  
+
+      responses:
+        "200":
+          description: "Ok. Show a specific report"
+
+  /admin/reports/{report}/ongoing:
+    put:
+      operationId: "R309"
+      summary: "R309: Report ongoing state"
+      description: "Administrators can mark the report as on going. Access: ADM"
+      
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                state:
+                  type: string
+                  enum: ['ongoing']
+      
+      parameters:
+        - name: report
+          in: path
+          required: true
+          schema:
+            type: string
+            description: "The report to approve"
+    
+      responses:
+        '200':
+          description: "Report marked as ongoing"
+        '400':        
+          description: "Invalid request"
+
+  /admin/reports/{report}/approved:
+    put:
+      operationId: "R310"
+      summary: "R310: Approve a report"
+      description: "Administrators can aprove a report in order to apply Access: ADM"
+      
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                state:
+                  type: string
+                  enum: ['approved']
+      
+      parameters:
+        - name: report
+          in: path
+          required: true
+          schema:
+            type: string
+            description: "The report to approve"
+    
+      responses:
+        '200':
+          description: "Report approved successfully"
+        '400':
+          description: "Invalid request"
+
+  /admin/reports/{report}/denied:
+    put:
+      operationId: "R311"
+      summary: "R311: Denie a report"
+      description: "Administrators can denie a report in order to apply Access: ADM"
+      
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                state:
+                  type: string
+                  enum: ['denied']
+      
+      parameters:
+        - name: report
+          in: path
+          required: true
+          schema:
+            type: string
+            description: "The report to denie"
+    
+      responses:
+        '200':
+          description: "Report denied successfully"
+        '400':
+          description: "Invalid request"        
+
+  #M04 : Forums, Posts and Comments
   /:
     get:
-      operationId: "301"
-      summary: "R301: View Homepage"
+      operationId: "401"
+      summary: "R401: View Homepage"
       description: "View feed of most popular or recent posts. Access: PUB"
       tags:
-        - "M03: Forums, Posts and Comments"
+        - "M04: Forums, Posts and Comments"
       
       parameters:
         - in: query
@@ -396,42 +726,51 @@ paths:
               - recent
 
       responses:
-        200:
+        "200":
           description: "Ok. Show Homepage UI01"
+  
+  /forums/{forum}/posts:
+    get:
+      operationId: R402
+      summary: "R402 : Create post form"
+      description: "Provide new post creation form. Access: USR"
+      tags:
+        - "M04: Forums, Posts and Comments"
 
-  /posts:
+      responses:
+        '200':
+          description: "Ok. Show Create Post Form (UI17)"
+        '302':
+          description: "Redirect after trying to get Create Post Form"
     post:
-      operationId: R302
-      summary: "R302 : Create post action"
+      operationId: R403
+      summary: "R403 : Create post on forum action"
       description: "Processes the new post creation form. Access: USR"
       tags:
-        - "M03: Forums, Posts and Comments"
+        - "M04: Forums, Posts and Comments"
 
       requestBody:
         required: true
         content:
-          application/x-www-form-urlencoded:
+          multipart/form-data:
             schema:
               type: object
               properties:
                 title:
                   type: string
+                image:
+                  type: string
+                  format: binary
                 body:
                   type: string
-                rating:
-                  type: integer
-                tag_ids:
-                  type: array
-                  minLength: 1
-                  maxLength: 3
+                caption:
+                  type: string
               required:
                 - title
                 - body
-                - rating
-                - tag_ids
 
       responses:
-        302:
+        "302":
           description: "Redirect after processing the create post form."
           headers:
             Location:
@@ -439,96 +778,409 @@ paths:
                 type: string
               examples:
                 302Success:
-                  description: "Successful post creation. Redirect to Post Page."
-                  value: "/post/{id}"
+                  description: "Successful post creation. Redirect to the post created."
+                  value: "/posts/{post}"
                 302Failure:
                   description: "Failed post creation. Redirect to Create Post form."
-                  value: "/post"
-
-  /posts/new:
+                  value: "/forums/{forum}/posts/new"
+  /posts/{post}:
     get:
-      operationId: R303
-      summary: "R303 : Create post form"
-      description: "Provide new post creation form. Access: USR"
+      operationId: R404
+      summary: "R404 : View Post Page"
+      description: "View an Post Page. Access: PUB"
       tags:
-        - "M03: Forums, Posts and Comments"
-
-      responses:
-        200:
-          description: 'Ok. Show Create Post Form'
-        302:
-          description: 'Redirect after trying to get Create Post Form'
-          headers:
-            Location:
-              schema:
-                type: string  
-              examples:
-                302Failure:
-                  description: 'You are not logged in. Failed post creation. Redirect to login Page.'
-                  value: '/login' 
-
-  /post/{id}:
-    get:
-      operationId: R304
-      summary: "R304 : View Post Page"
-      description: "View a Post Page. Access: PUB"
-      tags:
-        - "M03: Forums, Posts and Comments"
+        - "M04: Forums, Posts and Comments"
 
       parameters:
         - in: path
-          name: id
-          required: true
+          name: post
           schema:
-            type: integer
+            type: string
+          required: true
 
       responses:
-        200:
+        "200":
           description: "OK. Show Post Page"
-        404:
+        "404":
           description: "Post not found"
-
-    delete:
-      operationId: R305
-      summary: "R305 : Delete post action"
-      description: "Processes a request to delete a post. Access: OWN, ADM"
+    
+    put:
+      operationId: R405
+      summary: "R405 : Edit post action"
+      description: "Processes the user edit post form submission. Access: OWN"
       tags:
-        - "M03: Forums, Posts and Comments"
+        - "M04: Forums, Posts and Comments"
 
       parameters:
         - in: path
-          name: id
+          name: post
           schema:
-            type: integer
+            type: string
           required: true
+
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                title:
+                  type: string
+                image:
+                  type: string
+                  format: binary
+                body:
+                  type: string
+                caption:
+                  type: string
+              required:
+                - title
+                - body
 
       responses:
         "302":
-          description: "Redirect after deleting post."
+          description: "Redirect after processing the edit post action."
           headers:
             Location:
               schema:
                 type: string
               examples:
                 302Success:
-                  description: "Successful post deletion. Redirect to homepage."
-                  value: "/"
+                  description: "Successful post edition. Redirect to the post edited."
+                  value: "/posts/{post}"
                 302Failure:
-                  description: "Failed to delete post. Redirect to post page"
-                  value: "/post/{id}"
-    put:
-      operationId: R306
-      summary: "R306 : Edit post action"
-      description: "Processes the user edit profile form submission. Access: OWN"
+                  description: "Failed post edition. Redirect to Post edition form."
+                  value: "posts/{post}/edit"      
+  
+  /posts/{post}/edit:
+    get:
+      operationId: R406
+      summary: "R406: Post Edition Form"
+      description: "Provide form for post edition. Access: OWN"
       tags:
-        - "M03: Forums, Posts and Comments"
+        - "M04: Forums, Posts and Comments"
 
+      parameters:
+        - in: path
+          name: post
+          schema:
+            type: string
+          required: true
+
+      responses:
+        "200":
+          description: "Ok. Show post edition form"
+        "401":
+          description: "Unauthorized. Must be authenticated"
+        "403":
+          description: "Forbidden. Must be owner of the post"
+        "404":
+          description: "Post not found"
+
+  /posts/{post}/comments:
+    post:
+      operationId: R407
+      summary: "R407 : Comment on Post action"
+      description: "Processes the new comments on posts. Access: USR"
+      tags:
+        - "M04: Forums, Posts and Comments"
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: string
+              properties:
+                caption:
+                  type: string
+              required:
+                - comment
+
+      responses:
+        "302":
+          description: "Redirect after processing the comment on a post."
+          headers:
+            Location:
+              schema:
+                type: string
+              examples:
+                302Success:
+                  description: "Successful comment creation. Redirect to the post."
+                  value: "/posts/{post}"
+                302Failure:
+                  description: "Failed comment creation. Redirect to the post."
+                  value: "/posts/{post}"
+
+  /posts/{post}/comments/{comment}:
+    put:
+      operationId: R408
+      summary: "R408 : Edit comment on post action"
+      description: "Processes the comment edition on post form submission. Access: OWN"
+      tags:
+        - "M04: Forums, Posts and Comments"
+
+      parameters:
+        - in: path
+          name: post
+          schema:
+            type: string
+          required: true
+        - in: path
+          name: comment
+          schema:
+            type: string
+          required: true
+
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: string
+              properties:
+                caption:
+                  type: string
+              required:
+                - comment
+
+      responses:
+        "302":
+          description: "Redirect after processing the comment edition on a post."
+          headers:
+            Location:
+              schema:
+                type: string
+              examples:
+                302Success:
+                  description: "Successful comment edition. Redirect to the post."
+                  value: "/posts/{post}"
+                302Failure:
+                  description: "Failed comment edition. Redirect to the post."
+                  value: "/posts/{post}"
+    delete:
+      operationId: R409
+      summary: "R409: Delete comment on post action"
+      description: "Processes a request to delete comment on a post. Access: OWN"
+      tags:
+        - "M04: Forums, Posts and Comments"
+
+      parameters:
+        - in: path
+          name: post
+          schema:
+            type: string
+          required: true
+        - in: path
+          name: comment
+          schema:
+            type: string
+          required: true
+
+      responses:
+        "302":
+          description: "Redirect after processing the comment deletion on a post."
+          headers:
+            Location:
+              schema:
+                type: string
+              examples:
+                302Success:
+                  description: "Successful comment deletion. Redirect to the post."
+                  value: "/posts/{post}"
+                302Failure:
+                  description: "Failed comment deletion. Redirect to the post."
+                  value: "/posts/{post}" 
+
+  /api/comments/{comment}/rating:
+    get:
+      operationId: R410
+      summary: "R410 : Show Comment Rating"
+      description: "Provide the rating from the comment. Access: OWN"
+      tags:
+        - "M04: Forums, Posts and Comments"
+
+      parameters:
+        - in: path
+          name: comment
+          required: true
+          schema:
+            type: string
+
+      responses:
+        "200":
+          description: "OK. Show comment rating"
+        "404":
+          description: "Comment not found"
+    post:
+      operationId: R411
+      summary: "R411 : Save Comment Rating Action"
+      description: "Save Commnet Rating Action. Access: USR"
+      tags:
+        - "M04: Forums, Posts and Comments"
+
+      parameters:
+        - in: path
+          name: comment
+          required: true
+          schema:
+            type: string
+
+      responses:
+        "200":
+          description: "OK. Comment rating saved"
+        "404":
+          description: "Comment not found"
+    
+    delete:
+      operationId: R412
+      summary: "R412 : Remove Comment Rating Action"
+      description: "Remove Comment Rating Action. Access: USR"
+      tags:
+        - "M04: Forums, Posts and Comments"
       parameters:
         - in: path
           name: id
           required: true
           schema:
-            type: integer
+            type: string
+      responses:
+        "200":
+          description: "OK. Successfully removed the comment rating"
+        "404":
+          description: "Comment not found"     
+
+  /posts/{post}/images:
+    post:
+      operationId: R413
+      summary: "R413 : Add Post Image Action"
+      description: "Processes a request to add a image to the post. Access: OWN"
+      tags:
+        - "M04: Forums, Posts and Comments"
+      parameters:
+        - in: path
+          name: post
+          required: true
+          schema:
+            type: string
+
+      responses:
+        "200":
+          description: "OK. Successfully added an image to the post"
+        "401":
+          description: "Unauthorized. Must be authenticated."
+        "403":
+          description: "Unauthorized. Must be the owner of the post"
+        "404":
+          description: "Post not found"
+
+  /posts/{post}/images/{image}:
+    delete:
+      operationId: R414
+      summary: "R414: Remove image from post action"
+      description: "Processes a request to remove the image on a post. Access: OWN"
+      tags:
+        - "M04: Forums, Posts and Comments"
+
+      parameters:
+        - in: path
+          name: post
+          schema:
+            type: string
+          required: true
+        - in: path
+          name: comment
+          schema:
+            type: string
+          required: true
+
+      responses:
+        "302":
+          description: "Redirect after processing the image deletion on a post."
+          headers:
+            Location:
+              schema:
+                type: string
+              examples:
+                302Success:
+                  description: "Successful image deletion. Redirect to the post."
+                  value: "/posts/{post}"
+                302Failure:
+                  description: "Failed comment deletion. Redirect to the post."
+                  value: "/posts/{post}/edit"  
+
+  /api/comments/{post}/rating:
+    get:
+      operationId: R410
+      summary: "R410 : Show Post Rating"
+      description: "Provide the rating from the post. Access: OWN"
+      tags:
+        - "M04: Forums, Posts and Comments"
+
+      parameters:
+        - in: path
+          name: post
+          required: true
+          schema:
+            type: string
+
+      responses:
+        "200":
+          description: "OK. Show post rating"
+        "404":
+          description: "Post not found"
+    post:
+      operationId: R411
+      summary: "R411 : Save Post Rating Action"
+      description: "Save Post Rating Action. Access: USR"
+      tags:
+        - "M04: Forums, Posts and Comments"
+
+      parameters:
+        - in: path
+          name: comment
+          required: true
+          schema:
+            type: string
+
+      responses:
+        "200":
+          description: "OK. Post rating saved"
+        "404":
+          description: "Post not found"
+    
+    delete:
+      operationId: R412
+      summary: "R412 : Remove Post Rating Action"
+      description: "Remove Post Rating Action. Access: USR"
+      tags:
+        - "M04: Forums, Posts and Comments"
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: "OK. Successfully removed the post rating"
+        "404":
+          description: "Post not found"   
+
+  /posts/{post}/report:
+    post:
+      operationId: R413
+      summary: "R413: Report Post Action"
+      description: "Processes a report made on a post. Access: USR"
+      tags:
+        - "M04: Forums, Posts and Comments"
+
+      parameters:
+        - in: path
+          name: post
+          schema:
+            type: string
+          required: true
 
       requestBody:
         required: true
@@ -537,162 +1189,534 @@ paths:
             schema:
               type: object
               properties:
-                title:
+                type:
                   type: string
-                body:
+                  enum: ['post']
+                reason:
+                  type: string
+              required:
+                - reason
+
+      responses:
+        "200":
+          description: "Successful post report"
+        "400":
+          description: "Failed to report post. Bad request"
+        "401":
+          description: "Unauthorized. Must be authenticated"
+        "404":
+          description: "User not found"
+  
+  /posts/{post}/comments/{comment}/report:
+    post:
+      operationId: R414
+      summary: "R414: Report Comment on Post Action"
+      description: "Processes a report made on a post comment. Access: USR"
+      tags:
+        - "M04: Forums, Posts and Comments"
+
+      parameters:
+        - in: path
+          name: post
+          schema:
+            type: string
+          required: true
+        - in: path
+          name: comment
+          schema:
+            type: string
+          required: true  
+
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                type:
+                  type: string
+                  enum: ['comment']
+                reason:
+                  type: string
+              required:
+                - reason
+
+      responses:
+        "200":
+          description: "Successful comment report"
+        "400":
+          description: "Failed to report comment. Bad request"
+        "401":
+          description: "Unauthorized. Must be authenticated"
+        "404":
+          description: "User not found"
+
+  /forums/{forum}/report:
+    post:
+      operationId: R415
+      summary: "R415: Report Post Action"
+      description: "Processes a report made on a forum. Access: USR"
+      tags:
+        - "M04: Forums, Posts and Comments"
+
+      parameters:
+        - in: path
+          name: forum
+          schema:
+            type: string
+          required: true
+
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                type:
+                  type: string
+                  enum: ['forum']
+                reason:
+                  type: string
+              required:
+                - reason
+
+      responses:
+        "200":
+          description: "Successful forum report"
+        "400":
+          description: "Failed to report forum. Bad request"
+        "401":
+          description: "Unauthorized. Must be authenticated"
+        "404":
+          description: "Forum not found"
+
+  /forums/{forum}/follow:
+    post:
+      operationId: R416
+      summary: "R416: Follow forum action"
+      description: "Processes a request to follow another forum. Access: USR"
+      tags:
+        - "M04: Forums, Posts and Comments"
+
+      parameters:
+        - in: path
+          name: forum
+          schema:
+            type: string
+          required: true
+
+      responses:
+        "200":
+          description: "Success"
+        "401":
+          description: "Unauthorized. Must be authenticated"
+        "404":
+          description: "Forum not found"
+
+  /forums/{forum}/unfollow:
+    delete:
+      operationId: R417
+      summary: "R417: Unfollow forum action"
+      description: "Processes a request to unfollow another forum. Access: USR"
+      tags:
+        - "M04: Forums, Posts and Comments"
+
+      parameters:
+        - in: path
+          name: forum
+          schema:
+            type: string
+          required: true
+
+      responses:
+        "200":
+          description: "Success"
+        "401":
+          description: "Unauthorized. Must be authenticated"
+        "404":
+          description: "Forum not found"
+        "409":
+          description: "Conflict. Forum not followed"      
+
+  /forums/{forum}/management:
+    get:
+      operationId: R418
+      summary: "R418: View forum management page"
+      description: "Show the forum management page. Access: PUB"
+      tags:
+        - "M04: Forums, Posts and Comments"
+
+      parameters:
+        - in: path
+          name: forum
+          schema:
+            type: string
+          required: true
+
+      responses:
+        "200":
+          description: "Ok. Show forum management page"
+        "404":
+          description: "Forum management page does not exist"
+    put:
+      operationId: R418
+      summary: "R418: Edit forum action"
+      description: "Processes the forum edit submission. Access: OWN"
+      tags:
+        - "M04: Forums, Posts and Comments"
+
+      parameters:
+        - in: path
+          name: forum
+          schema:
+            type: string
+          required: true
+
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                bannerPicture:
+                  type: string
+                  format: binary
+                forumPicture:
+                  type: string
+                  format: binary 
+                description:
+                  type: string               
+                name:
                   type: string
 
       responses:
-        302:
-          description: "Redirect after processing the post updated information"
+        "302":
+          description: "Redirect after processing the forum updated information."
           headers:
             Location:
               schema:
                 type: string
               examples:
                 302Success:
-                  description: "Successful post edition. Redirect to the post page."
-                  value: "/post/{id}"
+                  description: "Successful forum edition. Redirect to forum profile."
+                  value: "/forums/{forum}"
                 302Failure:
-                  description: "Failed post edition. Redirect to the edit post page."
-                  value: "/post/{id}/edit"
+                  description: "Failed forum edition. Redirect to edit forum form."
+                  value: "/forums/{forum}/management"
 
-  /posts/{id}/edit:
-    get:
-      operationId: R307
-      summary: "R307 : Show post edition form"
-      description: "Provide a form for post edition. Access: OWN"
-      tags:
-        - "M03: Forums, Posts and Comments"
-
-      parameters:
-        - in: path
-          name: id
-          required: true
-          schema:
-            type: integer
-
-      responses:
-        200:
-          description: "OK. Show post edition form"
-        401:
-          description: "Unauthorized. Must be authenticated."
-        403:
-          description: "Unauthorized. Must be the owner of the post"
-        404:
-          description: "Post not found"
-
-  /posts/{id}/images:
+  /forums:
     post:
-      operationId: R308
-      summary: "R308 : Add Post Image Action"
-      description: "Processes a request to add a image to the post. Access: OWN"
+      operationId: R419
+      summary: "R419 : Create forum action"
+      description: "Processes the new forum creation form. Access: USR"
       tags:
-        - "M03: Forums, Posts and Comments"
-      parameters:
-        - in: path
-          name: id
-          description: "Post Id"
-          required: true
-          schema:
-            type: integer
+        - "M04: Forums, Posts and Comments"
+
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                bannerPicture:
+                  type: string
+                  format: binary
+                forumPicture:
+                  type: string
+                  format: binary 
+                description:
+                  type: string
+              required:
+                - name
+                - description
 
       responses:
-        200:
-          description: "OK. Successfully added an image to the post"
-        401:
-          description: "Unauthorized. Must be authenticated."
-        403:
-          description: "Unauthorized. Must be the owner of the post"
-        404:
-          description: "Post not found"
+        "302":
+          description: "Redirect after processing the create forum form."
+          headers:
+            Location:
+              schema:
+                type: string
+              examples:
+                302Success:
+                  description: "Successful forum creation. Redirect to the forum created."
+                  value: "/forums/{forum}"
+                302Failure:
+                  description: "Failed forum creation. Redirect to Create Forum form."
+                  value: "/forums/{forum}/new"
 
-  /posts/{post_id}/{image_id}:
-    delete:
-      operationId: R309
-      summary: "R309 : Remove Post Image Action"
-      description: "Remove Post Image Action. Access: OWN"
-      tags:
-        - "M03: Forums, Posts and Comments"
-      parameters:
-        - in: path
-          name: post_id
-          description: "Post Id"
-          required: true
-          schema:
-            type: integer
-        - in: path
-          name: image_id
-          description: "Image Id"
-          required: true
-          schema:
-            type: integer
 
-      responses:
-        200:
-          description: "OK. Successfully removed the image from the post"
-        401:
-          description: "Unauthorized. Must be authenticated."
-        403:
-          description: "Unauthorized. Must be the owner of the post"
-        404:
-          description: "Post or Image not found"
-
-  /api/posts/{id}/rating:
+  /forums/new:
     get:
-      operationId: R310
-      summary: "R310 : Show Post Rating"
-      description: "Provide the rating from the post. Access: OWN"
+      operationId: R420
+      summary: "R420 : Create forum form"
+      description: "Provide new forum creation form. Access: USR"
       tags:
-        - "M03: Forums, Posts and Comments"
-
-      parameters:
-        - in: path
-          name: id
-          required: true
-          schema:
-            type: integer
+        - "M04: Forums, Posts and Comments"
 
       responses:
         200:
-          description: "OK. Show post rating"
-        404:
-          description: "Post not found"
+          description: 'Ok. Show Create Forum Form'
+        302:
+          description: 'Redirect after trying to get Create Forum Form'
+          headers:
+            Location:
+              schema:
+                type: string  
+              examples:
+                302Failure:
+                  description: 'You are not logged in. Failed forum creation. Redirect to login Page.'
+                  value: '/login'
+
+  /forums/{forum}:
+    get:
+      operationId: R421
+      summary: "R421: View forum page"
+      description: "Show the forum page. Access: PUB"
+      tags:
+        - "M04: Forums, Posts and Comments"
+
+      parameters:
+        - in: path
+          name: forum
+          schema:
+            type: string
+          required: true
+
+      responses:
+        "200":
+          description: "Ok. Show forum"
+        "404":
+          description: "Forum does not exist"
+
+  /forums/{forum}/delete:
+    delete: 
+      operationId: R422
+      summary: "R422 : Delete forum action"
+      description: "Processes a request to delete a forum. Access: OWN, ADM"
+      tags:
+        - "M04: Forums, Posts and Comments"
+
+      parameters:
+        - in: path
+          name: forum
+          schema:
+            type: integer
+          required: true
+
+      responses:
+        "302":
+          description: "Redirect after deleting forum."
+          headers:
+            Location:
+              schema:
+                type: string
+              examples:
+                302Success:
+                  description: "Successful forum deletion. Redirect to homepage."
+                  value: "/"
+                302Failure:
+                  description: "Failed to delete forum post. Redirect to post page"
+                  value: "/forum/{forum}"
+
+  /forums/{forum}/promote/{user}:
     post:
-      operationId: R311
-      summary: "R311 : Save Post Rating Action"
-      description: "Save Post Rating Action. Access: USR"
+      operationId: R423
+      summary: "R423: Promote User inside of a Forum Action"
+      description: "Processes a User promotion to owner on a specific forum. Access: OWN"
       tags:
-        - "M03: Forums, Posts and Comments"
+        - "M04: Forums, Posts and Comments"
 
       parameters:
         - in: path
-          name: id
-          required: true
+          name: forum
           schema:
-            type: integer
+            type: string
+          required: true
+        - in: path
+          name: user
+          schema:
+            type: string
+          required: true  
 
       responses:
-        200:
-          description: "OK. Post rating saved"
-        404:
-          description: "Post not found"
+        "200":
+          description: "Successful user promotion"
+        "400":
+          description: "Failed to user promotion. Bad request"
+        "401":
+          description: "Unauthorized. Must be authenticated"
+        "404":
+          description: "User not found"
+
+  /forums/{forum}/demote/{user}:
+    post:
+      operationId: R424
+      summary: "R424: Demote User inside of a Forum Action"
+      description: "Processes a User demotion to owner on a specific forum. Access: OWN"
+      tags:
+        - "M04: Forums, Posts and Comments"
+
+      parameters:
+        - in: path
+          name: forum
+          schema:
+            type: string
+          required: true
+        - in: path
+          name: user
+          schema:
+            type: string
+          required: true  
+
+      responses:
+        "200":
+          description: "Successful user demotion"
+        "400":
+          description: "Failed to user demotion. Bad request"
+        "401":
+          description: "Unauthorized. Must be authenticated"
+        "404":
+          description: "User not found"
+
+  /search:
+     get:
+      operationId: R425
+      summary: "R425: View search results"
+      description: "Show search results. Access: USR"
+      tags:
+        - "M04: Forums, Posts and Comments"
+
+      responses:
+        "200":
+          description: "Ok. Show search results"
+        "401":
+          description: "Unauthorized. Not logged in"
+      
+            
+
+  # M05 - Notifications
+  /notifications:
+    get:
+      operationId: R501
+      summary: "R501: View Notifications"
+      description: "Show user notifications. Access: USR"
+      tags:
+        - "M05: Notifications"
+
+      responses:
+        "200":
+          description: "Ok. Show Notifications"
+        "401":
+          description: "Unauthorized. Not logged in"
+  
+  /notifications/{notification}:
+    get:
+      operationId: "R502"
+      summary: "R502: View a Notification"
+      description: "View the specific notification details. Access: USR"
+      tags:
+        - "M05: Notification"  
+
+      responses:
+        "200":
+          description: "Ok. Show a specific notification"    
+
+    post: 
+      operationId: "R503"
+      summary: "R503: Mark Notification as Read"
+      description: "Users can mark the notification as read. Acesses: USR"
+      
+      parameters:
+        - in: path
+          name: notification
+          required: true
+          schema:
+            type: string
     
-    delete:
-      operationId: R312
-      summary: "R312 : Remove Post Rating Action"
-      description: "Remove Post Rating Action. Access: USR"
-      tags:
-        - "M03: Forums, Posts and Comments"
-      parameters:
-        - in: path
-          name: id
-          description: "Post Id"
-          required: true
-          schema:
-            type: integer
       responses:
-        200:
-          description: "OK. Successfully removed the post rating"
-        404:
-          description: "Post or Image not found"
+        '200':
+          description: "Notification marked as read"
+        '400':        
+          description: "Invalid request" 
+  
+  /api/notifications/navbar:
+    get:
+      operationId: "R504"
+      summary: "R504: Notifications information"
+      description: "Provides information about the user notifications. Access: USR"
+      tags:
+        - "M05: Nofications"
+
+      responses:
+        "200":
+          description: "Success."
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  type:
+                    type: string
+                  created_at:
+                    type: string
+                    format: date
+                example:
+                  reason: "The user started following you!"
+                  created_at: "04-03"
+        "401":
+          description: "Unauthorized. Must be authenticated"
+        "403":
+          description: "Forbidden. Must be owner of the account or administrator"
+        "404":
+          description: "User not found"
+        "409":
+          description: "User not suspended"
+
+  # M06: Static Pages
+
+  /about:
+    get:
+      operationId: "R601"
+      summary: "R601: About Page"
+      description: "Page with information about application and its developers. Access: PUB"
+      tags:
+        - "M08: Static Pages"
+
+      responses:
+        "200":
+          description: "Ok. Show About Page"
+
+  /features:
+    get:
+      operationId: "R602"
+      summary: "R602: Features Page"
+      description: "Page with the main features of the application. Access: PUB"
+      tags:
+        - "M06: Static Pages"
+
+      responses:
+        "200":
+          description: "Ok. Show Main Features Page"
+
+  /contact:
+    get:
+      operationId: "R603"
+      summary: "R803: Contacts Page"
+      description: "Application managers contact page. Access: PUB"
+      tags:
+        - "M08: Static Pages"
+
+      responses:
+        "200":
+          description: "Ok. Show Contacts Page "
+  
+   
+
+  
