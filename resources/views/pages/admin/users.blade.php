@@ -79,6 +79,7 @@
                             </div>
                         </div>
                         @endif
+                        @if(!$user->is_admin)
                         <button type="button" class="btn btn-danger d-flex gap-2" data-bs-toggle="modal" data-bs-target="#deletionWarningModal" data-wt-action="modals.admin.users.delete.open" data-wt-url="{{ route('user.delete', $user->id) }}" data-wt-username="{{$user->username}}">
                             <i class="bi bi-trash"></i>
                             <span class="d-none d-md-block">Delete User</span>
@@ -106,6 +107,7 @@
                                 </div>
                             </div>
                         </div>
+                        @endif
                         @can("block", $user)
                         <button type="button" class="btn btn-danger d-flex gap-2" data-bs-toggle="modal" data-bs-target="#blockWarningModal" data-wt-action="modals.admin.users.block.open" data-wt-url="{{ route('admin.team.block', $user) }}" data-wt-username="{{$user->username}}">
                             <i class="bi bi-stop-fill"></i>

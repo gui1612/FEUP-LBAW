@@ -49,8 +49,6 @@ class AdminController extends Controller
         return redirect()->back();
     }
 
-
-
     public function demote(Admin $admin)
     {
         $this->authorize('demote', $admin);
