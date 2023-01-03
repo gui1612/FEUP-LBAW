@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\UpdateNotifications;
 use App\Models\Comment;
 use App\Models\CommentRating;
 use Illuminate\Http\Request;
@@ -52,6 +53,10 @@ class CommentRatingController extends Controller {
 
         $comment->refresh();
 
+        if ($type == 'like') {
+            UpdateNotifications::dispatch($comment->owner, 'new');
+        }
+
         return response()->json([
             'rating' => $comment->rating,
             'current' => $rating,
@@ -66,6 +71,8 @@ class CommentRatingController extends Controller {
         $deleted = $ratings->delete();
         
         $comment->refresh();
+
+        UpdateNotifications::dispatch($comment->owner, 'consistency');
         
         return response()->json([
             'rating' => $comment->rating,

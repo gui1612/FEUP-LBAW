@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\UpdateNotifications;
 use App\Models\Post;
 use App\Models\PostRating;
 use Illuminate\Http\Request;
@@ -52,6 +53,10 @@ class PostRatingController extends Controller {
 
         $post->refresh();
 
+        if ($type == 'like') {
+            UpdateNotifications::dispatch($post->owner, 'new');
+        }
+
         return response()->json([
             'rating' => $post->rating,
             'current' => $rating,
@@ -67,6 +72,10 @@ class PostRatingController extends Controller {
         
         $post->refresh();
         
+        if ($deleted) {
+            UpdateNotifications::dispatch($post->owner, 'consistency');
+        }
+
         return response()->json([
             'rating' => $post->rating,
             'current' => $deleted ? null : $ratings->first(),

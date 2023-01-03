@@ -40,6 +40,18 @@ class NotificationController extends Controller {
     return redirect()->back();
   }
 
+  public function navbar() {
+    $notifications = Auth::user()->notifications()->where('read', 'false')->orderBy('created_at', 'desc')->take(5)->get();
+
+    $widescreen = view('partials.navbar.notifications.widescreen', ['notifications' => $notifications]);
+    $mobile = view('partials.navbar.notifications.mobile', ['notifications' => $notifications]);
+
+    return response()->json([
+      'widescreen' => $widescreen->render(),
+      'mobile' => $mobile->render()
+    ]);
+  }
+
 //   public function delete(Notification $notification) {
 //     $this->authorize('delete', $notification);
 //     $notification->delete();

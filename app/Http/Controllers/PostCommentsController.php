@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\UpdateNotifications;
 use App\Models\Comment;
 use App\Models\Post;
 use Illuminate\Http\Request;
@@ -24,6 +25,8 @@ class PostCommentsController extends Controller {
         
         $this->authorize('update', $comment);
         $comment->save();
+
+        UpdateNotifications::dispatch($post->owner, 'new');
 
         return redirect()->route('post', ['post' => $post]);
     }

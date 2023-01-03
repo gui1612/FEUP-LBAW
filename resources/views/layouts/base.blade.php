@@ -7,6 +7,9 @@
 
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
+    @auth
+      <meta name="user-id" content="{{ Auth::id() }}">
+    @endauth
     <title>@yield('.title')</title>
         
 
@@ -36,6 +39,7 @@
       </div>
     @endforeachtoast
   </div>
+  <script src="https://js.pusher.com/7.2.0/pusher.min.js"></script>
   <script type="text/javascript" src="{{ mix('js/app.js') }}"></script>
 </body>
 </html>

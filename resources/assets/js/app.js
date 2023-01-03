@@ -7,11 +7,13 @@
 
 require('./bootstrap');
 
-import { setupButtons } from './buttons/setup';
-import { setupState } from './state/setup'
 import { showEphemeralToasts } from './utils/toasts';
+import { setupNotifications } from './notifications/setup';
+import { setupState } from './state/setup'
+import { setupButtons } from './buttons/setup';
 
 showEphemeralToasts();
+setupNotifications();
 setupState();
 setupButtons();
 

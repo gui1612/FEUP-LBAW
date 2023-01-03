@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\UpdateNotifications;
 use App\Models\User;
 use App\Models\Follow;
 use Illuminate\Http\Request;
@@ -31,6 +32,8 @@ class UserFollowController extends Controller {
         ]);
 
         $user->refresh();
+
+        UpdateNotifications::dispatch($user, 'new');
         
         return [
             'followers' => $user->followers->count(),
@@ -46,6 +49,8 @@ class UserFollowController extends Controller {
         $follow->delete();
         
         $user->refresh();
+
+        UpdateNotifications::dispatch($user, 'consistency');
 
         return [
             'followers' => $user->followers->count(),

@@ -88,6 +88,7 @@ Route::delete('/users/{user}/unfollow', 'UserFollowController@unfollow')->name('
 Route::get('/notifications', 'NotificationController@show_all')->name('notifications.show_all');
 Route::get('/notifications/{notification}', 'NotificationController@show_notification')->name('notifications.show_notification');
 Route::post('/notifications/{notification}', 'NotificationController@mark_as_read')->name('mark_as_read');
+Route::get('/api/notifications/navbar', 'NotificationController@navbar');
 
 // Reports
 Route::post('posts/{post}/report', 'ReportsController@post_report')->name('post.report.new');

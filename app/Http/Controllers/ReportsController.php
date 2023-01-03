@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\UpdateNotifications;
 use App\Models\Post;
 use App\Models\Forum;
 use App\Models\Comment;
@@ -33,6 +34,16 @@ class ReportsController extends Controller {
 
         $report->state = 'approved';
         $report->save();
+
+        if ($report->type == 'post') {
+            UpdateNotifications::dispatch($report->post->owner, 'new');
+        } else if ($report->type == 'comment') {
+            UpdateNotifications::dispatch($report->comment->owner, 'new');
+        } else {
+            foreach ($report->forum->owners as $owner) {
+                UpdateNotifications::dispatch($owner, 'new');
+            }
+        }
 
         return redirect()->back();
     }

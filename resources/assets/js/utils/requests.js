@@ -8,7 +8,8 @@ const endpoints = {
     'user.follow': (userId) => ['POST', `/users/${userId}/follow`],
     'user.unfollow': (userId) => ['DELETE', `/users/${userId}/unfollow`],
     'forum.follow': (forumId) => ['POST', `/forums/${forumId}/follow`],
-    'forum.unfollow': (forumId) => ['DELETE', `/forums/${forumId}/unfollow`]
+    'forum.unfollow': (forumId) => ['DELETE', `/forums/${forumId}/unfollow`],
+    'notifications.navbar': () => ['GET', '/api/notifications/navbar'],
 }
 
 export function makeRequest([key, ...params], { data, ...rest }) {

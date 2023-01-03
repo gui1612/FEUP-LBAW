@@ -2,26 +2,27 @@
 
 namespace App\Events;
 
-use Illuminate\Broadcasting\Channel;
+use App\Models\User;
 use Illuminate\Broadcasting\InteractsWithSockets;
-use Illuminate\Broadcasting\PresenceChannel;
-use Illuminate\Broadcasting\PrivateChannel;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 
-class FollowedUser
+class UpdateNotifications implements ShouldBroadcast
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
+
+    protected $receiver_id;
+    public $type;
 
     /**
      * Create a new event instance.
      *
      * @return void
      */
-    public function __construct($username) {
-        $this->username = $username;
-        $this->message  = "{$username} followed you";
+    public function __construct(User $receiver, string $type) {
+        $this->receiver_id = $receiver->id;
+        $this->type = $type;
     }
 
     /**
@@ -31,6 +32,10 @@ class FollowedUser
      */
     public function broadcastOn()
     {
-        return ['follow_user'];
+        return ['users.' . $this->receiver_id];
+    }
+
+    public function broadcastAs() {
+        return 'update_notifications';
     }
 }

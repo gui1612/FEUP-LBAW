@@ -8,15 +8,7 @@
         </a>
         <ul class="navbar-nav d-block d-md-none ms-auto me-2">
             <li class="nav-item">
-                <div class="dropdown mx-2 align-items-center">
-                    <a class="btn btn-lg p-0 border-0 d-flex align-items-center" href="{{ route('notifications.show_all') }}">
-                        @if($notifications->count() > 0)
-                        <i class="bi bi-bell-fill"></i>
-                        @else
-                        <i class="bi bi-bell"></i>
-                        @endif
-                    </a>
-                </div>
+                @include('partials.navbar.notifications.mobile', ['notifications' => $notifications])
             </li>
         </ul>
         <button class="navbar-toggler p-0 mx-2 overflow-hidden rounded-circle" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbar" aria-controls="offcanvasNavbar" aria-label="Toggle navigation">
@@ -49,30 +41,8 @@
                         </a>
                     </li>
                     <li class="nav-item d-none d-md-block">
-                        <div class="dropdown mx-2 align-items-center">
-                            <button class="dropdown-toggle btn btn-lg p-0 border-0 d-flex align-items-center" href="#" data-bs-toggle="dropdown" aria-expanded="false">
-                                @if($notifications->count() > 0)
-                                <i class="bi bi-bell-fill"></i>
-                                @else
-                                <i class="bi bi-bell"></i>
-                                @endif
-                            </button>
-                            <ul class="dropdown-menu dropdown-menu-end">
-                                @if($notifications->count() > 0)
-                                @foreach($notifications as $notif)
-                                <li><a class="dropdown-item" href="{{ $notif->link() }}">{{ $notif->body() }}</a></li>
-                                @endforeach
-                                @else
-                                <span class="dropdown-item">No notifications pending</span>
-                                @endif
-                                <li>
-                                    <hr class="dropdown-divider">
-                                </li>
-                                <li><a class="dropdown-item" href="{{ route('notifications.show_all') }}">View all</a></li>
-                            </ul>
-                        </div>
+                        @include('partials.navbar.notifications.widescreen', ['notifications' => $notifications])
                     </li>
-
                     <li>
                         <hr class="offcanvas-divider">
                     </li>
