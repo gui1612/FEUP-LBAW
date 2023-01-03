@@ -432,7 +432,7 @@ BEGIN
   IF OLD.block_reason IS NULL AND NEW.block_reason IS NOT NULL THEN
     UPDATE Posts SET hidden = TRUE WHERE owner_id = NEW.id;
     UPDATE Comments SET hidden = TRUE WHERE owner_id = NEW.id;
-    UPDATE Forums SET hidden = TRUE WHERE owner_id = NEW.id;
+    -- UPDATE Forums SET hidden = TRUE WHERE owner_id = NEW.id;
   END IF;
   RETURN NEW;
 END
