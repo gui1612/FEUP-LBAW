@@ -3,7 +3,7 @@ import { onCommentLike, onCommentDislike } from './ratings/comment';
 import { onUserFollow, onUserUnfollow } from './users';
 import { onForumFollow, onForumUnfollow } from './forums';
 import { onForumDemoteOpen, onForumPromoteOpen, onForumDeleteOpen } from './forums/management';
-import { onAdminTeamDemoteOpen, onAdminUsersDemoteOpen, onAdminUsersPromoteOpen, onAdminUsersDeleteOpen, onAdminUsersBlockOpen } from './admin/management';
+import { onAdminTeamDemoteOpen, onAdminUsersDemoteOpen, onAdminUsersPromoteOpen, onAdminUsersDeleteOpen, onAdminUsersBlockOpen, onAdminUsersUnblockOpen } from './admin/management';
 
 const actions = {
     'ratings.like': onPostLike,
@@ -22,6 +22,7 @@ const actions = {
     'modals.admin.users.promote.open': onAdminUsersPromoteOpen,
     'modals.admin.users.delete.open': onAdminUsersDeleteOpen,
     'modals.admin.users.block.open': onAdminUsersBlockOpen,
+    'modals.admin.users.unblock.open': onAdminUsersUnblockOpen,
 
 };
 
