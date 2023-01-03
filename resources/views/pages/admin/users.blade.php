@@ -106,6 +106,39 @@
                                 </div>
                             </div>
                         </div>
+                        @can("block", $user)
+                        <button type="button" class="btn btn-danger d-flex gap-2" data-bs-toggle="modal" data-bs-target="#blockWarningModal" data-wt-action="modals.admin.users.block.open" data-wt-url="{{ route('admin.team.block', $user) }}" data-wt-username="{{$user->username}}">
+                            <i class="bi bi-stop-fill"></i>
+                            <span class="d-none d-md-block">Block User</span>
+                        </button>
+                        @elsecan("unblock", $user)
+                        <button type="button" class="btn btn-secondary d-flex gap-2" data-bs-toggle="modal" data-bs-target="#unblockWarningModal" data-wt-action="modals.admin.users.unblock.open" data-wt-url="{{ route('admin.team.unblock', $user) }}" data-wt-username="{{$user->username}}">
+                            <i class="bi bi-stop-fill"></i>
+                            <span class="d-none d-md-block">Unblock User</span>
+                        </button>
+                        @endif
+                        <!-- Modal -->
+                        <div class="modal fade" id="unblockWarningModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title">Block <span data-wt-signal="modals.admin.users.block.username"></span></h5>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        Are you sure you want to unblock this user?
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">No</button>
+                                        <form method="POST" data-wt-signal="modals.admin.users.unblock.url:action">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button class="btn btn-danger" type="submit">Yes</button>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </td>
                 </tr>
                 @endforeach

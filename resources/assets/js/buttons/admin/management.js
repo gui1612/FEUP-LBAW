@@ -45,3 +45,14 @@ export const onAdminUsersDeleteOpen = {
         signal("modals.admin.users.delete.url").set(url);
     }
 }
+
+export const onAdminUsersBlockOpen = {
+    params: ({el}) => ({
+        url: el.getAttribute("data-wt-url"),
+        username: el.getAttribute("data-wt-username")
+    }),
+    onClick: ({url, username}) => {
+        signal("modals.admin.users.block.username").set(username);
+        signal("modals.admin.users.block.url").set(url);
+    }
+}
