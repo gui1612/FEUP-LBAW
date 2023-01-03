@@ -17,6 +17,14 @@ class UserPolicy
         }
     }
 
+    public function block(User $user, User $target) {
+        return $user->is_admin && !$target->is_blocked();
+    }
+
+    public function unblock(User $user, User $target) {
+        return $user->is_admin && $target->is_blocked();
+    }
+
     public function promote(User $user, User $target) {
         return $user->is_admin && !$target->is_admin;
     }
