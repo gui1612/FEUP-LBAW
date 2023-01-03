@@ -4,11 +4,11 @@
         @if(Auth::check() && ((Auth::user()->id === $comment->owner_id) || Auth::user()->is_admin || ($comment->post->forum->owners->contains(Auth::user()))))
             <div class="d-flex">
                 @if (Auth::user()->id === $comment->owner_id)
-                    <button id="edit-comment-button" class="btn" data-wt-action="modals.comment.edit" wt-action="{{ route('post.comments.edit', ['post'=>$post, 'comment'=>$comment]) }}">
+                    <button id="edit-comment-button" class="btn" data-wt-action="modals.comment.edit.open" data-wt-url="{{ route('post.comments.edit', ['post'=>$post, 'comment'=>$comment]) }}">
                         <i class="bi bi-pencil-fill"></i>
                     </button>
                 @endif
-                <button type="button" class="btn" data-bs-toggle="modal" data-bs-target="#commentDeletionModal" data-wt-action="modals.comment.delete" wt-action="{{ route('post.comments.delete', ['post'=>$post, 'comment'=>$comment]) }}">
+                <button type="button" class="btn" data-bs-toggle="modal" data-bs-target="#commentDeletionModal" data-wt-action="modals.comment.delete.open" data-wt-url="{{ route('post.comments.delete', ['post'=>$post, 'comment'=>$comment]) }}">
                     <i class="bi bi-trash-fill"></i>
                 </button>
             </div>
