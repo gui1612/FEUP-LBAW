@@ -1,4 +1,4 @@
-@extends ('layouts.app')
+@extends ('layouts.forum_layout')
 
 @section('title', $forum->name)
 

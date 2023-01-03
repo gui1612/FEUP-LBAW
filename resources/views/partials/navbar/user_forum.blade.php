@@ -35,6 +35,11 @@
                             <i class="d-none d-md-inline-block bi bi-plus me-1"></i>New Forum
                         </a>
                     </li>
+                    <li class="nav-item">
+                        <a class="nav-link d-flex align-items-center" href=" {{ route('post.create') }} ">
+                            <i class="d-none d-md-inline-block bi bi-plus me-1"></i>New Post
+                        </a>
+                    </li>
                     <li class="nav-item d-none d-md-block">
                         @include('partials.navbar.notifications.widescreen', ['notifications' => $notifications])
                     </li>
