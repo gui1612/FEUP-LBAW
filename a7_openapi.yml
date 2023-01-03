@@ -19,7 +19,7 @@ tags:
   - name: "M03: System Administration"
   - name: "M04: Forums, Posts and Comments"
   - name: "M05: Notifications"
-  - name: "M06: Static pages"
+  - name: "M06: Static Pages"
 
 paths:
   # M01 - Authentication and User Profile
@@ -427,14 +427,14 @@ paths:
           description: "Conflict. User not followed"                
 
 # aqui
-  # M03 - System Administration
+  # M03 : SystemAdministration
   /admin/users:
     get:
       operationId: "R301"
       summary: "R301: View Administration Panel"
       description: "View users administration panel. Access: ADM"
       tags:
-        - "M03 - System Administration"
+        - "M03: System Administration"
 
       responses:
         "200":
@@ -446,7 +446,7 @@ paths:
       summary: "R302: View Forums Administration Panel"
       description: "View forums administration panel. Access: ADM"
       tags:
-        - "M03 - System Administration"
+        - "M03: System Administration"
 
       responses:
         "200":
@@ -458,7 +458,7 @@ paths:
       summary: "R303: Show Administration Team"
       description: "View all system administrators. Access: ADM"
       tags:
-        - "M03 - System Administration"
+        - "M03: System Administration"
 
       responses:
         "200":
@@ -468,7 +468,7 @@ paths:
       summary: "R304: Promote User to Admin"
       description: "Promote Regular User to Admin Action. Access: ADM"
       tags:
-        - "M03 - System Administration"
+        - "M03: System Administration"
 
       responses:
         "200":
@@ -490,7 +490,7 @@ paths:
       summary: "R305: Remove Administrator API Route"
       description: "Remove user from the team of system administrators. Access: ADM"
       tags:
-        - "M03 - System Administration"
+        - "M03: System Administration"
 
       parameters:
         - in: path
@@ -521,7 +521,7 @@ paths:
       summary: "R304: Adds Administrator API Route"
       description: "Adds user to the team of system administrators. Access: ADM"
       tags:
-        - "M03 - System Administration"
+        - "M03: System Administration"
 
       parameters:
         - in: path
@@ -552,7 +552,7 @@ paths:
       summary: "R305: Block a user"
       description: "Administrators block for users. Access: ADM"
       tags:
-        - "M03 - System Administration"
+        - "M03: System Administration"
 
       parameters:
         - in: path
@@ -573,7 +573,7 @@ paths:
       summary: "R306: Unblock a user"
       description: "Administrators unblock the user that was blocked before. Access: ADM"
       tags:
-        - "M03 - System Administration"
+        - "M03: System Administration"
 
       parameters:
         - in: path
@@ -596,7 +596,7 @@ paths:
       summary: "R307: View Reports Administration Panel"
       description: "View reports administration panel. Access: ADM"
       tags:
-        - "M03 - System Administration"
+        - "M03: System Administration"
 
       responses:
         "200":
@@ -608,7 +608,7 @@ paths:
       summary: "R308: View a Report"
       description: "View the specific report details like type and state. Access: ADM"
       tags:
-        - "M03 - System Administration"  
+        - "M03: System Administration"  
 
       responses:
         "200":
@@ -620,7 +620,7 @@ paths:
       summary: "R309: Report ongoing state"
       description: "Administrators can mark the report as on going. Access: ADM"
       tags:
-        - "M03 - System Administration" 
+        - "M03: System Administration" 
 
       requestBody:
         required: true
@@ -653,7 +653,7 @@ paths:
       summary: "R310: Approve a report"
       description: "Administrators can aprove a report in order to apply Access: ADM"
       tags:
-        - "M03 - System Administration" 
+        - "M03: System Administration" 
 
       requestBody:
         required: true
@@ -686,8 +686,8 @@ paths:
       summary: "R311: Denie a report"
       description: "Administrators can denie a report in order to apply Access: ADM"
       tags:
-        - "M03 - System Administration" 
-        
+        - "M03: System Administration" 
+
       requestBody:
         required: true
         content:
@@ -1638,7 +1638,9 @@ paths:
       operationId: "R503"
       summary: "R503: Mark Notification as Read"
       description: "Users can mark the notification as read. Acesses: USR"
-      
+      tags:
+        - "M05: Notifications"
+
       parameters:
         - in: path
           name: notification
@@ -1658,7 +1660,7 @@ paths:
       summary: "R504: Notifications information"
       description: "Provides information about the user notifications. Access: USR"
       tags:
-        - "M05: Nofications"
+        - "M05: Notifications"
 
       responses:
         "200":
