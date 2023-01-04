@@ -24,7 +24,7 @@ DROP TABLE IF EXISTS PasswordResets CASCADE;
 
 CREATE TYPE ReportState AS ENUM ('proposed', 'ongoing', 'approved', 'denied');
 CREATE TYPE ReportType AS ENUM ('post', 'comment', 'forum');
-CREATE TYPE NotificationType AS ENUM ('follow_user', 'post_comment', 'content_reported', 'content_rated');
+CREATE TYPE NotificationType AS ENUM ('follow_forum', 'follow_user', 'post_comment', 'content_reported', 'content_rated');
 CREATE TYPE RatingType AS ENUM ('like', 'dislike');
 
 

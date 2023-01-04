@@ -39,7 +39,7 @@
                             <div class="d-flex justify-content-between text-center mt-4 mb-2">
                                 <div>
                                     <p class="mb-2 h5"> {{ $user->reputation }} </p>
-                                    <p class="text-muted mb-0">Reputation Points</p>
+                                    <p class="text-muted mb-0">Reputation</p>
                                 </div>
                                 <div class="px-3">
                                     <p class="mb-2 h5"> {{ $paginator_own->total() }} </p>
