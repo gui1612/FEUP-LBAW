@@ -59,7 +59,7 @@ class ReportsController extends Controller {
 
     public function post_report(Request $request, Post $post) {
         $this->authorize('view', $post);
-        $this->authorize('create', Report::class);
+        $this->authorize('report', $post);
         
         $data = $request->validate([
             'reason' => 'required|string|max:1000',
@@ -81,7 +81,7 @@ class ReportsController extends Controller {
         }
 
         $this->authorize('view', $comment);
-        $this->authorize('create', Report::class);
+        $this->authorize('report', $comment);
 
         $data = $request->validate([
             'reason' => 'required|string|max:1000',
@@ -101,7 +101,7 @@ class ReportsController extends Controller {
     public function forum_report(Request $request, Forum $forum)
     {
         $this->authorize('view', $forum);
-        $this->authorize('create', Report::class);
+        $this->authorize('report', $forum);
 
         $data = $request->validate([
             'reason' => 'required|string|max:1000',

@@ -12,9 +12,9 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             @if($content == 'post')
-            <form method="POST" action="{{ route('post.report.new', ['post' => $post]) }}">
+            <form method="POST" action="{{ route('post.report.new', ['post' => $post, 'forum'=>$post->forum]) }}">
             @elseif($content == 'comment')
-            <form method="POST" action="{{ route('comment.report.new', ['post' => $comment->post, 'comment' => $comment]) }}">
+            <form method="POST" action="{{ route('comment.report.new', ['post' => $comment->post, 'comment' => $comment, 'forum'=>$comment->post->forum]) }}">
             @elseif($content == 'forum')
             <form method="POST" action="{{ route('forum.report.new', ['forum' => $forum]) }}">
             @endif

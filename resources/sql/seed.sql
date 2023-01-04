@@ -62,7 +62,7 @@ CREATE TABLE Forums (
 );
 
 CREATE TABLE ForumOwners (
-  forum_id INTEGER CONSTRAINT forum_owners_ref_forum REFERENCES Forums CONSTRAINT forum_owner_forum_id_nn NOT NULL,
+  forum_id INTEGER CONSTRAINT forum_owners_ref_forum REFERENCES Forums ON DELETE CASCADE CONSTRAINT forum_owner_forum_id_nn NOT NULL,
   owner_id INTEGER CONSTRAINT forum_owners_ref_owner REFERENCES Users CONSTRAINT forum_owner_owner_id_nn NOT NULL,
   CONSTRAINT forum_owner_pk PRIMARY KEY (forum_id, owner_id)
 );
@@ -106,7 +106,7 @@ CREATE TABLE Follows (
   id SERIAL CONSTRAINT follows_pk PRIMARY KEY, 
   owner_id INTEGER CONSTRAINT follow_ref_owner REFERENCES Users CONSTRAINT follow_owner_id_nn NOT NULL,
   followed_user_id INTEGER CONSTRAINT follow_ref_followed_user REFERENCES Users,
-  followed_forum_id INTEGER CONSTRAINT follow_ref_followed_forum REFERENCES Forums,
+  followed_forum_id INTEGER CONSTRAINT follow_ref_followed_forum REFERENCES Forums ON DELETE CASCADE,
   CONSTRAINT follow_refs_user_uk UNIQUE (owner_id, followed_user_id),
   CONSTRAINT follow_refs_forum_uk UNIQUE (owner_id, followed_forum_id),
 
@@ -139,8 +139,8 @@ CREATE TABLE Notifications (
   receiver_id INTEGER CONSTRAINT notification_ref_receiver REFERENCES Users CONSTRAINT notification_receiver_id_nn NOT NULL,
 
   follow_id INTEGER CONSTRAINT notification_ref_follow REFERENCES Follows ON DELETE CASCADE,
-  comment_id INTEGER CONSTRAINT notification_ref_comment REFERENCES Comments,
-  report_id INTEGER CONSTRAINT notification_ref_report REFERENCES Reports,
+  comment_id INTEGER CONSTRAINT notification_ref_comment REFERENCES Comments ON DELETE CASCADE,
+  report_id INTEGER CONSTRAINT notification_ref_report REFERENCES Reports ON DELETE CASCADE,
   rating_id INTEGER CONSTRAINT notification_ref_rating REFERENCES Ratings ON DELETE CASCADE,
 
   CONSTRAINT notification_xor_ref_follow CHECK ((type = 'follow_user') = (follow_id IS NOT NULL)),
@@ -252,6 +252,10 @@ EXECUTE PROCEDURE update_last_edited();
 CREATE OR REPLACE FUNCTION at_least_one_forum_owner() RETURNS TRIGGER AS
 $BODY$
 BEGIN
+  IF NOT EXISTS (SELECT * FROM Forums WHERE Forums.id = OLD.forum_id) THEN
+    RETURN OLD;
+  END IF;
+
   IF NOT EXISTS (SELECT * FROM ForumOwners WHERE ForumOwners.forum_id = OLD.forum_id AND ForumOwners.owner_id <> OLD.owner_id) THEN
     RAISE EXCEPTION 'A forum must have at least one owner.';
   END IF;
@@ -261,7 +265,7 @@ $BODY$
 LANGUAGE plpgsql;
 
 CREATE TRIGGER at_least_one_forum_owner
-  BEFORE DELETE ON ForumOwners
+  AFTER DELETE ON ForumOwners
   FOR EACH ROW
   EXECUTE PROCEDURE at_least_one_forum_owner();
 
@@ -390,39 +394,39 @@ CREATE TRIGGER hide_reported_content
 
 -- ---
 
--- CREATE OR REPLACE FUNCTION hide_hidden_forum_posts() RETURNS TRIGGER AS
--- $BODY$
--- BEGIN
---   IF NOT OLD.hidden AND NEW.hidden THEN
---     UPDATE Posts SET hidden = TRUE WHERE forum_id = NEW.id;
---   END IF;
---   RETURN NEW;
--- END
--- $BODY$
--- LANGUAGE plpgsql;
+CREATE OR REPLACE FUNCTION hide_hidden_forum_posts() RETURNS TRIGGER AS
+$BODY$
+BEGIN
+  IF NOT OLD.hidden AND NEW.hidden THEN
+    UPDATE Posts SET hidden = TRUE WHERE forum_id = NEW.id;
+  END IF;
+  RETURN NEW;
+END
+$BODY$
+LANGUAGE plpgsql;
 
--- CREATE TRIGGER hide_hidden_forum_posts
---   BEFORE UPDATE ON Forums
---   FOR EACH ROW
---   EXECUTE PROCEDURE hide_hidden_forum_posts();
+CREATE TRIGGER hide_hidden_forum_posts
+  AFTER UPDATE ON Forums
+  FOR EACH ROW
+  EXECUTE PROCEDURE hide_hidden_forum_posts();
 
--- ---
+---
 
--- CREATE OR REPLACE FUNCTION hide_hidden_post_comments() RETURNS TRIGGER AS
--- $BODY$
--- BEGIN
---   IF NOT OLD.hidden AND NEW.hidden THEN
---     UPDATE Comments SET hidden = TRUE WHERE post_id = NEW.id;
---   END IF;
---   RETURN NEW;
--- END
--- $BODY$
--- LANGUAGE plpgsql;
+CREATE OR REPLACE FUNCTION hide_hidden_post_comments() RETURNS TRIGGER AS
+$BODY$
+BEGIN
+  IF NOT OLD.hidden AND NEW.hidden THEN
+    UPDATE Comments SET hidden = TRUE WHERE post_id = NEW.id;
+  END IF;
+  RETURN NEW;
+END
+$BODY$
+LANGUAGE plpgsql;
 
--- CREATE TRIGGER hide_hidden_post_comments
---   BEFORE UPDATE ON Posts
---   FOR EACH ROW
---   EXECUTE PROCEDURE hide_hidden_post_comments();
+CREATE TRIGGER hide_hidden_post_comments
+  AFTER UPDATE ON Posts
+  FOR EACH ROW
+  EXECUTE PROCEDURE hide_hidden_post_comments();
 
 ---
 
@@ -432,7 +436,7 @@ BEGIN
   IF OLD.block_reason IS NULL AND NEW.block_reason IS NOT NULL THEN
     UPDATE Posts SET hidden = TRUE WHERE owner_id = NEW.id;
     UPDATE Comments SET hidden = TRUE WHERE owner_id = NEW.id;
-    UPDATE Forums SET hidden = TRUE WHERE owner_id = NEW.id;
+    UPDATE Forums SET hidden = TRUE WHERE id IN (SELECT forum_id FROM ForumOwners WHERE owner_id = NEW.id);
   END IF;
   RETURN NEW;
 END
@@ -440,7 +444,7 @@ $BODY$
 LANGUAGE plpgsql;
 
 CREATE TRIGGER hide_blocked_user_content
-  BEFORE UPDATE ON Users
+  AFTER UPDATE ON Users
   FOR EACH ROW
   EXECUTE PROCEDURE hide_blocked_user_content();
 
@@ -485,12 +489,10 @@ $BODY$
 DECLARE
   receiver INTEGER;
 BEGIN
-  IF NEW.type = 'like' THEN
-    IF NEW.rated_post_id IS NOT NULL THEN
-      INSERT INTO Notifications(type, receiver_id, rating_id) VALUES ('content_rated', (SELECT owner_id FROM Posts WHERE id = NEW.rated_post_id), NEW.id);
-    ELSIF NEW.rated_comment_id IS NOT NULL THEN
-      INSERT INTO Notifications(type, receiver_id, rating_id) VALUES ('content_rated', (SELECT owner_id FROM Comments WHERE id = NEW.rated_comment_id), NEW.id);
-    END IF;
+  IF NEW.rated_post_id IS NOT NULL THEN
+    INSERT INTO Notifications(type, receiver_id, rating_id) VALUES ('content_rated', (SELECT owner_id FROM Posts WHERE id = NEW.rated_post_id), NEW.id);
+  ELSIF NEW.rated_comment_id IS NOT NULL THEN
+    INSERT INTO Notifications(type, receiver_id, rating_id) VALUES ('content_rated', (SELECT owner_id FROM Comments WHERE id = NEW.rated_comment_id), NEW.id);
   END IF;
   RETURN NEW;
 END
@@ -534,11 +536,11 @@ BEGIN
       IF NEW.rated_post_id IS NOT NULL THEN
         table_name := 'posts';
         content_id := NEW.rated_post_id;
-        user_id := NEW.owner_id;
+        SELECT owner_id INTO user_id FROM Posts WHERE id = NEW.rated_post_id;
       ELSE
         table_name := 'comments';
         content_id := NEW.rated_comment_id;
-        user_id := NEW.owner_id;
+        SELECT owner_id INTO user_id FROM Comments WHERE id = NEW.rated_comment_id;
       END IF;
     END IF;
       
@@ -552,11 +554,11 @@ BEGIN
       IF OLD.rated_post_id IS NOT NULL THEN
         table_name := 'posts';
         content_id := OLD.rated_post_id;
-        user_id := OLD.owner_id;
+        SELECT owner_id INTO user_id FROM Posts WHERE id = OLD.rated_post_id;
       ELSE
         table_name := 'comments';
         content_id := OLD.rated_comment_id;
-        user_id := OLD.owner_id;
+        SELECT owner_id INTO user_id FROM Comments WHERE id = OLD.rated_comment_id;
       END IF;
     END IF;
 
@@ -567,8 +569,6 @@ BEGIN
   UPDATE Users
     SET reputation = reputation + rating_diff
     WHERE id = user_id;
-
-  -- FIXME: faltam comments
 
   IF TG_OP = 'INSERT' OR TG_OP = 'UPDATE' THEN
     RETURN NEW;
@@ -589,23 +589,21 @@ CREATE TRIGGER update_user_rating
 CREATE OR REPLACE FUNCTION no_post_delete_with_likes_or_comments() RETURNS TRIGGER AS
 $BODY$
 BEGIN
-  IF NOT OLD.hidden AND NEW.hidden THEN
-    IF EXISTS (SELECT * FROM Ratings WHERE Ratings.rated_post_id = OLD.id) THEN
-      RAISE EXCEPTION 'A post cannot be deleted if it has ratings';
-    END IF;
-
-    IF EXISTS (SELECT * FROM Comments WHERE Comments.post_id = OLD.id) THEN
-      RAISE EXCEPTION 'A post cannot be deleted if it has comments';
-    END IF;
-
+  IF EXISTS (SELECT * FROM Ratings WHERE Ratings.rated_post_id = OLD.id) THEN
+    RAISE EXCEPTION 'A post cannot be deleted if it has ratings';
   END IF;
-  RETURN NEW;
+
+  IF EXISTS (SELECT * FROM Comments WHERE Comments.post_id = OLD.id) THEN
+    RAISE EXCEPTION 'A post cannot be deleted if it has comments';
+  END IF;
+
+  RETURN OLD;
 END
 $BODY$
 LANGUAGE plpgsql;
 
 CREATE TRIGGER no_post_delete_with_likes_or_comments
-  BEFORE UPDATE ON Posts
+  BEFORE DELETE ON Posts
   FOR EACH ROW
   EXECUTE PROCEDURE no_post_delete_with_likes_or_comments();
 

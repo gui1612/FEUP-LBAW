@@ -25,13 +25,14 @@ class PostController extends Controller {
     return view('pages.create_post', ['new_post' => true, 'forum' => $forum]);
   }
 
-  public function show_post(Post $post)
+  public function show_post(Forum $forum, Post $post)
   {
     $this->authorize('view', $post);
-    return view('pages.post', ['post' => $post, 'preview' => False]);
+    $paginator = $post->comments()->visible()->orderBy('last_edited', 'desc')->paginate(10);
+    return view('pages.post', ['post' => $post, 'preview' => False, 'paginator'=>$paginator]);
   }
 
-  public function show_edit_post_form(Post $post)
+  public function show_edit_post_form(Forum $forum, Post $post)
   {
     $this->authorize('edit', $post);
     return view('pages.edit_post', ['post' => $post, 'new_post' => false]);
@@ -44,16 +45,20 @@ class PostController extends Controller {
     $data = $request->validate([
       'title' => 'required|string|max:255',
       'body' => 'required|string',
-      'images.*.caption' => 'nullable|string',
-      'images.*.file' => 'nullable|required_with:images|image|max:4096',
+      'images.*.caption' => 'nullable|required_with:images.*.file|string',
+      'images.*.file' => 'nullable|image|max:4096',
       ], [
-      'images.*.file.required_with' => 'The :attribute field is required when images are present.'
+      'images.*.caption.required_with' => 'A caption is required for every image.'
     ]);
 
 
     if (!isset($data['images'])) {
       $data['images'] = [];
     }
+
+    $data['images'] = array_filter($data['images'], function ($image) {
+      return $image['caption'] != null && isset($image['file']) && $image['file'] != null;
+    });
 
     if (count($data['images']) > 0) {
       $this->authorize('create', PostImage::class);
@@ -84,10 +89,10 @@ class PostController extends Controller {
       }
     });
 
-    return redirect()->route('post', ['post' => $post]);
+    return redirect()->route('post', ['forum' => $forum, 'post' => $post]);
   }
 
-  public function edit_post(Request $request, Post $post)
+  public function edit_post(Request $request, Forum $forum, Post $post)
   {
     $this->authorize('edit', $post);
 
@@ -100,16 +105,17 @@ class PostController extends Controller {
     $post->body = $validated['body'] ?? $post->body;
     $post->save();
 
-    return redirect()->route('post', ['post' => $post]);
+    return redirect()->route('post', ['post' => $post, 'forum'=>$forum]);
   }
 
-  public function delete_post(Request $request, Post $post)
+  public function delete_post(Request $request, Forum $forum, Post $post)
   {
     $this->authorize('delete_post', $post);
 
-    $post->hidden = True;
-    $post->save();
-
-    return redirect()->route('feed.show');
+    if (Post::destroy($post->id) > 0) {
+      return redirect()->route('forum.show', ['forum' => $forum]);
+    } else {
+      return abort(500, 'Failed to delete post.');
+    }
   }
 }

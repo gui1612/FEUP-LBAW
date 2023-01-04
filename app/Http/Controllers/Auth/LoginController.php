@@ -54,6 +54,16 @@ class LoginController extends Controller
         return view('pages.homepage');
     }
 
+    public function authenticated(Request $request, $user)
+    {
+        if ($user->block_reason) {
+            Auth::logout();
+            return $this->home()->withErrors([
+                'email' => "You have been blocked from using this website. Reason: " . $user->block_reason
+            ]);
+        }
+    }
+
     private function sanitizeUsername($username) {
         // Replace any invalid characters with underscores
         $sanitizedUsername = preg_replace('/[^a-zA-Z0-9._]/', '_', $username);
@@ -149,6 +159,10 @@ class LoginController extends Controller
             }
 
             $user = User::create($userData);
+        } else if ($user->block_reason) {
+            return $this->home()->withErrors([
+                'email' => "You have been blocked from using this website. Reason: " . $user->block_reason
+            ]);
         }
 
         Auth::login($user);

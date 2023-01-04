@@ -53,9 +53,7 @@ class CommentRatingController extends Controller {
 
         $comment->refresh();
 
-        if ($type == 'like') {
-            UpdateNotifications::dispatch($comment->owner, 'new');
-        }
+        UpdateNotifications::dispatch($comment->owner, 'new');
 
         return response()->json([
             'rating' => $comment->rating,

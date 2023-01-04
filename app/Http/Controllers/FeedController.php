@@ -23,10 +23,21 @@ class FeedController extends Controller
       ]);
 
       $order = $validated['order'] ?? 'popularity';
+
+      if (Auth::check()) {
+        $posts = Post::visible()->whereIn('forum_id', function($query) {
+          $query->select('followed_forum_id')->from('follows')->where('owner_id', Auth::id());
+        })->union(Post::visible()->whereIn('owner_id', function($query) {
+          $query->select('followed_user_id')->from('follows')->where('owner_id', Auth::id());
+        }));
+      } else {
+        $posts = Post::visible();
+      }
+
       if ($order === 'chronological')
-        $posts = Post::visible()->orderBy('created_at', 'desc');
+        $posts = $posts->orderBy('created_at', 'desc');
       else 
-        $posts = Post::visible()->orderBy('rating', 'desc');
+        $posts = $posts->orderBy('rating', 'desc');
 
       return view('pages.feed', ['paginator' => $posts->paginate(30)]);
     }

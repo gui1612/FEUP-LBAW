@@ -123,8 +123,7 @@ class ForumController extends Controller
   {
     $this->authorize('delete', $forum);
 
-    $forum->hidden = true;
-    $forum->save();
+    Forum::destroy($forum->id);
 
     return redirect()->route('feed.show')->with('success', 'Forum deleted successfully');
   }

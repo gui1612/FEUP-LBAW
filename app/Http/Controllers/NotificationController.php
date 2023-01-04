@@ -58,17 +58,4 @@ class NotificationController extends Controller {
       'mobile' => $mobile->render()
     ]);
   }
-
-//   public function delete(Notification $notification) {
-//     $this->authorize('delete', $notification);
-//     $notification->delete();
-//     return redirect()->back();
-//   }
-
-//   public function delete_all(User $user) {
-//     $this->authorize('delete', $user);
-//     $user->notifications()->delete();
-//     return redirect()->back();
-//   }
-
 }    

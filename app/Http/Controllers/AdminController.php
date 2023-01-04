@@ -49,8 +49,6 @@ class AdminController extends Controller
         return redirect()->back();
     }
 
-
-
     public function demote(Admin $admin)
     {
         $this->authorize('demote', $admin);
@@ -76,8 +74,7 @@ class AdminController extends Controller
     }
 
     public function unblock(User $user) {
-        $this->authorize('block', $user);
-
+        $this->authorize('unblock', $user);
 
         $user->block_reason = NULL;
         $user->save();

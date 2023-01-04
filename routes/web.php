@@ -53,20 +53,18 @@ Route::get('admin/reports/{report}', 'ReportsController@show_report')->name('adm
 Route::put('admin/reports/{report}/ongoing', 'ReportsController@ongoing')->name('admin.reports.ongoing');
 Route::put('admin/reports/{report}/approved', 'ReportsController@approved')->name('admin.reports.approved');
 Route::put('admin/reports/{report}/denied', 'ReportsController@denied')->name('admin.reports.denied');
-Route::post('admin/team', 'AdminController@promote')->name('admin.team.promote');
-Route::delete('admin/team/{admin}', 'AdminController@demote')->name('admin.team.demote');
 Route::post('admin/team/{user}', 'AdminController@promote')->name('admin.team.promote');
-Route::delete('admin/team/{user}', 'AdminController@demote')->name('admin.team.demote');
+Route::delete('admin/team/{admin}', 'AdminController@demote')->name('admin.team.demote');
 Route::post('admin/team/{user}/block', 'AdminController@block')->name('admin.team.block');
-Route::delete('admin/team/{user}/unblock', 'AdminController@block')->name('admin.team.unblock');
+Route::post('admin/team/{user}/unblock', 'AdminController@unblock')->name('admin.team.unblock');
 
 // Post
 Route::post('forums/{forum}/posts/', 'PostController@create_post')->name('post.create_post');
 Route::get('forums/{forum}/posts/new', 'PostController@show_create_post_form')->name('post.create');
-Route::get('posts/{post}', 'PostController@show_post')->name('post');
-Route::put('posts/{post}', 'PostController@edit_post')->name('post.edit_with_new_data');
-Route::delete('posts/{post}', 'PostController@delete_post')->name('post.delete');
-Route::get('posts/{post}/edit', 'PostController@show_edit_post_form')->name('post.edit');
+Route::get('forums/{forum}/posts/{post}', 'PostController@show_post')->name('post');
+Route::put('forums/{forum}/posts/{post}', 'PostController@edit_post')->name('post.edit_with_new_data');
+Route::delete('forums/{forum}/posts/{post}', 'PostController@delete_post')->name('post.delete');
+Route::get('forums/{forum}/posts/{post}/edit', 'PostController@show_edit_post_form')->name('post.edit');
 
 // Post Comments
 Route::post('posts/{post}/comments', 'PostCommentsController@create_comment')->name('post.comments.create');
@@ -89,8 +87,8 @@ Route::get('contact', 'StaticPagesController@showContactPage')->name('contact');
 Route::get('features', 'StaticPagesController@showFeaturesPage')->name('features');
 
 // Follows
-Route::post('/users/{user}/follow', 'UserFollowController@follow')->name('follow');
-Route::delete('/users/{user}/unfollow', 'UserFollowController@unfollow')->name('unfollow');
+Route::post('/users/{user}/follow', 'UserFollowController@follow')->name('user.follow');
+Route::delete('/users/{user}/unfollow', 'UserFollowController@unfollow')->name('user.unfollow');
 
 // Notifications
 Route::get('/notifications', 'NotificationController@show_all')->name('notifications.show_all');
@@ -102,8 +100,8 @@ Route::get('/api/notifications/navbar', 'NotificationController@navbar');
 Route::post('posts/{post}/report', 'ReportsController@post_report')->name('post.report.new');
 Route::post('posts/{post}/comment/{comment}/report', 'ReportsController@comment_report')->name('comment.report.new');
 Route::post('forum/{forum}/report', 'ReportsController@forum_report')->name('forum.report.new');
-Route::post('/forums/{forum}/follow', 'ForumFollowController@follow')->name('follow');
-Route::delete('/forums/{forum}/unfollow', 'ForumFollowController@unfollow')->name('unfollow');
+Route::post('/forums/{forum}/follow', 'ForumFollowController@follow')->name('forum.follow');
+Route::delete('/forums/{forum}/unfollow', 'ForumFollowController@unfollow')->name('forum.unfollow');
 
 //Forum Management
 Route::get('/forums/{forum}/management', 'ForumOwnerController@show_forum_management')->name('forum.management');

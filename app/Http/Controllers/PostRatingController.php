@@ -53,9 +53,7 @@ class PostRatingController extends Controller {
 
         $post->refresh();
 
-        if ($type == 'like') {
-            UpdateNotifications::dispatch($post->owner, 'new');
-        }
+        UpdateNotifications::dispatch($post->owner, 'new');
 
         return response()->json([
             'rating' => $post->rating,

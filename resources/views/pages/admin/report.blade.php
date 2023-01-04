@@ -28,11 +28,11 @@
             <h5>Actions</h5>
             <div class="d-flex flex-md-row flex-column gap-3">
                 @if($report->post != NULL)
-                <a href="{{ route('post', ['post'=>$report->post]) }}" class="btn btn-primary d-flex align-items-center gap-2">View post
+                <a href="{{ route('post', ['post'=>$report->post, 'forum'=>$report->post->forum]) }}" class="btn btn-primary d-flex align-items-center gap-2">View post
                 <i class="bi bi-arrow-right-circle"></i>
                 </a>
                 @elseif($report->comment != NULL)
-                <a href="{{ route('post', ['post'=>$report->comment->post]) }}" class="btn btn-primary d-flex align-items-center gap-2" style="width: max-content">View comment
+                <a href="{{ route('post', ['post'=>$report->comment->post, 'forum'=>$report->comment->post->forum]) }}" class="btn btn-primary d-flex align-items-center gap-2" style="width: max-content">View comment
                 <i class="bi bi-arrow-right-circle"></i>
                 </a>
                 @elseif($report->forum != NULL)

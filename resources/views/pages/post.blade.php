@@ -38,14 +38,10 @@
             </div>
         @endif
         
-        @if(Auth::check() && ($post->owner_id == Auth::user()->id))
-            <div class="d-flex align-items-center justify-content-between">
-                @include('partials.post_title')
-                @include('partials.post_actions')
-            </div>
-        @else
+        <div class="d-flex align-items-center justify-content-between">
             @include('partials.post_title')
-        @endif
+            @include('partials.post_actions')
+        </div>
 
         @include('partials.post_body')
 
@@ -64,7 +60,9 @@
 
         <div class="d-flex align-items-center gap-2 mt-2">
             @include('partials.rating')
+            @can('report', $post)
             @include('partials.report', ['content'=>'post', 'post'=>$post])
+            @endcan
         </div>
 
         @auth
@@ -82,9 +80,10 @@
         @endauth
 
         <section class="container" id="comment-section">
-            @foreach ($post->comments()->visible()->orderBy('last_edited', 'desc')->get() as $comment)
+            @foreach ($paginator as $comment)
                 @include('partials.comment', ['comment' => $comment])
             @endforeach
+            {{ $paginator }}
         </section>
     </article>
     

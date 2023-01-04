@@ -11,10 +11,9 @@ class ForumPolicy
 {
     use HandlesAuthorization;
 
-
     public function view(?User $user, Forum $forum)
     {
-        return true;
+        return !$forum->hidden;
     }
 
     public function follow(User $user, Forum $target)
@@ -53,5 +52,17 @@ class ForumPolicy
     public function delete(User $user, Forum $target)
     {
         return !$target->owners->where('users.id', $user->id)->count();
+    }
+
+    public function report(User $user, Forum $forum) {
+        if ($forum->hidden) {
+            return Response::denyAsNotFound();
+        }
+        
+        if ($forum->owners()->where('users.id', $user->id)->count()) {
+            return Response::denyWithStatus(403, 'You cannot report your own forum.');
+        }
+        
+        return true;
     }
 }

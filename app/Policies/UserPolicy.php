@@ -4,6 +4,7 @@ namespace App\Policies;
 
 use App\Models\User;
 use App\Models\Post;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Auth\Access\HandlesAuthorization;
 use Illuminate\Auth\Access\Response;
 
@@ -18,10 +19,19 @@ class UserPolicy
     }
 
     public function block(User $user, User $target) {
+        if ($user === $target)
+            return Response::denyWithStatus(403, 'You can\'t block yourself.');
+
+        if ($target->is_admin)
+            return Response::denyWithStatus(403, 'You can\'t block an administrator.');
+   
         return $user->is_admin && !$target->is_blocked();
     }
 
     public function unblock(User $user, User $target) {
+        if ($user === $target)
+            return Response::denyWithStatus(403, 'You can\'t unblock yourself.');
+            
         return $user->is_admin && $target->is_blocked();
     }
 
@@ -45,6 +55,6 @@ class UserPolicy
         if ($target->is_admin)
             return Response::denyWithStatus(403, 'An admin account cannot be deleted.');
 
-        return $user->is_admin;
+        return $user->id == $target->id;
     }
 }

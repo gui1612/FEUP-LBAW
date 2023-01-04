@@ -79,6 +79,7 @@
                             </div>
                         </div>
                         @endif
+                        @if(!$user->is_admin)
                         <button type="button" class="btn btn-danger d-flex gap-2" data-bs-toggle="modal" data-bs-target="#deletionWarningModal" data-wt-action="modals.admin.users.delete.open" data-wt-url="{{ route('user.delete', $user->id) }}" data-wt-username="{{$user->username}}">
                             <i class="bi bi-trash"></i>
                             <span class="d-none d-md-block">Delete User</span>
@@ -106,6 +107,7 @@
                                 </div>
                             </div>
                         </div>
+                        @endif
                         @can("block", $user)
                         <button type="button" class="btn btn-danger d-flex gap-2" data-bs-toggle="modal" data-bs-target="#blockWarningModal" data-wt-action="modals.admin.users.block.open" data-wt-url="{{ route('admin.team.block', $user) }}" data-wt-username="{{$user->username}}">
                             <i class="bi bi-stop-fill"></i>
@@ -145,7 +147,7 @@
                             <div class="modal-dialog">
                                 <div class="modal-content">
                                     <div class="modal-header">
-                                        <h5 class="modal-title">Block <span data-wt-signal="modals.admin.users.unblock.username"></span></h5>
+                                        <h5 class="modal-title">Unblock<span data-wt-signal="modals.admin.users.unblock.username"></span></h5>
                                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                     </div>
                                     <div class="modal-body">
@@ -155,7 +157,6 @@
                                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">No</button>
                                         <form method="POST" data-wt-signal="modals.admin.users.unblock.url:action">
                                             @csrf
-                                            @method('DELETE')
                                             <button class="btn btn-danger" type="submit">Yes</button>
                                         </form>
                                     </div>

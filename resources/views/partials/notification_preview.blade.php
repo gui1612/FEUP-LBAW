@@ -49,7 +49,7 @@
 @endif
 
 @if($notification->type == 'post_comment')
-<a href="{{ route('post', ['post'=>$notification->comment->post]) }}" class="text-decoration-none text-black">
+<a href="{{ route('post', ['forum' => $notification->comment->post->forum, 'post'=>$notification->comment->post]) }}" class="text-decoration-none text-black">
     <div class="d-flex gap-2 justify-content-between align-items-center bg-white p-3 my-1">
         <div class="d-flex flex-column gap-2">
             <div class="d-flex gap-2 align-items-center">
